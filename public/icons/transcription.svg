@@ -1,0 +1,7 @@
+<svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect x="8" y="12" width="48" height="40" rx="4" fill="#FEF3C7" stroke="#F59E0B" stroke-width="2"/>
+  <path d="M16 24H48" stroke="#F59E0B" stroke-width="2"/>
+  <path d="M16 32H40" stroke="#F59E0B" stroke-width="2"/>
+  <path d="M16 40H36" stroke="#F59E0B" stroke-width="2"/>
+  <circle cx="52" cy="40" r="4" fill="#3B82F6" class="animate-pulse"/>
+</svg> 
