@@ -46,61 +46,78 @@ const DownloadButton: React.FC<{ os: 'mac' | 'windows' | 'linux' }> = ({ os }) =
         break;
     }
 
-    window.open(downloadUrl, '_blank');
+    window.location.href = downloadUrl;
   };
 
   return (
-    <div className="flex flex-col items-center gap-4">
+    <div className="flex flex-col items-center gap-6 relative z-10">
       {/* Primary Download Button */}
-      <button
-        onClick={() => handleDownload(os)}
-        className="px-8 py-4 bg-white/10 backdrop-blur-md text-white font-semibold rounded-xl shadow-lg 
-                  hover:bg-white/20 transition-all duration-300 flex items-center gap-3 border border-white/20 cursor-pointer"
-      >
-        <span className="text-lg">
-          {os === 'mac' ? (
-            <AppleLogo size={24} weight="fill" />
-          ) : os === 'windows' ? (
-            <WindowsLogo size={24} weight="fill" />
-          ) : (
-            <Globe size={24} weight="fill" />
-          )}
-        </span>
-        <span>Download for {os === 'mac' ? 'macOS' : os === 'windows' ? 'Windows' : 'Linux'}</span>
-        <span className="absolute -top-3 -right-3 bg-gradient-to-r from-yellow-500 to-amber-500 
-                      text-white text-xs px-2 py-1 rounded-full animate-pulse">
-          Beta
-        </span>
-      </button>
+      <div className="relative">
+        <button
+          onClick={() => handleDownload(os)}
+          className="relative z-20 px-8 py-4 bg-white/10 backdrop-blur-md text-white font-semibold rounded-xl shadow-lg 
+                    hover:bg-white/20 transition-all duration-300 flex items-center gap-3 border border-white/20 cursor-pointer"
+        >
+          <span className="text-lg">
+            {os === 'mac' ? (
+              <AppleLogo size={24} weight="fill" />
+            ) : os === 'windows' ? (
+              <WindowsLogo size={24} weight="fill" />
+            ) : (
+              <Globe size={24} weight="fill" />
+            )}
+          </span>
+          <span>Download for {os === 'mac' ? 'macOS' : os === 'windows' ? 'Windows' : 'Linux'}</span>
+          <span className="absolute -top-3 -right-3 bg-gradient-to-r from-yellow-500 to-amber-500 
+                        text-white text-xs px-2 py-1 rounded-full animate-pulse">
+            Beta
+          </span>
+        </button>
+      </div>
 
       {/* Other OS Download Links */}
-      <div className="flex gap-6 text-sm text-gray-400">
+      <div className="relative z-20 flex flex-wrap justify-center gap-x-6 gap-y-2 text-sm mt-2">
         {os !== 'mac' && (
-          <button
-            onClick={() => handleDownload('mac')}
-            className="flex items-center gap-1 hover:text-yellow-500 transition-colors cursor-pointer"
+          <a
+            href="#"
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              handleDownload('mac');
+            }}
+            className="relative z-20 flex items-center gap-1 text-gray-400 hover:text-yellow-500 transition-colors p-2 cursor-pointer"
           >
             <AppleLogo size={16} weight="fill" />
             <span>Download for macOS</span>
-          </button>
+          </a>
         )}
         {os !== 'windows' && (
-          <button
-            onClick={() => handleDownload('windows')}
-            className="flex items-center gap-1 hover:text-yellow-500 transition-colors cursor-pointer"
+          <a
+            href="#"
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              handleDownload('windows');
+            }}
+            className="relative z-20 flex items-center gap-1 text-gray-400 hover:text-yellow-500 transition-colors p-2 cursor-pointer"
           >
             <WindowsLogo size={16} weight="fill" />
             <span>Download for Windows</span>
-          </button>
+          </a>
         )}
         {os !== 'linux' && (
-          <button
-            onClick={() => handleDownload('linux')}
-            className="flex items-center gap-1 hover:text-yellow-500 transition-colors cursor-pointer"
+          <a
+            href="#"
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              handleDownload('linux');
+            }}
+            className="relative z-20 flex items-center gap-1 text-gray-400 hover:text-yellow-500 transition-colors p-2 cursor-pointer"
           >
             <Globe size={16} weight="fill" />
             <span>Download for Linux</span>
-          </button>
+          </a>
         )}
       </div>
     </div>
@@ -113,82 +130,85 @@ const DownloadButton: React.FC<{ os: 'mac' | 'windows' | 'linux' }> = ({ os }) =
 const Hero: React.FC<{ os: 'mac' | 'windows' | 'linux' }> = ({ os }) => (
   <section className="relative flex flex-col items-center justify-center text-center py-32 bg-gradient-to-r from-yellow-500/10 via-amber-500/10 to-orange-500/10 dark:from-yellow-900/20 dark:via-amber-900/20 dark:to-orange-900/20 overflow-hidden">
     {/* Background blur elements */}
-    <div className="absolute inset-0 overflow-hidden">
+    <div className="absolute inset-0 overflow-hidden z-0">
       <div className="absolute -left-4 top-20 w-72 h-72 bg-yellow-500 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob" />
       <div className="absolute -right-4 top-20 w-72 h-72 bg-amber-500 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob animation-delay-2000" />
       <div className="absolute -bottom-8 left-20 w-72 h-72 bg-orange-500 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob animation-delay-4000" />
     </div>
 
-    <motion.h1
-      className="relative text-6xl font-bold text-gray-900 dark:text-white max-w-3xl bg-clip-text text-transparent bg-gradient-to-r from-yellow-600 to-amber-600 dark:from-yellow-400 dark:to-amber-400"
-      initial={{ opacity: 0, y: -50 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.6 }}
-    >
-      AI Meeting Notes & Transcription
-    </motion.h1>
-    <motion.h2
-      className="mt-4 text-2xl font-semibold text-gray-700 dark:text-gray-300"
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ delay: 0.2, duration: 0.6 }}
-    >
-      Transform Meetings into Actionable Notes
-    </motion.h2>
-    <motion.p
-      className="mt-6 text-xl text-gray-600 max-w-2xl"
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ delay: 0.3, duration: 0.6 }}
-    >
-      Automatically record, transcribe, and organize your meetings with AI-powered technology. Perfect for teams, developers, and professionals.
-    </motion.p>
-    <motion.div
-      className="mt-10"
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ delay: 0.5, duration: 0.6 }}
-    >
-      <DownloadButton os={os} />
-    </motion.div>
-    <motion.p
-      className="mt-4 text-sm text-gray-500 dark:text-gray-400"
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ delay: 0.7, duration: 0.6 }}
-    >
-      {os === 'mac' ? 'macOS 10.15+' : os === 'windows' ? 'Windows 10+' : 'Linux'} • Free during beta
-    </motion.p>
-    {/* App Preview - Updated sizing */}
-    <motion.div
-      className="mt-20 w-full max-w-3xl mx-auto relative"
-      initial={{ scale: 0.9, opacity: 0 }}
-      animate={{ scale: 1, opacity: 1 }}
-      transition={{ delay: 0.5, duration: 0.5 }}
-    >
-      <div className="bg-white/10 dark:bg-white/5 backdrop-blur-xl rounded-2xl shadow-2xl overflow-hidden border border-white/20">
-        <div className="relative">
-          {/* Mac-style window controls */}
-          <div className="absolute top-3 left-3 flex gap-2">
-            <div className="w-3 h-3 rounded-full bg-red-500/80" />
-            <div className="w-3 h-3 rounded-full bg-yellow-500/80" />
-            <div className="w-3 h-3 rounded-full bg-green-500/80" />
-          </div>
-          <img
-            src="/screenshot.png"
-            alt="App Interface"
-            className="w-full h-auto opacity-90"
-          />
-        </div>
-      </div>
-      {/* Floating elements - adjusted position */}
-      <motion.div
-        className="absolute -right-4 -top-4 bg-blue-500/10 dark:bg-blue-400/10 backdrop-blur-lg p-4 rounded-xl shadow-lg border border-white/20"
-        whileHover={{ y: -5 }}
+    {/* Content with higher z-index */}
+    <div className="relative z-10">
+      <motion.h1
+        className="relative text-6xl font-bold text-gray-900 dark:text-white max-w-3xl bg-clip-text text-transparent bg-gradient-to-r from-yellow-600 to-amber-600 dark:from-yellow-400 dark:to-amber-400"
+        initial={{ opacity: 0, y: -50 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6 }}
       >
-        <Robot size={24} className="text-blue-600 dark:text-blue-400" weight="fill" />
+        AI Meeting Notes & Transcription
+      </motion.h1>
+      <motion.h2
+        className="mt-4 text-2xl font-semibold text-gray-700 dark:text-gray-300"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.2, duration: 0.6 }}
+      >
+        Transform Meetings into Actionable Notes
+      </motion.h2>
+      <motion.p
+        className="mt-6 text-xl text-gray-600 max-w-2xl"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.3, duration: 0.6 }}
+      >
+        Automatically record, transcribe, and organize your meetings with AI-powered technology. Perfect for teams, developers, and professionals.
+      </motion.p>
+      <motion.div
+        className="mt-10"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.5, duration: 0.6 }}
+      >
+        <DownloadButton os={os} />
       </motion.div>
-    </motion.div>
+      <motion.p
+        className="mt-4 text-sm text-gray-500 dark:text-gray-400"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.7, duration: 0.6 }}
+      >
+        {os === 'mac' ? 'macOS 10.15+' : os === 'windows' ? 'Windows 10+' : 'Linux'} • Free during beta
+      </motion.p>
+      {/* App Preview - Updated sizing */}
+      <motion.div
+        className="mt-20 w-full max-w-3xl mx-auto relative"
+        initial={{ scale: 0.9, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        transition={{ delay: 0.5, duration: 0.5 }}
+      >
+        <div className="bg-white/10 dark:bg-white/5 backdrop-blur-xl rounded-2xl shadow-2xl overflow-hidden border border-white/20">
+          <div className="relative">
+            {/* Mac-style window controls */}
+            <div className="absolute top-3 left-3 flex gap-2">
+              <div className="w-3 h-3 rounded-full bg-red-500/80" />
+              <div className="w-3 h-3 rounded-full bg-yellow-500/80" />
+              <div className="w-3 h-3 rounded-full bg-green-500/80" />
+            </div>
+            <img
+              src="/screenshot.png"
+              alt="App Interface"
+              className="w-full h-auto opacity-90"
+            />
+          </div>
+        </div>
+        {/* Floating elements - adjusted position */}
+        <motion.div
+          className="absolute -right-4 -top-4 bg-blue-500/10 dark:bg-blue-400/10 backdrop-blur-lg p-4 rounded-xl shadow-lg border border-white/20"
+          whileHover={{ y: -5 }}
+        >
+          <Robot size={24} className="text-blue-600 dark:text-blue-400" weight="fill" />
+        </motion.div>
+      </motion.div>
+    </div>
   </section>
 );
 
