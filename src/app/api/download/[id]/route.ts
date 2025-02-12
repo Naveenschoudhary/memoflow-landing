@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { supabase } from '@/lib/supabase';
+import { redirect } from 'next/navigation';
 
 const EXPIRATION_TIME = 10 * 60 * 1000; // 10 minutes in milliseconds
 
@@ -38,10 +39,8 @@ export async function GET(
         .update({ status: 'expired' })
         .eq('id', id);
 
-      return Response.json(
-        { error: 'Download link has expired. Please request a new link.' },
-        { status: 410 }
-      );
+      // Redirect to expired page instead of JSON response
+      return redirect('/download/expired');
     }
 
     // Update download status
