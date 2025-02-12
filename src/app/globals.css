@@ -72,3 +72,33 @@ html {
 .glass-hover {
   @apply hover:bg-white/60 dark:hover:bg-gray-800/60 transition-all duration-300;
 }
+
+/* Add these to your globals.css */
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+.animate-float {
+  animation: float 4s ease-in-out infinite;
+}
+
+/* Smooth scrolling for the whole page */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Enhanced transitions */
+.transition-all {
+  transition-duration: 300ms;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Hover effect utilities */
+.hover-lift {
+  transition: transform 0.2s ease-in-out;
+}
+
+.hover-lift:hover {
+  transform: translateY(-5px);
+}
