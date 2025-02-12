@@ -15,7 +15,7 @@ export const EmailTemplate: React.FC<EmailTemplateProps> = ({
     margin: '0 auto',
   }}>
     <div style={{ textAlign: 'center', padding: '40px 0' }}>
-      <img src="https://memoflow.app/logo.png" alt="MemoFlow Logo" style={{ width: '150px' }} />
+      <img src="https://memoflow.app/logo.png" alt="MemoFlow Logo" style={{ width: '100px' }} />
     </div>
 
     <div style={{ background: 'linear-gradient(to right, #fbbf24, #f59e0b)', padding: '2px' }}>
