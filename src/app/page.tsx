@@ -30,41 +30,79 @@ import {
 //
 // Helper: Download Button (OS-specific)
 //
-const DownloadButton: React.FC<{ os: 'mac' | 'windows' }> = ({ os }) => {
-  const handleDownload = () => {
-    const downloadUrl = os === 'mac' 
-      ? '/Application/mac/memoflow 1.0.0.dmg'
-      : '/Application/windows/memoflow 1.0.0.exe';
+const DownloadButton: React.FC<{ os: 'mac' | 'windows' | 'linux' }> = ({ os }) => {
+  const handleDownload = (targetOs: 'mac' | 'windows' | 'linux') => {
+    let downloadUrl;
 
-    // Create an anchor element and trigger download
-    const link = document.createElement('a');
-    link.href = downloadUrl;
-    link.download = os === 'mac' ? 'memoflow 1.0.0.dmg' : 'memoflow 1.0.0.exe';
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+    switch (targetOs) {
+      case 'mac':
+        downloadUrl = 'http://assets.naveenschoudhary.com/memoflow/macos/Memoflow-1.0.0-arm64.dmg';
+        break;
+      case 'windows':
+        downloadUrl = 'http://assets.naveenschoudhary.com/memoflow/windows/Memoflow%20Setup%201.0.0.exe';
+        break;
+      case 'linux':
+        downloadUrl = 'http://assets.naveenschoudhary.com/memoflow/ubantu/memoflow_1.0.0_arm64.deb';
+        break;
+    }
+
+    window.open(downloadUrl, '_blank');
   };
 
   return (
-    <div className="relative inline-block">
-      <button 
-        onClick={handleDownload}
+    <div className="flex flex-col items-center gap-4">
+      {/* Primary Download Button */}
+      <button
+        onClick={() => handleDownload(os)}
         className="px-8 py-4 bg-white/10 backdrop-blur-md text-white font-semibold rounded-xl shadow-lg 
-                  hover:bg-white/20 transition-all duration-300 flex items-center gap-3 border border-white/20"
+                  hover:bg-white/20 transition-all duration-300 flex items-center gap-3 border border-white/20 cursor-pointer"
       >
         <span className="text-lg">
           {os === 'mac' ? (
             <AppleLogo size={24} weight="fill" />
-          ) : (
+          ) : os === 'windows' ? (
             <WindowsLogo size={24} weight="fill" />
+          ) : (
+            <Globe size={24} weight="fill" />
           )}
         </span>
-        <span>Download for {os === 'mac' ? 'macOS' : 'Windows'}</span>
+        <span>Download for {os === 'mac' ? 'macOS' : os === 'windows' ? 'Windows' : 'Linux'}</span>
         <span className="absolute -top-3 -right-3 bg-gradient-to-r from-yellow-500 to-amber-500 
                       text-white text-xs px-2 py-1 rounded-full animate-pulse">
           Beta
         </span>
       </button>
+
+      {/* Other OS Download Links */}
+      <div className="flex gap-6 text-sm text-gray-400">
+        {os !== 'mac' && (
+          <button
+            onClick={() => handleDownload('mac')}
+            className="flex items-center gap-1 hover:text-yellow-500 transition-colors cursor-pointer"
+          >
+            <AppleLogo size={16} weight="fill" />
+            <span>Download for macOS</span>
+          </button>
+        )}
+        {os !== 'windows' && (
+          <button
+            onClick={() => handleDownload('windows')}
+            className="flex items-center gap-1 hover:text-yellow-500 transition-colors cursor-pointer"
+          >
+            <WindowsLogo size={16} weight="fill" />
+            <span>Download for Windows</span>
+          </button>
+        )}
+        {os !== 'linux' && (
+          <button
+            onClick={() => handleDownload('linux')}
+            className="flex items-center gap-1 hover:text-yellow-500 transition-colors cursor-pointer"
+          >
+            <Globe size={16} weight="fill" />
+            <span>Download for Linux</span>
+          </button>
+        )}
+      </div>
     </div>
   );
 };
@@ -72,7 +110,7 @@ const DownloadButton: React.FC<{ os: 'mac' | 'windows' }> = ({ os }) => {
 //
 // Hero Section
 //
-const Hero: React.FC<{ os: 'mac' | 'windows' }> = ({ os }) => (
+const Hero: React.FC<{ os: 'mac' | 'windows' | 'linux' }> = ({ os }) => (
   <section className="relative flex flex-col items-center justify-center text-center py-32 bg-gradient-to-r from-yellow-500/10 via-amber-500/10 to-orange-500/10 dark:from-yellow-900/20 dark:via-amber-900/20 dark:to-orange-900/20 overflow-hidden">
     {/* Background blur elements */}
     <div className="absolute inset-0 overflow-hidden">
@@ -119,7 +157,7 @@ const Hero: React.FC<{ os: 'mac' | 'windows' }> = ({ os }) => (
       animate={{ opacity: 1 }}
       transition={{ delay: 0.7, duration: 0.6 }}
     >
-      {os === 'mac' ? 'macOS 10.15+' : 'Windows 10+'} • Free during beta
+      {os === 'mac' ? 'macOS 10.15+' : os === 'windows' ? 'Windows 10+' : 'Linux'} • Free during beta
     </motion.p>
     {/* App Preview - Updated sizing */}
     <motion.div
@@ -458,70 +496,101 @@ const Privacy = () => (
 //
 // Download Section
 //
-const DownloadSection: React.FC<{ os: 'mac' | 'windows' }> = ({ os }) => (
-  <section className="py-20 bg-gradient-to-r from-yellow-500/20 to-amber-500/20 dark:from-yellow-900/30 dark:to-amber-900/30 backdrop-blur-lg">
-    <div className="max-w-4xl mx-auto px-4 text-center">
-      <motion.div
-        className="glass p-12 rounded-2xl"
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-      >
-        <motion.h2
-          className="text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-yellow-600 to-amber-600 dark:from-yellow-400 dark:to-amber-400 mb-6"
+const DownloadSection: React.FC<{ os: 'mac' | 'windows' | 'linux' }> = ({ os }) => {
+  const getAlternativeOS = () => {
+    if (os === 'mac') return 'windows';
+    if (os === 'windows') return 'linux';
+    return 'mac';
+  };
+
+  const handleDownload = (targetOs: 'mac' | 'windows' | 'linux') => {
+    let downloadUrl;
+
+    switch (targetOs) {
+      case 'mac':
+        downloadUrl = 'http://assets.naveenschoudhary.com/memoflow/macos/Memoflow-1.0.0-arm64.dmg';
+        break;
+      case 'windows':
+        downloadUrl = 'http://assets.naveenschoudhary.com/memoflow/windows/Memoflow%20Setup%201.0.0.exe';
+        break;
+      case 'linux':
+        downloadUrl = 'http://assets.naveenschoudhary.com/memoflow/ubantu/memoflow_1.0.0_arm64.deb';
+        break;
+    }
+
+    window.open(downloadUrl);
+  };
+
+  const alternativeOS = getAlternativeOS();
+
+  return (
+    <section className="py-20 bg-gradient-to-r from-yellow-500/20 to-amber-500/20 dark:from-yellow-900/30 dark:to-amber-900/30 backdrop-blur-lg">
+      <div className="max-w-4xl mx-auto px-4 text-center">
+        <motion.div
+          className="glass p-12 rounded-2xl"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.5 }}
         >
-          Ready to Transform Your Meetings?
-        </motion.h2>
+          <motion.h2
+            className="text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-yellow-600 to-amber-600 dark:from-yellow-400 dark:to-amber-400 mb-6"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5 }}
+          >
+            Ready to Transform Your Meetings?
+          </motion.h2>
 
-        <div className="flex flex-col items-center gap-8 mb-8">
-          <DownloadButton os={os} />
+          <div className="flex flex-col items-center gap-8 mb-8">
+            <DownloadButton os={os} />
 
-          {/* Alternative OS Download */}
-          <div className="text-sm text-gray-500 dark:text-gray-400">
-            Using {os === 'mac' ? 'Windows' : 'macOS'}?{' '}
-            <button className="text-blue-500 hover:text-blue-600 dark:text-blue-400 dark:hover:text-blue-300 underline">
-              Download for {os === 'mac' ? 'Windows' : 'macOS'} instead
-            </button>
-          </div>
-        </div>
-
-        <div className="space-y-4">
-          {/* System Requirements */}
-          <div className="flex items-center justify-center gap-8 text-sm text-gray-600 dark:text-gray-400">
-            <div className="flex items-center gap-2">
-              <Cpu size={16} />
-              <span>64-bit {os === 'mac' ? 'macOS 10.15+' : 'Windows 10+'}</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <HardDrive size={16} />
-              <span>200MB free space</span>
+            {/* Alternative OS Download */}
+            <div className="text-sm text-gray-500 dark:text-gray-400">
+              Using {alternativeOS === 'mac' ? 'macOS' : alternativeOS === 'windows' ? 'Windows' : 'Linux'}?{' '}
+              <button
+                onClick={() => handleDownload(alternativeOS)}
+                className="text-blue-500 hover:text-blue-600 dark:text-blue-400 dark:hover:text-blue-300 underline cursor-pointer"
+              >
+                Download for {alternativeOS === 'mac' ? 'macOS' : alternativeOS === 'windows' ? 'Windows' : 'Linux'} instead
+              </button>
             </div>
           </div>
 
-          {/* Version Info */}
-          <div className="flex items-center justify-center gap-4 text-sm text-gray-600 dark:text-gray-400">
-            <div className="flex items-center gap-2">
-              <Code size={16} />
-              <span>Version 1.2.3 Beta</span>
+          <div className="space-y-4">
+            {/* System Requirements */}
+            <div className="flex items-center justify-center gap-8 text-sm text-gray-600 dark:text-gray-400">
+              <div className="flex items-center gap-2">
+                <Cpu size={16} />
+                <span>64-bit {os === 'mac' ? 'macOS 10.15+' : os === 'windows' ? 'Windows 10+' : 'Linux'}</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <HardDrive size={16} />
+                <span>200MB free space</span>
+              </div>
             </div>
-            <a href="/release-notes" className="flex items-center gap-1 text-blue-500 hover:text-blue-600 dark:text-blue-400 dark:hover:text-blue-300">
-              <FileText size={16} />
-              <span>Release Notes</span>
-            </a>
-            <a href="/docs" className="flex items-center gap-1 text-blue-500 hover:text-blue-600 dark:text-blue-400 dark:hover:text-blue-300">
-              <Book size={16} />
-              <span>Documentation</span>
-            </a>
+
+            {/* Version Info */}
+            <div className="flex items-center justify-center gap-4 text-sm text-gray-600 dark:text-gray-400">
+              <div className="flex items-center gap-2">
+                <Code size={16} />
+                <span>Version 1.2.3 Beta</span>
+              </div>
+              <a href="/release-notes" className="flex items-center gap-1 text-blue-500 hover:text-blue-600 dark:text-blue-400 dark:hover:text-blue-300">
+                <FileText size={16} />
+                <span>Release Notes</span>
+              </a>
+              <a href="/docs" className="flex items-center gap-1 text-blue-500 hover:text-blue-600 dark:text-blue-400 dark:hover:text-blue-300">
+                <Book size={16} />
+                <span>Documentation</span>
+              </a>
+            </div>
           </div>
-        </div>
-      </motion.div>
-    </div>
-  </section>
-);
+        </motion.div>
+      </div>
+    </section>
+  );
+};
 
 // Add this after the DownloadSection component
 const Footer = () => (
@@ -647,14 +716,20 @@ const structuredData = {
 // Main Landing Page Component
 //
 const Home: React.FC = () => {
-  // OS detection hook (for simplicity, only distinguishing Windows vs. macOS)
-  const [os, setOs] = useState<'mac' | 'windows'>('mac');
+  const [os, setOs] = useState<'mac' | 'windows' | 'linux'>('mac');
 
   useEffect(() => {
-    if (typeof window !== 'undefined' && navigator.platform.indexOf('Win') > -1) {
-      setOs('windows');
-    } else {
-      setOs('mac');
+    if (typeof window !== 'undefined') {
+      const platform = navigator.platform.toLowerCase();
+      const userAgent = navigator.userAgent.toLowerCase();
+
+      if (platform.includes('win') || userAgent.includes('windows')) {
+        setOs('windows');
+      } else if (platform.includes('linux') || userAgent.includes('linux')) {
+        setOs('linux');
+      } else if (platform.includes('mac') || userAgent.includes('mac')) {
+        setOs('mac');
+      }
     }
   }, []);
 
