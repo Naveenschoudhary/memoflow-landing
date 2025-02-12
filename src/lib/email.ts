@@ -79,7 +79,7 @@ export async function sendWelcomeEmail(email: string, os: 'mac' | 'windows' | 'l
         message: dbError.message,
         details: dbError.details,
         hint: dbError.hint,
-        status: dbError.status,
+        status: dbError.cause,
         error: JSON.stringify(dbError)
       });
       throw new Error(`Database error: ${dbError.message || 'Unknown error'}`);

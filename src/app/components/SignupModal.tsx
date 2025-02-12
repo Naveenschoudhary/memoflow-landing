@@ -28,7 +28,7 @@ const SignupModal: React.FC<SignupModalProps> = ({ isOpen, onClose, onSubmit, os
       }, 2000);
     } catch (err) {
       setStatus('error');
-      setError(err.message || 'Something went wrong');
+      setError(err instanceof Error ? err.message : 'Something went wrong');
     }
   };
 
@@ -66,8 +66,8 @@ const SignupModal: React.FC<SignupModalProps> = ({ isOpen, onClose, onSubmit, os
 
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div className="relative">
-                  <Envelope 
-                    size={20} 
+                  <Envelope
+                    size={20}
                     className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
                   />
                   <input
@@ -86,8 +86,8 @@ const SignupModal: React.FC<SignupModalProps> = ({ isOpen, onClose, onSubmit, os
                   type="submit"
                   disabled={status === 'loading' || status === 'success'}
                   className={`w-full py-3 rounded-xl font-semibold text-white 
-                    ${status === 'success' 
-                      ? 'bg-green-500' 
+                    ${status === 'success'
+                      ? 'bg-green-500'
                       : 'bg-gradient-to-r from-yellow-500 to-amber-500 hover:from-yellow-600 hover:to-amber-600'
                     } transition-all duration-200 flex items-center justify-center gap-2`}
                 >

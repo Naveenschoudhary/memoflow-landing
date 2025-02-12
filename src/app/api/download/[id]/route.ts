@@ -1,16 +1,16 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { supabase } from '@/lib/supabase';
+
+const EXPIRATION_TIME = 10 * 60 * 1000; // 10 minutes in milliseconds
 
 export async function GET(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const { id } = params;
+    const id = (await params).id; // 'a', 'b', or 'c'
 
-    console.log('Fetching download with ID:', id);
-
-    // Get download info from Supabase with schema specified
+    // Get download info from Supabase
     const { data, error } = await supabase
       .schema('public')
       .from('downloads')
@@ -18,29 +18,34 @@ export async function GET(
       .eq('id', id)
       .single();
 
-    if (error) {
-      console.error('Supabase error:', error);
-      return NextResponse.json(
-        { 
-          error: 'Failed to fetch download information',
-          details: error.message
-        },
-        { status: 500 }
-      );
-    }
-
-    if (!data) {
-      console.error('Download not found for ID:', id);
-      return NextResponse.json(
-        { error: 'Download link not found or expired' },
+    if (error || !data) {
+      return Response.json(
+        { error: 'Download link not found' },
         { status: 404 }
       );
     }
 
-    console.log('Found download data:', data);
+    // Check if the link has expired
+    const createdAt = new Date(data.created_at).getTime();
+    const now = Date.now();
+    const timeDiff = now - createdAt;
+
+    if (timeDiff > EXPIRATION_TIME) {
+      // Update status to expired
+      await supabase
+        .schema('public')
+        .from('downloads')
+        .update({ status: 'expired' })
+        .eq('id', id);
+
+      return Response.json(
+        { error: 'Download link has expired. Please request a new link.' },
+        { status: 410 }
+      );
+    }
 
     // Update download status
-    const { error: updateError } = await supabase
+    await supabase
       .schema('public')
       .from('downloads')
       .update({ 
@@ -49,31 +54,12 @@ export async function GET(
       })
       .eq('id', id);
 
-    if (updateError) {
-      console.error('Failed to update download status:', updateError);
-      // Continue with redirect even if status update fails
-    }
-
-    // Ensure we have a valid download link
-    if (!data.download_link) {
-      console.error('Download link is missing for ID:', id);
-      return NextResponse.json(
-        { error: 'Download link is invalid' },
-        { status: 500 }
-      );
-    }
-
-    console.log('Redirecting to:', data.download_link);
-
     // Redirect to actual download URL
-    return NextResponse.redirect(data.download_link);
+    return Response.redirect(data.download_link);
   } catch (error) {
-    console.error('Download route error:', error);
-    return NextResponse.json(
-      { 
-        error: 'Failed to process download',
-        details: error instanceof Error ? error.message : 'Unknown error'
-      },
+    console.error('Download error:', error);
+    return Response.json(
+      { error: 'Failed to process download' },
       { status: 500 }
     );
   }
