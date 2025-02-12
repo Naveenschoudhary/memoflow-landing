@@ -57,9 +57,6 @@ export async function GET(
     return Response.redirect(data.download_link);
   } catch (error) {
     console.error('Download error:', error);
-    return Response.json(
-      { error: 'Failed to process download' },
-      { status: 500 }
-    );
+    return redirect('/download/expired');
   }
 } 
