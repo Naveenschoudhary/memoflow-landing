@@ -1,748 +1,378 @@
-// pages/index.tsx
-'use client'
-import { useEffect, useState } from 'react';
-import Head from 'next/head';
-import { motion, useScroll, useTransform, useSpring, useMotionValueEvent } from 'framer-motion';
+import CTAButton from "@/components/CTAButton";
 import {
-  Robot,
-  Clock,
-  Database,
-  Shield,
-  Trash,
-  Desktop,
-  MicrophoneStage,
-  Notepad,
-  ArrowRight,
-  Globe,
-  Lock,
-  AppleLogo,
-  WindowsLogo,
-  Cpu,
-  HardDrive,
-  FileText,
-  Book,
-  Code,
-  GithubLogo,
-  TwitterLogo,
-  LinkedinLogo,
-} from "@phosphor-icons/react";
-import DownloadButton from '@/components/DownloadButton';
+  RecordingWindow,
+  SummaryFrame,
+  ChatFrame,
+  DictationFrame,
+  HinglishFrame,
+} from "@/components/ui-frames";
 
-//
-// Hero Section
-//
-const FloatingElement: React.FC<{ delay?: number; children: React.ReactNode }> = ({ delay = 0, children }) => {
-  return (
-    <motion.div
-      initial={{ y: 0 }}
-      animate={{
-        y: [0, -10, 0],
-        transition: {
-          duration: 4,
-          repeat: Infinity,
-          delay: delay,
-          ease: "easeInOut"
-        }
-      }}
-    >
-      {children}
-    </motion.div>
-  );
+const faqs = [
+  {
+    q: "Is anything uploaded to the cloud?",
+    a: "No. Recording, transcription, summaries, and chat all run on your Mac using Apple Intelligence and Whisper on the Neural Engine. Your recordings and transcripts live in a local database on your disk. MemoFlow needs no account and works fully offline.",
+  },
+  {
+    q: "Does it work with Zoom, Google Meet, and Teams?",
+    a: "Yes — with any meeting app. MemoFlow captures your microphone and your Mac's system audio, so it hears both sides of any call, labels who said what (You vs. Others), and needs no bots or calendar integrations.",
+  },
+  {
+    q: "Does it really support Hindi and Hinglish?",
+    a: "Yes. MemoFlow runs Whisper large-v3 turbo on-device, transcribing Hindi in Devanagari and handling Hinglish code-switching — English words mixed into Hindi sentences come out naturally. Auto-detection picks the right language per meeting.",
+  },
+  {
+    q: "How is this different from Otter, Fireflies, or Granola?",
+    a: "Those services process your meetings on their servers. MemoFlow processes everything on your Mac — nothing is uploaded, so nothing can leak, be subpoenaed from a third party, or become training data. It's also the only one with local Hindi and Hinglish support.",
+  },
+  {
+    q: "What does dictation do?",
+    a: "Hold a hotkey in any app, speak, and release — clean text is typed into whatever field has focus. MemoFlow removes filler words, fixes punctuation, and applies your self-corrections: say “at 6 o'clock — no, at 7” and it types “at 7 o'clock.” Works in English, Hindi, and Hinglish.",
+  },
+  {
+    q: "What are the system requirements?",
+    a: "An Apple Silicon Mac running macOS 26 (Tahoe). Summaries and chat use Apple Intelligence; transcription models download once and run offline afterward.",
+  },
+  {
+    q: "How much does it cost?",
+    a: "MemoFlow is free during the beta. No account, no credit card.",
+  },
+  {
+    q: "Can I ask questions about old meetings?",
+    a: "Yes — Ask works across your whole library. Answers come only from your transcripts and carry citations; click one and MemoFlow jumps to that exact moment in the recording.",
+  },
+];
+
+const faqJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: faqs.map((f) => ({
+    "@type": "Question",
+    name: f.q,
+    acceptedAnswer: { "@type": "Answer", text: f.a },
+  })),
 };
 
-const Hero: React.FC<{ os: 'mac' | 'windows' | 'linux' }> = ({ os }) => {
-  const { scrollY } = useScroll();
-  const y = useSpring(useTransform(scrollY, [0, 300], [0, -50]), {
-    stiffness: 100,
-    damping: 30
-  });
+const WaveMark = () => (
+  <span className="flex h-5 items-end gap-[2px]" aria-hidden="true">
+    {[8, 14, 20, 14, 8].map((h, i) => (
+      <span
+        key={i}
+        className="w-[3px] rounded-full bg-[var(--accent)]"
+        style={{ height: h }}
+      />
+    ))}
+  </span>
+);
 
+function Nav() {
   return (
-    <section className="relative flex flex-col items-center justify-center text-center py-32 min-h-screen">
-      {/* Background blur elements with parallax */}
-      <motion.div className="absolute inset-0 overflow-hidden z-0" style={{ y }}>
-        <motion.div
-          className="absolute -left-4 top-20 w-72 h-72 bg-yellow-500 rounded-full mix-blend-multiply filter blur-xl opacity-70"
-          animate={{
-            scale: [1, 1.2, 1],
-            opacity: [0.5, 0.7, 0.5],
-          }}
-          transition={{
-            duration: 8,
-            repeat: Infinity,
-            ease: "easeInOut"
-          }}
-        />
-        <div className="absolute -right-4 top-20 w-72 h-72 bg-amber-500 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob animation-delay-2000" />
-        <div className="absolute -bottom-8 left-20 w-72 h-72 bg-orange-500 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob animation-delay-4000" />
-      </motion.div>
+    <header className="sticky top-0 z-40 border-b border-[var(--line)] bg-[var(--page)]/80 backdrop-blur">
+      <nav className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
+        <a href="#" className="flex items-center gap-2 font-semibold">
+          <WaveMark />
+          MemoFlow
+        </a>
+        <div className="hidden items-center gap-8 text-sm text-[var(--muted)] sm:flex">
+          <a href="#features" className="hover:text-[var(--text)]">Features</a>
+          <a href="#privacy" className="hover:text-[var(--text)]">Privacy</a>
+          <a href="#hinglish" className="hover:text-[var(--text)]">हिन्दी + English</a>
+          <a href="#faq" className="hover:text-[var(--text)]">FAQ</a>
+        </div>
+        <CTAButton variant="ghost">Download</CTAButton>
+      </nav>
+    </header>
+  );
+}
 
-      {/* Content with enhanced animations */}
-      <div className="relative z-10">
-        <FloatingElement>
-          <motion.h1
-            className="relative text-6xl font-bold text-gray-900 dark:text-white max-w-3xl bg-clip-text text-transparent bg-gradient-to-r from-yellow-600 to-amber-600 dark:from-yellow-400 dark:to-amber-400"
-            initial={{ opacity: 0, y: -50 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, type: "spring" }}
-          >
-            AI Meeting Notes & Transcription
-          </motion.h1>
-        </FloatingElement>
-        <motion.h2
-          className="mt-4 text-2xl font-semibold text-gray-700 dark:text-gray-300"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.2, duration: 0.6 }}
+function Hero() {
+  return (
+    <section className="mx-auto max-w-6xl px-6 pb-20 pt-16 text-center sm:pt-24">
+      <p className="mb-4 text-sm font-medium text-[var(--accent)]">
+        For macOS · 100% on-device
+      </p>
+      <h1 className="mx-auto max-w-3xl text-4xl font-semibold tracking-tight sm:text-6xl">
+        AI meeting notes that never leave your Mac.
+      </h1>
+      <p className="mx-auto mt-5 max-w-2xl text-lg text-[var(--muted)]">
+        MemoFlow records both sides of your meetings, transcribes live, writes
+        summaries and action items, and answers questions about what was said —
+        in English, हिन्दी, and Hinglish. No cloud. No account. No bots in your
+        calls.
+      </p>
+      <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
+        <CTAButton>Download for macOS — free beta</CTAButton>
+        <a
+          href="#features"
+          className="px-4 py-3 text-sm text-[var(--muted)] hover:text-[var(--text)]"
         >
-          Transform Meetings into Actionable Notes
-        </motion.h2>
-        <motion.p
-          className="mt-6 text-xl text-gray-600 max-w-2xl"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.3, duration: 0.6 }}
-        >
-          Automatically record, transcribe, and organize your meetings with AI-powered technology. Perfect for teams, developers, and professionals.
-        </motion.p>
-        <motion.div
-          className="mt-10"
-          whileHover={{ scale: 1.02 }}
-          whileTap={{ scale: 0.98 }}
-        >
-          <DownloadButton os={os} />
-        </motion.div>
-        <motion.p
-          className="mt-4 text-sm text-gray-500 dark:text-gray-400"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.7, duration: 0.6 }}
-        >
-          {os === 'mac' ? 'macOS 10.15+' : os === 'windows' ? 'Windows 10+' : 'Linux'} • Free during beta
-        </motion.p>
-        {/* App Preview - Updated sizing */}
-        <motion.div
-          className="mt-20 w-full max-w-3xl mx-auto relative"
-          initial={{ scale: 0.9, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          transition={{
-            duration: 0.8,
-            type: "spring",
-            bounce: 0.4
-          }}
-          whileHover={{
-            scale: 1.02,
-            transition: { duration: 0.3 }
-          }}
-        >
-          <div className="bg-white/10 dark:bg-white/5 backdrop-blur-xl rounded-2xl shadow-2xl overflow-hidden border border-white/20">
-            <div className="relative">
-              {/* Mac-style window controls */}
-              <div className="absolute top-3 left-3 flex gap-2">
-                <div className="w-3 h-3 rounded-full bg-red-500/80" />
-                <div className="w-3 h-3 rounded-full bg-yellow-500/80" />
-                <div className="w-3 h-3 rounded-full bg-green-500/80" />
-              </div>
-              <img
-                src="/screenshot.png"
-                alt="App Interface"
-                className="w-full h-auto opacity-90"
-              />
-            </div>
-          </div>
-          {/* Floating elements - adjusted position */}
-          <motion.div
-            className="absolute -right-4 -top-4 bg-blue-500/10 dark:bg-blue-400/10 backdrop-blur-lg p-4 rounded-xl shadow-lg border border-white/20"
-            whileHover={{ y: -5 }}
-          >
-            <Robot size={24} className="text-blue-600 dark:text-blue-400" weight="fill" />
-          </motion.div>
-        </motion.div>
+          See how it works ↓
+        </a>
       </div>
+      <p className="mt-4 text-xs text-[var(--muted)]/70">
+        macOS 26 · Apple Silicon · nothing is ever uploaded
+      </p>
+
+      <div className="mt-14">
+        <RecordingWindow />
+      </div>
+
+      <ul className="mx-auto mt-10 flex max-w-3xl flex-wrap items-center justify-center gap-x-8 gap-y-3 text-sm text-[var(--muted)]">
+        <li>Apple Intelligence</li>
+        <li>Whisper on the Neural Engine</li>
+        <li>Local database, your disk</li>
+        <li>No account needed</li>
+      </ul>
     </section>
   );
-};
+}
 
-//
-// Features Section
-//
-const Features = () => {
-  const features = [
-    {
-      title: "AI-Powered Notes",
-      description: "Automatically generate structured notes from your meetings",
-      icon: <Robot size={32} weight="fill" className="text-blue-600" />
-    },
-    {
-      title: "Real-time Transcription",
-      description: "Get instant transcripts as your meeting progresses",
-      icon: <MicrophoneStage size={32} weight="fill" className="text-purple-600" />
-    },
-    {
-      title: "Smart Organization",
-      description: "Automatically categorize and tag your meeting notes",
-      icon: <Notepad size={32} weight="fill" className="text-green-600" />
-    },
-    {
-      title: "Secure Storage",
-      description: "Your data is encrypted and stored safely",
-      icon: <Lock size={32} weight="fill" className="text-orange-600" />
-    },
-    {
-      title: "Global Access",
-      description: "Access your notes from anywhere, anytime",
-      icon: <Globe size={32} weight="fill" className="text-teal-600" />
-    },
-    {
-      title: "Desktop Integration",
-      description: "Seamlessly integrates with your workflow",
-      icon: <Desktop size={32} weight="fill" className="text-indigo-600" />
-    },
-  ];
-
+function Privacy() {
   return (
-    <section className="py-32 bg-gradient-to-b from-transparent to-gray-50/50 dark:to-gray-900/50">
-      <div className="max-w-7xl mx-auto px-4">
-        <motion.div
-          className="text-center mb-20"
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-        >
-          <h2 className="text-4xl font-bold text-gray-900 mb-4">
-            Everything you need for better meetings
-          </h2>
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-            Powerful features to help you capture, organize, and act on your meeting insights
-          </p>
-        </motion.div>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
-          {features.map((feature, index) => (
-            <motion.div
-              key={index}
-              className="feature-card p-8 rounded-2xl bg-white/40 dark:bg-gray-800/40 backdrop-blur-lg border border-white/20 dark:border-white/10 hover:bg-white/60 dark:hover:bg-gray-800/60 transition-colors"
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-100px" }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
-              whileHover={{
-                scale: 1.03,
-                boxShadow: "0 10px 30px rgba(0,0,0,0.1)",
-                transition: { duration: 0.2 }
-              }}
-            >
-              <div className="mb-6">{feature.icon}</div>
-              <h3 className="text-xl font-semibold mb-3">{feature.title}</h3>
-              <p className="text-gray-600">{feature.description}</p>
-            </motion.div>
+    <section id="privacy" className="border-y border-[var(--line)] bg-black/20">
+      <div className="mx-auto max-w-6xl px-6 py-20 text-center">
+        <h2 className="text-3xl font-semibold tracking-tight sm:text-4xl">
+          Your meetings are not training data.
+        </h2>
+        <p className="mx-auto mt-4 max-w-2xl text-[var(--muted)]">
+          Cloud notetakers send every word your team says to someone else&apos;s
+          servers. MemoFlow runs Apple&apos;s speech models and Whisper directly
+          on your Mac&apos;s Neural Engine. The audio, transcripts, summaries,
+          and chat history live in a local database you can open in Finder —
+          and delete whenever you want.
+        </p>
+        <div className="mx-auto mt-10 grid max-w-3xl gap-4 text-left sm:grid-cols-3">
+          {[
+            ["On-device AI", "Apple Intelligence + Whisper, accelerated by the Neural Engine."],
+            ["Works offline", "Transcribe and summarize on a plane. Models download once."],
+            ["You hold the keys", "No account, no sync, no telemetry on your conversations."],
+          ].map(([title, body]) => (
+            <div key={title} className="rounded-2xl border border-[var(--line)] bg-[var(--panel)] p-5">
+              <div className="font-semibold">{title}</div>
+              <p className="mt-1 text-sm text-[var(--muted)]">{body}</p>
+            </div>
           ))}
         </div>
       </div>
     </section>
   );
-};
+}
 
-//
-// How It Works Section
-//
-const HowItWorks = () => {
+function FeatureRow({
+  eyebrow,
+  title,
+  body,
+  bullets,
+  visual,
+  flip = false,
+}: {
+  eyebrow: string;
+  title: string;
+  body: string;
+  bullets: string[];
+  visual: React.ReactNode;
+  flip?: boolean;
+}) {
+  return (
+    <div
+      className={`mx-auto flex max-w-6xl flex-col items-center gap-10 px-6 py-16 lg:gap-16 ${
+        flip ? "lg:flex-row-reverse" : "lg:flex-row"
+      }`}
+    >
+      <div className="w-full max-w-md shrink-0">
+        <p className="text-sm font-medium text-[var(--accent)]">{eyebrow}</p>
+        <h3 className="mt-2 text-2xl font-semibold tracking-tight sm:text-3xl">
+          {title}
+        </h3>
+        <p className="mt-3 text-[var(--muted)]">{body}</p>
+        <ul className="mt-5 space-y-2 text-sm">
+          {bullets.map((b) => (
+            <li key={b} className="flex gap-2">
+              <span className="text-[var(--accent)]">—</span>
+              <span className="text-[var(--muted)]">{b}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+      <div className="w-full min-w-0">{visual}</div>
+    </div>
+  );
+}
+
+function Features() {
+  return (
+    <section id="features" className="py-8">
+      <FeatureRow
+        eyebrow="Meetings"
+        title="Both sides of the call, transcribed live."
+        body="MemoFlow hears your mic and your Mac's system audio, so every Zoom, Meet, or Teams call is captured with who-said-what — no bot joining your meeting."
+        bullets={[
+          "Live transcript while you talk, labeled You / Others",
+          "Filler words removed, punctuation fixed — original always kept",
+          "Summaries, action items, and smart titles on every meeting",
+        ]}
+        visual={<SummaryFrame />}
+      />
+      <FeatureRow
+        flip
+        eyebrow="Ask"
+        title="Ask your meetings anything."
+        body="A chat that answers only from your transcripts — with citations. Click one and MemoFlow jumps to the exact moment in the recording, so you can hear it said."
+        bullets={[
+          "Grounded answers — “not discussed” instead of guesses",
+          "Works across one meeting or your entire library",
+          "Everything indexed locally, searchable in the sidebar",
+        ]}
+        visual={<ChatFrame />}
+      />
+      <FeatureRow
+        eyebrow="Dictation"
+        title="Speak into any app. Corrections included."
+        body="Hold ⌥Space, talk, release — polished text is typed into whatever field has focus. Change your mind mid-sentence and MemoFlow keeps only what you meant."
+        bullets={[
+          "“at 6 o'clock — no, at 7” types “at 7 o'clock.”",
+          "Fillers stripped, punctuation and casing fixed",
+          "Any shortcut you like — hold-to-talk or toggle",
+        ]}
+        visual={<DictationFrame />}
+      />
+    </section>
+  );
+}
+
+function Hinglish() {
+  return (
+    <section id="hinglish" className="border-y border-[var(--line)] bg-black/20">
+      <div className="mx-auto flex max-w-6xl flex-col items-center gap-10 px-6 py-20 lg:flex-row lg:gap-16">
+        <div className="w-full max-w-md shrink-0">
+          <p className="text-sm font-medium text-[var(--accent)]">
+            Made for how India actually talks
+          </p>
+          <h2 className="mt-2 text-3xl font-semibold tracking-tight sm:text-4xl">
+            <span lang="hi">मीटिंग</span> हो या meeting —<br />
+            MemoFlow <span lang="hi">दोनों समझता है।</span>
+          </h2>
+          <p className="mt-4 text-[var(--muted)]">
+            The only private notetaker that transcribes Hindi, English, and the
+            Hinglish in between — code-switching mid-sentence, the way real
+            meetings sound. Powered by Whisper large-v3 turbo running entirely
+            on your Mac.
+          </p>
+          <ul className="mt-5 space-y-2 text-sm text-[var(--muted)]">
+            <li>— Hindi in <span lang="hi">देवनागरी</span>, English words kept in English</li>
+            <li>— Auto language detection per meeting and per dictation</li>
+            <li>— Hindi dictation into any app</li>
+          </ul>
+        </div>
+        <div className="w-full min-w-0">
+          <HinglishFrame />
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function HowItWorks() {
   const steps = [
-    {
-      title: "Meeting Detection",
-      description: "Automatically detects when your meeting starts.",
-      illustration: "/icons/meeting-detection.svg",
-      accent: "from-yellow-500 to-amber-500",
-      delay: 0
-    },
-    {
-      title: "Recording",
-      description: "Records the meeting seamlessly.",
-      illustration: "/icons/recording.svg",
-      accent: "from-red-500 to-rose-500",
-      delay: 0.2
-    },
-    {
-      title: "Transcription",
-      description: "High-quality transcription powered by OpenAI.",
-      illustration: "/icons/transcription.svg",
-      accent: "from-blue-500 to-indigo-500",
-      delay: 0.4
-    },
-    {
-      title: "Review & Edit",
-      description: "Easily review and edit your transcripts.",
-      illustration: "/icons/review-edit.svg",
-      accent: "from-green-500 to-emerald-500",
-      delay: 0.6
-    }
+    ["Install", "Download the notarized app, drag to Applications. No account."],
+    ["Grant two permissions", "Microphone and system audio — so both sides of calls are captured."],
+    ["Record from anywhere", "Menu bar, ⌘N, or hold fn⇧ in any app. Notes appear when you stop."],
   ];
-
   return (
-    <section className="py-32 relative overflow-hidden">
-      {/* Background Elements */}
-      <div className="absolute inset-0 bg-gradient-to-b from-gray-50/0 via-gray-50/80 to-gray-50/0 dark:from-gray-900/0 dark:via-gray-900/80 dark:to-gray-900/0 backdrop-blur-3xl" />
+    <section className="mx-auto max-w-6xl px-6 py-20">
+      <h2 className="text-center text-3xl font-semibold tracking-tight">
+        Running in two minutes
+      </h2>
+      <div className="mt-10 grid gap-4 sm:grid-cols-3">
+        {steps.map(([title, body], i) => (
+          <div key={title} className="rounded-2xl border border-[var(--line)] bg-[var(--panel)] p-6">
+            <div className="text-sm font-semibold text-[var(--accent)]">{i + 1}</div>
+            <div className="mt-1 font-semibold">{title}</div>
+            <p className="mt-1.5 text-sm text-[var(--muted)]">{body}</p>
+          </div>
+        ))}
+      </div>
+    </section>
+  );
+}
 
-      <div className="max-w-7xl mx-auto px-4 relative">
-        <motion.h2
-          className="text-4xl font-bold text-center mb-16 bg-clip-text text-transparent bg-gradient-to-r from-yellow-600 to-amber-600 dark:from-yellow-400 dark:to-amber-400"
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5 }}
-        >
-          How It Works
-        </motion.h2>
+function FAQ() {
+  return (
+    <section id="faq" className="mx-auto max-w-3xl px-6 py-20">
+      <h2 className="text-center text-3xl font-semibold tracking-tight">
+        Questions, answered
+      </h2>
+      <div className="mt-8 divide-y divide-[var(--line)] border-y border-[var(--line)]">
+        {faqs.map((f) => (
+          <details key={f.q} className="group py-4">
+            <summary className="pr-8 font-medium">{f.q}</summary>
+            <p className="mt-3 text-sm leading-relaxed text-[var(--muted)]">{f.a}</p>
+          </details>
+        ))}
+      </div>
+    </section>
+  );
+}
 
-        <div className="relative">
-          {/* Connecting Line */}
-          <div className="absolute left-16 top-0 bottom-0 w-0.5 bg-gradient-to-b from-yellow-500/20 via-amber-500/20 to-transparent hidden md:block" />
-
-          <div className="space-y-24">
-            {steps.map((step, index) => (
-              <motion.div
-                key={index}
-                className="flex flex-col md:flex-row items-center gap-12 relative"
-                initial={{ opacity: 0, x: -50 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.7, delay: step.delay }}
-              >
-                {/* Step Number */}
-                <div className="absolute -left-4 md:left-14 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-gradient-to-r from-yellow-500 to-amber-500 flex items-center justify-center text-white font-bold z-10">
-                  {index + 1}
-                </div>
-
-                {/* Icon Container */}
-                <motion.div
-                  className="w-32 h-32 relative group"
-                  whileHover={{ scale: 1.05 }}
-                >
-                  {/* Animated Background */}
-                  <div className={`absolute inset-0 bg-gradient-to-r ${step.accent} opacity-20 rounded-2xl blur-xl group-hover:opacity-30 transition-opacity`} />
-
-                  {/* Icon Card */}
-                  <div className="relative h-full glass p-4 rounded-2xl border border-white/20 group-hover:border-white/40 transition-all">
-                    <motion.img
-                      src={step.illustration}
-                      alt={step.title}
-                      className="w-full h-full object-contain"
-                      whileHover={{ rotate: 5 }}
-                      transition={{ type: "spring", stiffness: 300 }}
-                    />
-                  </div>
-                </motion.div>
-
-                {/* Content */}
-                <motion.div
-                  className="flex-1 text-center md:text-left"
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.5, delay: step.delay + 0.2 }}
-                >
-                  <h3 className="text-2xl font-semibold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-gray-900 to-gray-600 dark:from-white dark:to-gray-400">
-                    {step.title}
-                  </h3>
-                  <p className="text-gray-600 dark:text-gray-400 text-lg">
-                    {step.description}
-                  </p>
-                </motion.div>
-
-                {/* Decorative Elements */}
-                <motion.div
-                  className="absolute -z-10 opacity-20 blur-3xl w-64 h-64 bg-gradient-to-r from-yellow-500/30 to-amber-500/30 rounded-full"
-                  initial={{ scale: 0 }}
-                  whileInView={{ scale: 1 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 1, delay: step.delay }}
-                />
-              </motion.div>
+function FinalCTA() {
+  return (
+    <section className="border-t border-[var(--line)] bg-black/20">
+      <div className="mx-auto max-w-6xl px-6 py-24 text-center">
+        <div className="mx-auto mb-8 flex h-12 w-64 items-center">
+          <span className="wave w-full" aria-hidden="true">
+            {Array.from({ length: 40 }).map((_, i) => (
+              <i key={i} />
             ))}
-          </div>
+          </span>
         </div>
-      </div>
-    </section>
-  );
-};
-
-//
-// Privacy & Security Section
-//
-const Privacy = () => (
-  <section className="py-32 bg-gradient-to-b from-transparent to-gray-50/50 dark:to-gray-900/50">
-    <div className="max-w-6xl mx-auto px-4">
-      <motion.div
-        className="bg-white/40 dark:bg-gray-800/40 backdrop-blur-lg p-12 rounded-2xl shadow-lg border border-white/20 dark:border-white/10"
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-      >
-        <div className="flex flex-col md:flex-row gap-12 items-center">
-          {/* Left side: Icon and Main Message */}
-          <div className="flex-1 text-center md:text-left">
-            <motion.div
-              className="inline-block p-4 rounded-2xl bg-gradient-to-br from-yellow-500/10 to-amber-500/10 mb-6"
-              whileHover={{ scale: 1.05 }}
-            >
-              <Shield size={48} weight="fill" className="text-yellow-600 dark:text-yellow-500" />
-            </motion.div>
-            <h2 className="text-4xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-gray-900 to-gray-600 dark:from-white dark:to-gray-300">
-              Enterprise-grade security
-            </h2>
-            <p className="text-xl text-gray-600 dark:text-gray-400 mb-8">
-              Your data stays on your device. We prioritize privacy with a local-first approach and never send your meeting content to the cloud without explicit permission.
-            </p>
-          </div>
-
-          {/* Right side: Feature Grid */}
-          <div className="flex-1">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {/* Local Storage */}
-              <motion.div
-                className="p-6 rounded-xl bg-white/50 dark:bg-gray-800/50 border border-white/20 backdrop-blur-sm"
-                whileHover={{ y: -5 }}
-              >
-                <Database size={32} className="text-yellow-600 dark:text-yellow-500 mb-4" />
-                <h3 className="text-lg font-semibold mb-2">Local Database</h3>
-                <p className="text-gray-600 dark:text-gray-400 text-sm">
-                  All meeting recordings and transcripts are stored locally on your device using SQLite
-                </p>
-              </motion.div>
-
-              {/* Encryption */}
-              <motion.div
-                className="p-6 rounded-xl bg-white/50 dark:bg-gray-800/50 border border-white/20 backdrop-blur-sm"
-                whileHover={{ y: -5 }}
-              >
-                <Lock size={32} className="text-yellow-600 dark:text-yellow-500 mb-4" />
-                <h3 className="text-lg font-semibold mb-2">End-to-end Encryption</h3>
-                <p className="text-gray-600 dark:text-gray-400 text-sm">
-                  AES-256 encryption for all stored data with local key management
-                </p>
-              </motion.div>
-
-              {/* Offline First */}
-              <motion.div
-                className="p-6 rounded-xl bg-white/50 dark:bg-gray-800/50 border border-white/20 backdrop-blur-sm"
-                whileHover={{ y: -5 }}
-              >
-                <Desktop size={32} className="text-yellow-600 dark:text-yellow-500 mb-4" />
-                <h3 className="text-lg font-semibold mb-2">Offline First</h3>
-                <p className="text-gray-600 dark:text-gray-400 text-sm">
-                  Works completely offline. No internet connection required for core features
-                </p>
-              </motion.div>
-
-              {/* Data Control */}
-              <motion.div
-                className="p-6 rounded-xl bg-white/50 dark:bg-gray-800/50 border border-white/20 backdrop-blur-sm"
-                whileHover={{ y: -5 }}
-              >
-                <Trash size={32} className="text-yellow-600 dark:text-yellow-500 mb-4" />
-                <h3 className="text-lg font-semibold mb-2">Full Data Control</h3>
-                <p className="text-gray-600 dark:text-gray-400 text-sm">
-                  Easily manage, export, or delete your data with built-in tools
-                </p>
-              </motion.div>
-            </div>
-          </div>
-        </div>
-
-        {/* Bottom Badges */}
-        <div className="mt-12 flex flex-wrap justify-center gap-6">
-          <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-white/50 dark:bg-gray-800/50 text-sm text-gray-600 dark:text-gray-400 border border-white/20">
-            <Database size={16} />
-            <span>SQLite Database</span>
-          </div>
-          <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-white/50 dark:bg-gray-800/50 text-sm text-gray-600 dark:text-gray-400 border border-white/20">
-            <Desktop size={16} />
-            <span>Native Desktop App</span>
-          </div>
-          <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-white/50 dark:bg-gray-800/50 text-sm text-gray-600 dark:text-gray-400 border border-white/20">
-            <Shield size={16} />
-            <span>GDPR Compliant</span>
-          </div>
-        </div>
-      </motion.div>
-    </div>
-  </section>
-);
-
-//
-// Download Section
-//
-const DownloadSection: React.FC<{ os: 'mac' | 'windows' | 'linux' }> = ({ os }) => {
-  const getAlternativeOS = () => {
-    if (os === 'mac') return 'windows';
-    if (os === 'windows') return 'linux';
-    return 'mac';
-  };
-
-  const handleDownload = (targetOs: 'mac' | 'windows' | 'linux') => {
-    let downloadUrl;
-
-    switch (targetOs) {
-      case 'mac':
-        downloadUrl = 'http://assets.naveenschoudhary.com/memoflow/macos/Memoflow-1.0.0-arm64.dmg';
-        break;
-      case 'windows':
-        downloadUrl = 'http://assets.naveenschoudhary.com/memoflow/windows/Memoflow%20Setup%201.0.0.exe';
-        break;
-      case 'linux':
-        downloadUrl = 'http://assets.naveenschoudhary.com/memoflow/ubantu/memoflow_1.0.0_arm64.deb';
-        break;
-    }
-
-    window.open(downloadUrl);
-  };
-
-  const alternativeOS = getAlternativeOS();
-
-  return (
-    <section className="py-20 bg-gradient-to-r from-yellow-500/20 to-amber-500/20 dark:from-yellow-900/30 dark:to-amber-900/30 backdrop-blur-lg">
-      <div className="max-w-4xl mx-auto px-4 text-center">
-        <motion.div
-          className="glass p-12 rounded-2xl"
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-        >
-          <motion.h2
-            className="text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-yellow-600 to-amber-600 dark:from-yellow-400 dark:to-amber-400 mb-6"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5 }}
-          >
-            Ready to Transform Your Meetings?
-          </motion.h2>
-
-          <div className="flex flex-col items-center gap-8 mb-8">
-            <DownloadButton os={os} />
-
-            {/* Alternative OS Download */}
-            <div className="text-sm text-gray-500 dark:text-gray-400">
-              Using {alternativeOS === 'mac' ? 'macOS' : alternativeOS === 'windows' ? 'Windows' : 'Linux'}?{' '}
-              <button
-                onClick={() => handleDownload(alternativeOS)}
-                className="text-blue-500 hover:text-blue-600 dark:text-blue-400 dark:hover:text-blue-300 underline cursor-pointer"
-              >
-                Download for {alternativeOS === 'mac' ? 'macOS' : alternativeOS === 'windows' ? 'Windows' : 'Linux'} instead
-              </button>
-            </div>
-          </div>
-
-          <div className="space-y-4">
-            {/* System Requirements */}
-            <div className="flex items-center justify-center gap-8 text-sm text-gray-600 dark:text-gray-400">
-              <div className="flex items-center gap-2">
-                <Cpu size={16} />
-                <span>64-bit {os === 'mac' ? 'macOS 10.15+' : os === 'windows' ? 'Windows 10+' : 'Linux'}</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <HardDrive size={16} />
-                <span>200MB free space</span>
-              </div>
-            </div>
-
-            {/* Version Info */}
-            <div className="flex items-center justify-center gap-4 text-sm text-gray-600 dark:text-gray-400">
-              <div className="flex items-center gap-2">
-                <Code size={16} />
-                <span>Version 1.2.3 Beta</span>
-              </div>
-              <a href="/release-notes" className="flex items-center gap-1 text-blue-500 hover:text-blue-600 dark:text-blue-400 dark:hover:text-blue-300">
-                <FileText size={16} />
-                <span>Release Notes</span>
-              </a>
-              <a href="/docs" className="flex items-center gap-1 text-blue-500 hover:text-blue-600 dark:text-blue-400 dark:hover:text-blue-300">
-                <Book size={16} />
-                <span>Documentation</span>
-              </a>
-            </div>
-          </div>
-        </motion.div>
-      </div>
-    </section>
-  );
-};
-
-// Add this after the DownloadSection component
-const Footer = () => (
-  <section className="py-16 bg-gray-50/50 dark:bg-gray-900/50 backdrop-blur-lg border-t border-gray-200/20 dark:border-gray-700/20">
-    <div className="max-w-7xl mx-auto px-4">
-      <div className="flex flex-col md:flex-row justify-between items-center gap-8">
-        {/* Left side - Developer Info */}
-        <div className="flex flex-col items-center md:items-start">
-          <motion.div
-            className="flex items-center gap-3"
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-          >
-            <a
-              href="https://naveenschoudhary.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="group"
-            >
-              <div className="w-12 h-12 rounded-full overflow-hidden border-2 border-yellow-500/20 group-hover:border-yellow-500/40 transition-all">
-                <img
-                  src="https://www.naveenschoudhary.com/assets/images/my1.png"
-                  alt="Naveen Singh Choudhary"
-                  className="w-full h-full object-cover"
-                />
-              </div>
-            </a>
-            <div>
-              <a
-                href="https://naveenschoudhary.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="hover:opacity-80 transition-opacity"
-              >
-                <h3 className="text-lg font-semibold bg-clip-text text-transparent bg-gradient-to-r from-yellow-600 to-amber-600 dark:from-yellow-400 dark:to-amber-400">
-                  Built by Naveen Singh Choudhary
-                </h3>
-              </a>
-              <p className="text-sm text-gray-600 dark:text-gray-400">
-                Software Developer & AI Enthusiast
-              </p>
-            </div>
-          </motion.div>
-        </div>
-
-        {/* Right side - Social Links */}
-        <motion.div
-          className="flex gap-6"
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          transition={{ delay: 0.3 }}
-        >
-          <a
-            href="https://github.com/Naveenschoudhary"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-gray-600 dark:text-gray-400 hover:text-yellow-600 dark:hover:text-yellow-400 transition-colors"
-          >
-            <GithubLogo size={24} weight="fill" />
-          </a>
-          <a
-            href="https://www.linkedin.com/in/naveenschoudhary/"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-gray-600 dark:text-gray-400 hover:text-yellow-600 dark:hover:text-yellow-400 transition-colors"
-          >
-            <LinkedinLogo size={24} weight="fill" />
-          </a>
-          <a
-            href="https://naveenschoudhary.com"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-gray-600 dark:text-gray-400 hover:text-yellow-600 dark:hover:text-yellow-400 transition-colors"
-          >
-            <Globe size={24} weight="fill" />
-          </a>
-        </motion.div>
-      </div>
-
-      {/* Bottom - Copyright */}
-      <motion.div
-        className="mt-8 pt-8 border-t border-gray-200/20 dark:border-gray-700/20 text-center text-sm text-gray-600 dark:text-gray-400"
-        initial={{ opacity: 0 }}
-        whileInView={{ opacity: 1 }}
-        viewport={{ once: true }}
-        transition={{ delay: 0.4 }}
-      >
-        <p>© 2024 MemoFlow by <a href="https://naveenschoudhary.com" target="_blank" rel="noopener noreferrer" className="hover:text-yellow-600 dark:hover:text-yellow-400 transition-colors">Naveen Singh Choudhary</a>. All rights reserved.</p>
-        <p className="mt-2">
-          <a href="/privacy" className="hover:text-yellow-600 dark:hover:text-yellow-400 transition-colors">Privacy Policy</a>
-          {' • '}
-          <a href="/terms" className="hover:text-yellow-600 dark:hover:text-yellow-400 transition-colors">Terms of Service</a>
+        <h2 className="text-3xl font-semibold tracking-tight sm:text-4xl">
+          Your next meeting deserves a private notetaker.
+        </h2>
+        <p className="mx-auto mt-3 max-w-xl text-[var(--muted)]">
+          Free during beta. macOS 26, Apple Silicon. Nothing you say ever
+          leaves your Mac.
         </p>
-      </motion.div>
-    </div>
-  </section>
-);
-
-// Add this new component for scroll progress
-const ScrollProgress = () => {
-  const { scrollYProgress } = useScroll();
-
-  return (
-    <motion.div
-      className="fixed top-0 left-0 right-0 h-1 bg-yellow-500 origin-left z-50"
-      style={{ scaleX: scrollYProgress }}
-    />
+        <div className="mt-8">
+          <CTAButton>Download MemoFlow for macOS</CTAButton>
+        </div>
+      </div>
+    </section>
   );
-};
+}
 
-// Add this near the top of your page component
-const structuredData = {
-  "@context": "https://schema.org",
-  "@type": "SoftwareApplication",
-  "name": "MemoFlow",
-  "applicationCategory": "BusinessApplication",
-  "operatingSystem": ["macOS", "Windows"],
-  "offers": {
-    "@type": "Offer",
-    "price": "0",
-    "priceCurrency": "USD",
-    "availability": "https://schema.org/InStock"
-  },
-  "description": "AI-powered meeting transcription and note-taking software that automatically records and transcribes meetings in real-time.",
-  "aggregateRating": {
-    "@type": "AggregateRating",
-    "ratingValue": "4.8",
-    "ratingCount": "127"
-  }
-};
-
-//
-// Main Landing Page Component
-//
-const Home: React.FC = () => {
-  const [os, setOs] = useState<'mac' | 'windows' | 'linux'>('mac');
-
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const platform = navigator.platform.toLowerCase();
-      const userAgent = navigator.userAgent.toLowerCase();
-
-      if (platform.includes('win') || userAgent.includes('windows')) {
-        setOs('windows');
-      } else if (platform.includes('linux') || userAgent.includes('linux')) {
-        setOs('linux');
-      } else if (platform.includes('mac') || userAgent.includes('mac')) {
-        setOs('mac');
-      }
-    }
-  }, []);
-
+function Footer() {
   return (
-    <>
-      <Head>
-        <title>AI Meeting Transcription App</title>
-        <meta name="description" content="Automatic meeting recording, transcription, and timesheet integration." />
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
-        />
-        <meta name="robots" content="index, follow" />
-        <link rel="canonical" href="https://memoflow.app" />
-      </Head>
-      <main className="min-h-screen bg-gray-50 dark:bg-gray-900 font-system">
-        <ScrollProgress />
-        <Hero os={os} />
-        <Features />
-        <HowItWorks />
-        <Privacy />
-        <DownloadSection os={os} />
-        <Footer />
-      </main>
-    </>
+    <footer className="border-t border-[var(--line)]">
+      <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-4 px-6 py-10 text-sm text-[var(--muted)] sm:flex-row">
+        <div className="flex items-center gap-2">
+          <WaveMark />
+          <span>MemoFlow — private AI meeting notes for Mac</span>
+        </div>
+        <div className="flex gap-6">
+          <a href="/privacy" className="hover:text-[var(--text)]">Privacy</a>
+          <a href="/terms" className="hover:text-[var(--text)]">Terms</a>
+          <a href="/release-notes" className="hover:text-[var(--text)]">Release notes</a>
+        </div>
+      </div>
+    </footer>
   );
-};
+}
 
-export default Home;
+export default function Home() {
+  return (
+    <main>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+      />
+      <Nav />
+      <Hero />
+      <Privacy />
+      <Features />
+      <Hinglish />
+      <HowItWorks />
+      <FAQ />
+      <FinalCTA />
+      <Footer />
+    </main>
+  );
+}

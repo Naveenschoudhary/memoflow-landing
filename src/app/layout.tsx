@@ -1,99 +1,90 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import { SignupModalProvider } from '@/context/SignupModalContext';
-import ModalContainer from '@/components/ModalContainer';
-
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
+import { SignupModalProvider } from "@/context/SignupModalContext";
+import ModalContainer from "@/components/ModalContainer";
 
 export const metadata: Metadata = {
-  title: "MemoFlow - AI Meeting Notes & Automatic Transcription Software",
-  description: "Transform your meetings with AI-powered transcription, automatic note-taking, and real-time recording. Perfect for teams, developers, and professionals. Free during beta.",
+  metadataBase: new URL("https://memoflow.app"),
+  title: "MemoFlow — AI Meeting Notes That Never Leave Your Mac",
+  description:
+    "Private, on-device AI meeting notes for macOS. Records both sides of your calls, live transcripts, summaries, action items, and ask-your-meetings chat — in English, Hindi & Hinglish. Nothing is ever uploaded.",
   keywords: [
-    "AI meeting transcription",
-    "automatic meeting notes",
-    "voice to text meetings",
-    "meeting recorder app",
-    "meeting minutes generator",
-    "real-time transcription",
-    "meeting notes software",
-    "AI meeting assistant",
-    "team meeting recorder",
-    "meeting productivity tool"
+    "AI meeting notes Mac",
+    "private meeting transcription",
+    "on-device transcription macOS",
+    "offline meeting recorder",
+    "local AI notetaker",
+    "Hinglish transcription app",
+    "Hindi meeting transcription",
+    "Whisper Mac app",
+    "Apple Intelligence meeting notes",
+    "AI dictation Mac",
+    "meeting summary app macOS",
+    "Otter alternative private",
   ],
+  alternates: {
+    canonical: "https://memoflow.app",
+  },
   icons: {
-    icon: [
-      {
-        url: "/favicon.ico",
-        sizes: "any",
-      },
-    ],
-    apple: [
-      {
-        url: "/apple-touch-icon.png",
-        sizes: "180x180",
-      },
-    ],
+    icon: [{ url: "/favicon.ico", sizes: "any" }],
+    apple: [{ url: "/apple-touch-icon.png", sizes: "180x180" }],
     other: [
-      {
-        rel: "icon",
-        url: "/icon-192.png",
-        sizes: "192x192",
-        type: "image/png",
-      },
-      {
-        rel: "icon",
-        url: "/icon-512.png",
-        sizes: "512x512",
-        type: "image/png",
-      },
-      {
-        rel: "icon",
-        url: "/icon-192-maskable.png",
-        sizes: "192x192",
-        type: "image/png",
-      },
-      {
-        rel: "icon",
-        url: "/icon-512-maskable.png",
-        sizes: "512x512",
-        type: "image/png",
-      },
+      { rel: "icon", url: "/icon-192.png", sizes: "192x192", type: "image/png" },
+      { rel: "icon", url: "/icon-512.png", sizes: "512x512", type: "image/png" },
     ],
   },
   manifest: "/manifest.json",
   openGraph: {
-    title: "MemoFlow - AI Meeting Notes & Automatic Transcription",
-    description: "Transform your meetings with AI-powered transcription. Automatic recording, real-time notes, and team collaboration.",
-    images: ['/og-image.jpg'],
-    type: 'website',
+    title: "MemoFlow — AI Meeting Notes That Never Leave Your Mac",
+    description:
+      "Records both sides of your meetings, transcribes live, writes summaries & action items, and answers questions about what was said — 100% on-device, in English, Hindi & Hinglish.",
+    url: "https://memoflow.app",
+    siteName: "MemoFlow",
+    images: [{ url: "/og.png", width: 1200, height: 630, alt: "MemoFlow — private AI meeting notes for Mac" }],
+    type: "website",
   },
   twitter: {
-    card: 'summary_large_image',
-    title: "MemoFlow - AI Meeting Notes & Transcription",
-    description: "Transform your meetings with AI-powered transcription. Automatic recording, real-time notes, and team collaboration.",
-    images: ['/og-image.jpg'],
-  }
+    card: "summary_large_image",
+    title: "MemoFlow — AI Meeting Notes That Never Leave Your Mac",
+    description:
+      "Private, on-device meeting transcription, summaries, and dictation for macOS. English, Hindi & Hinglish. Nothing is ever uploaded.",
+    images: ["/og.png"],
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
+};
+
+const softwareJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  name: "MemoFlow",
+  operatingSystem: "macOS 26",
+  applicationCategory: "BusinessApplication",
+  description:
+    "Private, on-device AI meeting recorder for Mac: transcription, summaries, action items, ask-your-meetings chat, and system-wide dictation in English, Hindi and Hinglish. No cloud, no account.",
+  offers: {
+    "@type": "Offer",
+    price: "0",
+    priceCurrency: "USD",
+    description: "Free during beta",
+  },
+  url: "https://memoflow.app",
 };
 
 export default function RootLayout({
   children,
 }: {
-  children: React.ReactNode
+  children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className="dark:bg-gray-900">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased dark:bg-gray-900`}
-      >
+    <html lang="en">
+      <body className="antialiased">
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(softwareJsonLd) }}
+        />
         <SignupModalProvider>
           {children}
           <ModalContainer />

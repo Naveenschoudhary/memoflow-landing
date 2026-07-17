@@ -1,152 +1,138 @@
-import { motion, AnimatePresence } from 'framer-motion';
-import { useState } from 'react';
-import { X, Check, Envelope } from '@phosphor-icons/react';
+"use client";
+import { useEffect, useState } from "react";
 
 interface SignupModalProps {
-    isOpen: boolean;
-    onClose: () => void;
-    onSubmit: (email: string) => Promise<void>;
-    os: 'mac' | 'windows' | 'linux';
+  isOpen: boolean;
+  onClose: () => void;
+  onSubmit: (email: string) => Promise<void>;
+  os: "mac" | "windows" | "linux";
 }
 
-const SignupModal: React.FC<SignupModalProps> = ({ isOpen, onClose, onSubmit, os }) => {
-    const [email, setEmail] = useState('');
-    const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
-    const [error, setError] = useState('');
+const WaveMark = () => (
+  <span className="flex h-6 items-end gap-[2.5px]" aria-hidden="true">
+    {[10, 17, 24, 17, 10].map((h, i) => (
+      <span
+        key={i}
+        className="w-[3.5px] rounded-full bg-[var(--accent)]"
+        style={{ height: h }}
+      />
+    ))}
+  </span>
+);
 
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
-        setStatus('loading');
-        try {
-            await onSubmit(email);
-            setStatus('success');
-            setTimeout(() => {
-                onClose();
-                setStatus('idle');
-                setEmail('');
-            }, 2000);
-        } catch (err: any) {
-            setStatus('error');
-            setError(err.message || 'Something went wrong');
-        }
+const SignupModal: React.FC<SignupModalProps> = ({ isOpen, onClose, onSubmit }) => {
+  const [email, setEmail] = useState("");
+  const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    if (!isOpen) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
     };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [isOpen, onClose]);
 
-    return (
-        <AnimatePresence mode="wait">
-            {isOpen && (
-                <div className="fixed inset-0 z-50 overflow-y-auto">
-                    <div className="min-h-screen px-4 text-center">
-                        {/* Backdrop */}
-                        <motion.div
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            exit={{ opacity: 0 }}
-                            transition={{ duration: 0.2 }}
-                            className="fixed inset-0 bg-black/50 backdrop-blur-sm"
-                            onClick={onClose}
-                            style={{ willChange: 'opacity' }}
-                        />
+  if (!isOpen) return null;
 
-                        {/* This element is to trick the browser into centering the modal contents. */}
-                        <span
-                            className="inline-block h-screen align-middle"
-                            aria-hidden="true"
-                        >
-                            &#8203;
-                        </span>
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setStatus("loading");
+    try {
+      await onSubmit(email);
+      setStatus("success");
+      setTimeout(() => {
+        onClose();
+        setStatus("idle");
+        setEmail("");
+      }, 2500);
+    } catch (err) {
+      setStatus("error");
+      setError(err instanceof Error ? err.message : "Something went wrong");
+    }
+  };
 
-                        {/* Modal */}
-                        <motion.div
-                            initial={{ opacity: 0, scale: 0.95, y: 20 }}
-                            animate={{ opacity: 1, scale: 1, y: 0 }}
-                            exit={{ opacity: 0, scale: 0.95, y: 20 }}
-                            transition={{ 
-                                duration: 0.2,
-                                ease: [0.4, 0, 0.2, 1]
-                            }}
-                            className="relative inline-block w-full max-w-md p-6 my-8 text-left align-middle bg-white dark:bg-gray-800 rounded-2xl shadow-xl transform"
-                            style={{ willChange: 'transform' }}
-                        >
-                            {/* Close button */}
-                            <button
-                                onClick={onClose}
-                                className="absolute right-4 top-4 text-gray-400 hover:text-gray-500 dark:hover:text-gray-300 transition-colors"
-                            >
-                                <X size={24} weight="bold" />
-                            </button>
+  return (
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center p-4"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="signup-title"
+    >
+      {/* Backdrop */}
+      <div
+        className="absolute inset-0 bg-black/70 backdrop-blur-sm"
+        onClick={onClose}
+      />
 
-                            <div className="mt-2">
-                                <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
-                                    Download MemoFlow for {os === 'mac' ? 'macOS' : os === 'windows' ? 'Windows' : 'Linux'}
-                                </h2>
-                                <p className="mt-2 text-gray-500 dark:text-gray-400">
-                                    Enter your email to receive the download link and stay updated with new features.
-                                </p>
+      {/* Panel */}
+      <div className="relative w-full max-w-md rounded-2xl border border-[var(--line)] bg-[var(--panel)] p-7 shadow-2xl shadow-black/60">
+        <button
+          onClick={onClose}
+          aria-label="Close"
+          className="absolute right-4 top-4 rounded-md px-2 py-0.5 text-lg text-[var(--muted)] transition hover:bg-white/5 hover:text-[var(--text)]"
+        >
+          ×
+        </button>
 
-                                <form onSubmit={handleSubmit} className="mt-6 space-y-4">
-                                    <div className="relative">
-                                        <Envelope 
-                                            size={20} 
-                                            className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none"
-                                        />
-                                        <input
-                                            type="email"
-                                            value={email}
-                                            onChange={(e) => setEmail(e.target.value)}
-                                            placeholder="Your email address"
-                                            className="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700 
-                                                     bg-white dark:bg-gray-900 text-gray-900 dark:text-white placeholder-gray-400
-                                                     focus:ring-2 focus:ring-yellow-500 focus:border-transparent outline-none
-                                                     transition-all duration-200"
-                                            required
-                                        />
-                                    </div>
+        <WaveMark />
 
-                                    <button
-                                        type="submit"
-                                        disabled={status === 'loading' || status === 'success'}
-                                        className={`w-full py-3 px-4 rounded-xl font-semibold text-white 
-                                            ${status === 'success' 
-                                                ? 'bg-green-500' 
-                                                : 'bg-gradient-to-r from-yellow-500 to-amber-500 hover:from-yellow-600 hover:to-amber-600'
-                                            } transition-all duration-200 flex items-center justify-center gap-2
-                                            disabled:opacity-50 disabled:cursor-not-allowed`}
-                                    >
-                                        {status === 'loading' && (
-                                            <motion.div
-                                                animate={{ rotate: 360 }}
-                                                transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
-                                                className="w-5 h-5 border-2 border-white border-t-transparent rounded-full"
-                                            />
-                                        )}
-                                        {status === 'success' && <Check size={20} weight="bold" />}
-                                        {status === 'loading' ? 'Processing...' : status === 'success' ? 'Success!' : 'Get Download Link'}
-                                    </button>
+        <h2 id="signup-title" className="mt-4 text-xl font-semibold tracking-tight">
+          Get MemoFlow for macOS
+        </h2>
+        <p className="mt-1.5 text-sm text-[var(--muted)]">
+          Enter your email and we&apos;ll send the download link. Free during
+          beta — no account needed.
+        </p>
 
-                                    {status === 'error' && (
-                                        <motion.p 
-                                            initial={{ opacity: 0, y: -10 }}
-                                            animate={{ opacity: 1, y: 0 }}
-                                            className="text-red-500 text-sm mt-2 text-center"
-                                        >
-                                            {error}
-                                        </motion.p>
-                                    )}
+        {status === "success" ? (
+          <div className="mt-6 rounded-xl border border-[var(--line)] bg-black/30 px-4 py-5 text-center">
+            <div className="text-2xl">✓</div>
+            <p className="mt-1 font-medium">Link sent — check your inbox.</p>
+            <p className="mt-1 text-xs text-[var(--muted)]">
+              Nothing you record ever leaves your Mac.
+            </p>
+          </div>
+        ) : (
+          <form onSubmit={handleSubmit} className="mt-6 space-y-3">
+            <input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="you@example.com"
+              autoFocus
+              required
+              className="w-full rounded-xl border border-[var(--line)] bg-black/30 px-4 py-3 text-[var(--text)] placeholder-[var(--muted)]/60 outline-none transition focus:border-[var(--accent)]/60 focus:ring-2 focus:ring-[var(--accent)]/30"
+            />
 
-                                    <p className="text-xs text-gray-500 dark:text-gray-400 text-center">
-                                        By downloading, you agree to our{' '}
-                                        <a href="/terms" className="text-yellow-600 hover:text-yellow-700 underline">Terms</a>
-                                        {' '}and{' '}
-                                        <a href="/privacy" className="text-yellow-600 hover:text-yellow-700 underline">Privacy Policy</a>
-                                    </p>
-                                </form>
-                            </div>
-                        </motion.div>
-                    </div>
-                </div>
+            <button
+              type="submit"
+              disabled={status === "loading"}
+              className="flex w-full items-center justify-center gap-2 rounded-xl bg-[var(--accent)] px-4 py-3 font-semibold text-white shadow-lg shadow-[var(--accent)]/25 transition hover:brightness-110 disabled:cursor-not-allowed disabled:opacity-60"
+            >
+              {status === "loading" && (
+                <span className="h-4 w-4 animate-spin rounded-full border-2 border-white/40 border-t-white" />
+              )}
+              {status === "loading" ? "Sending…" : "Send me the download link"}
+            </button>
+
+            {status === "error" && (
+              <p className="text-center text-sm text-[var(--accent)]">{error}</p>
             )}
-        </AnimatePresence>
-    );
+
+            <p className="text-center text-xs text-[var(--muted)]/70">
+              Only the link and major updates — no spam. By downloading you
+              agree to the{" "}
+              <a href="/terms" className="underline hover:text-[var(--text)]">Terms</a>{" "}
+              and{" "}
+              <a href="/privacy" className="underline hover:text-[var(--text)]">Privacy Policy</a>.
+            </p>
+          </form>
+        )}
+      </div>
+    </div>
+  );
 };
 
-export default SignupModal; 
+export default SignupModal;

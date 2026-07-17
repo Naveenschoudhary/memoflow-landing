@@ -3,102 +3,105 @@
 @tailwind utilities;
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --page: #0a0a0e;
+  --panel: #131318;
+  --panel-2: #1a1a21;
+  --line: rgba(255, 255, 255, 0.08);
+  --text: #f5f5f7;
+  --muted: #a1a1aa;
+  --accent: #ff453a;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #030712;
-    --foreground: #f8fafc;
-  }
+html {
+  scroll-behavior: smooth;
 }
 
 body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: var(--font-geist-sans);
+  background: var(--page);
+  color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI",
+    Roboto, "Helvetica Neue", Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
 }
 
-/* Add smooth scrolling */
-html {
-  scroll-behavior: smooth;
+::selection {
+  background: rgba(255, 69, 58, 0.35);
 }
 
-/* Custom button styles */
-.button-primary {
-  @apply px-8 py-4 bg-blue-600 text-white font-semibold rounded-lg shadow-lg 
-         hover:bg-blue-700 transition-all duration-200 flex items-center gap-2;
+/* ————— Live waveform (the signature) ————— */
+.wave {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  height: 100%;
 }
 
-/* Custom card hover effect */
-.feature-card {
-  @apply transition-all duration-200 hover:shadow-lg hover:-translate-y-1;
+.wave i {
+  display: block;
+  width: 3px;
+  border-radius: 999px;
+  background: var(--accent);
+  height: 14%;
+  animation: wave-bounce 1.15s ease-in-out infinite;
+  transform-origin: center;
 }
 
-/* Add these new styles */
-@keyframes blob {
-  0% {
-    transform: translate(0px, 0px) scale(1);
+/* Staggered, organic rhythm */
+.wave i:nth-child(6n + 1) { animation-delay: -0.9s; }
+.wave i:nth-child(6n + 2) { animation-delay: -0.35s; }
+.wave i:nth-child(6n + 3) { animation-delay: -0.6s; }
+.wave i:nth-child(6n + 4) { animation-delay: -0.1s; }
+.wave i:nth-child(6n + 5) { animation-delay: -0.75s; }
+.wave i:nth-child(6n)     { animation-delay: -0.5s; }
+.wave i:nth-child(4n)   { animation-duration: 1.35s; }
+.wave i:nth-child(5n)   { animation-duration: 0.95s; }
+.wave i:nth-child(7n)   { opacity: 0.75; }
+.wave i:nth-child(11n)  { opacity: 0.55; }
+
+@keyframes wave-bounce {
+  0%, 100% { transform: scaleY(1); }
+  35%      { transform: scaleY(5.2); }
+  55%      { transform: scaleY(2.2); }
+  75%      { transform: scaleY(6.4); }
+}
+
+/* Dictation HUD mini-wave */
+.wave-sm i {
+  width: 2.5px;
+  height: 5px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .wave i {
+    animation: none;
   }
-  33% {
-    transform: translate(30px, -50px) scale(1.1);
-  }
-  66% {
-    transform: translate(-20px, 20px) scale(0.9);
-  }
-  100% {
-    transform: translate(0px, 0px) scale(1);
-  }
+  /* Static but still waveform-shaped */
+  .wave i:nth-child(6n + 1) { transform: scaleY(2.4); }
+  .wave i:nth-child(6n + 2) { transform: scaleY(5); }
+  .wave i:nth-child(6n + 3) { transform: scaleY(3.2); }
+  .wave i:nth-child(6n + 4) { transform: scaleY(6); }
+  .wave i:nth-child(6n + 5) { transform: scaleY(1.8); }
+  .wave i:nth-child(6n)     { transform: scaleY(4.2); }
 }
 
-.animate-blob {
-  animation: blob 7s infinite;
+/* Native FAQ accordion polish */
+details > summary {
+  list-style: none;
+  cursor: pointer;
 }
-
-.animation-delay-2000 {
-  animation-delay: 2s;
+details > summary::-webkit-details-marker {
+  display: none;
 }
-
-.animation-delay-4000 {
-  animation-delay: 4s;
+details > summary::after {
+  content: "+";
+  float: right;
+  font-size: 1.25rem;
+  line-height: 1;
+  color: var(--muted);
+  transition: transform 0.2s ease;
 }
-
-/* Add glass effect utilities */
-.glass {
-  @apply bg-white/40 dark:bg-gray-800/40 backdrop-blur-lg border border-white/20 dark:border-white/10;
-}
-
-.glass-hover {
-  @apply hover:bg-white/60 dark:hover:bg-gray-800/60 transition-all duration-300;
-}
-
-/* Add these to your globals.css */
-@keyframes float {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-10px); }
-}
-
-.animate-float {
-  animation: float 4s ease-in-out infinite;
-}
-
-/* Smooth scrolling for the whole page */
-html {
-  scroll-behavior: smooth;
-}
-
-/* Enhanced transitions */
-.transition-all {
-  transition-duration: 300ms;
-  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-/* Hover effect utilities */
-.hover-lift {
-  transition: transform 0.2s ease-in-out;
-}
-
-.hover-lift:hover {
-  transform: translateY(-5px);
+details[open] > summary::after {
+  transform: rotate(45deg);
 }
