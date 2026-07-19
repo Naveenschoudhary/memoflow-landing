@@ -14,7 +14,8 @@ export const EmailTemplate: React.FC<EmailTemplateProps> = ({
     margin: '0 auto',
   }}>
     <div style={{ textAlign: 'center', padding: '40px 0' }}>
-      <img src="https://memoflow.app/logo.png" alt="MemoFlow Logo" style={{ width: '100px' }} />
+      {/* ?v=2 busts email image-proxy caches from the old logo era. */}
+      <img src="https://memoflow.app/logo.png?v=2" alt="MemoFlow Logo" style={{ width: '96px', borderRadius: '21%' }} />
     </div>
 
     <div style={{ background: '#ff453a', padding: '2px' }}>
