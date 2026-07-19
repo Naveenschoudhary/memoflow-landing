@@ -4,6 +4,8 @@
  * PNGs into /public/screenshots — see README.
  */
 
+import InView from "./InView";
+
 const Bars = ({ count, small = false }: { count: number; small?: boolean }) => (
   <span className={`wave ${small ? "wave-sm" : ""}`} aria-hidden="true">
     {Array.from({ length: count }).map((_, i) => (
@@ -23,6 +25,7 @@ const TrafficLights = () => (
 /** Hero: the live recording screen with waveform + live transcript. */
 export function RecordingWindow() {
   return (
+    <InView>
     <div
       className="mx-auto w-full max-w-3xl overflow-hidden rounded-2xl border border-[var(--line)] bg-[var(--panel)] shadow-2xl shadow-black/60"
       role="img"
@@ -89,30 +92,34 @@ export function RecordingWindow() {
 
           {/* Live transcript */}
           <div className="space-y-3 border-t border-[var(--line)] px-6 py-4 text-sm">
-            <div>
+            <div data-reveal style={{ "--rd": "0.3s" } as React.CSSProperties}>
               <div className="text-[10px] font-semibold text-[var(--accent)]">YOU</div>
               <p>Let&apos;s lock the launch for the 24th and brief design tomorrow.</p>
             </div>
-            <div>
+            <div data-reveal style={{ "--rd": "1s" } as React.CSSProperties}>
               <div className="text-[10px] font-semibold text-[var(--muted)]">OTHERS</div>
               <p>
                 Works for us — Priya will send the revised budget tonight.
               </p>
             </div>
-            <div>
+            <div data-reveal style={{ "--rd": "1.7s" } as React.CSSProperties}>
               <div className="text-[10px] font-semibold text-[var(--accent)]">YOU</div>
-              <p className="italic text-[var(--muted)]">Perfect, then action items are…</p>
+              <p className="italic text-[var(--muted)]">
+                <span className="type-caret">Perfect, then action items are…</span>
+              </p>
             </div>
           </div>
         </div>
       </div>
     </div>
+    </InView>
   );
 }
 
 /** Summary tab with action items. */
 export function SummaryFrame() {
   return (
+    <InView>
     <div
       className="overflow-hidden rounded-2xl border border-[var(--line)] bg-[var(--panel)] shadow-xl shadow-black/40"
       role="img"
@@ -130,7 +137,7 @@ export function SummaryFrame() {
         </div>
       </div>
       <div className="space-y-4 px-5 py-4 text-sm">
-        <p className="text-[var(--muted)]">
+        <p className="text-[var(--muted)]" data-reveal style={{ "--rd": "0.15s" } as React.CSSProperties}>
           The team agreed to reduce Q3 spend from 80k to 65k, protecting the
           hiring budget. Marketing shifts to performance channels only.
         </p>
@@ -143,8 +150,13 @@ export function SummaryFrame() {
               "Priya: send revised budget by Friday",
               "Freeze new tool purchases until August",
               "Naveen: brief design on the launch scope",
-            ].map((item) => (
-              <li key={item} className="flex gap-2">
+            ].map((item, i) => (
+              <li
+                key={item}
+                className="flex gap-2"
+                data-reveal
+                style={{ "--rd": `${0.5 + i * 0.2}s` } as React.CSSProperties}
+              >
                 <span className="mt-1 h-3 w-3 shrink-0 rounded-full border border-[var(--muted)]/40" />
                 {item}
               </li>
@@ -153,34 +165,42 @@ export function SummaryFrame() {
         </div>
       </div>
     </div>
+    </InView>
   );
 }
 
 /** Ask chat with citation chips. */
 export function ChatFrame() {
   return (
+    <InView>
     <div
       className="overflow-hidden rounded-2xl border border-[var(--line)] bg-[var(--panel)] shadow-xl shadow-black/40"
       role="img"
       aria-label="MemoFlow Ask chat answering a question with citations that jump to the exact moment in the recording"
     >
       <div className="space-y-4 px-5 py-5 text-sm">
-        <div className="flex justify-end">
+        <div className="flex justify-end" data-reveal style={{ "--rd": "0.1s" } as React.CSSProperties}>
           <div className="max-w-[80%] rounded-2xl bg-[var(--accent)]/20 px-4 py-2">
             What did we decide about the launch date?
           </div>
         </div>
         <div className="max-w-[85%] space-y-2">
-          <div className="rounded-2xl bg-white/5 px-4 py-2 text-[var(--muted)]">
+          <div
+            className="rounded-2xl bg-white/5 px-4 py-2 text-[var(--muted)]"
+            data-reveal
+            style={{ "--rd": "0.65s" } as React.CSSProperties}
+          >
             You locked the launch for <span className="text-[var(--text)]">July 24th</span> and
             agreed design gets briefed the next morning [1]. Priya owns the
             revised budget before then [2].
           </div>
           <div className="flex flex-wrap gap-1.5">
-            {["Client Kickoff · 12:04", "Client Kickoff · 27:41"].map((c) => (
+            {["Client Kickoff · 12:04", "Client Kickoff · 27:41"].map((c, i) => (
               <span
                 key={c}
                 className="flex items-center gap-1 rounded-full border border-[var(--line)] px-2.5 py-1 text-xs text-[var(--muted)]"
+                data-reveal="pop"
+                style={{ "--rd": `${1.2 + i * 0.15}s` } as React.CSSProperties}
               >
                 <span className="text-[var(--accent)]">▸</span>
                 {c}
@@ -194,14 +214,20 @@ export function ChatFrame() {
         </div>
       </div>
     </div>
+    </InView>
   );
 }
 
 /** Dictation HUD + self-correction demo. */
 export function DictationFrame() {
   return (
+    <InView>
     <div className="space-y-4" role="img" aria-label="MemoFlow dictation: floating HUD capsule and a self-correction example">
-      <div className="mx-auto flex w-fit items-center gap-3 rounded-2xl border border-[var(--line)] bg-[var(--panel-2)]/90 px-5 py-3 shadow-xl shadow-black/50 backdrop-blur">
+      <div
+        className="mx-auto flex w-fit items-center gap-3 rounded-2xl border border-[var(--line)] bg-[var(--panel-2)]/90 px-5 py-3 shadow-xl shadow-black/50 backdrop-blur"
+        data-reveal
+        style={{ "--rd": "0.1s" } as React.CSSProperties}
+      >
         <span className="flex h-5 w-14 items-center">
           <Bars count={14} small />
         </span>
@@ -209,35 +235,41 @@ export function DictationFrame() {
           let&apos;s move the meeting to six… no, seven
         </span>
       </div>
-      <div className="mx-auto w-fit rounded-xl border border-[var(--line)] bg-black/30 px-4 py-3 text-sm">
+      <div
+        className="mx-auto w-fit rounded-xl border border-[var(--line)] bg-black/30 px-4 py-3 text-sm"
+        data-reveal="pop"
+        style={{ "--rd": "1s" } as React.CSSProperties}
+      >
         <span className="text-[var(--muted)]">inserted → </span>
         <span className="font-medium">“Let&apos;s move the meeting to 7 o&apos;clock.”</span>
       </div>
     </div>
+    </InView>
   );
 }
 
 /** Hinglish transcript sample. */
 export function HinglishFrame() {
   return (
+    <InView>
     <div
       className="overflow-hidden rounded-2xl border border-[var(--line)] bg-[var(--panel)] shadow-xl shadow-black/40"
       role="img"
       aria-label="MemoFlow transcribing a Hinglish meeting, mixing Hindi and English naturally"
     >
       <div className="space-y-3 px-5 py-5 text-sm">
-        <div>
+        <div data-reveal style={{ "--rd": "0.2s" } as React.CSSProperties}>
           <div className="text-[10px] font-semibold text-[var(--accent)]">YOU</div>
           <p lang="hi">
             कल <span className="text-[var(--accent)]">client</span> के साथ meeting
             है, budget final करना है।
           </p>
         </div>
-        <div>
+        <div data-reveal style={{ "--rd": "0.9s" } as React.CSSProperties}>
           <div className="text-[10px] font-semibold text-[var(--muted)]">OTHERS</div>
           <p>Haan, deck main aaj raat bhej dunga.</p>
         </div>
-        <div>
+        <div data-reveal style={{ "--rd": "1.6s" } as React.CSSProperties}>
           <div className="text-[10px] font-semibold text-[var(--accent)]">YOU</div>
           <p>Perfect — action items note kar lo.</p>
         </div>
@@ -246,5 +278,6 @@ export function HinglishFrame() {
         Whisper large-v3 turbo · on-device · auto Hindi/English
       </div>
     </div>
+    </InView>
   );
 }

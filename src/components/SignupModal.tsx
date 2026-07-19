@@ -9,7 +9,7 @@ interface SignupModalProps {
 }
 
 const WaveMark = () => (
-  <span className="flex h-6 items-end gap-[2.5px]" aria-hidden="true">
+  <span className="flex h-6 items-center gap-[2.5px]" aria-hidden="true">
     {[10, 17, 24, 17, 10].map((h, i) => (
       <span
         key={i}

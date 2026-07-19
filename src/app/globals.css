@@ -72,6 +72,48 @@ body {
   height: 5px;
 }
 
+/* ---- UI-frame micro-interactions -------------------------------------
+   Elements tagged data-reveal are hidden until their frame gets
+   `is-inview` (see components/InView.tsx), then rise in, staggered via
+   --rd. One-shot: the observer disconnects after the first reveal. */
+[data-reveal] {
+  opacity: 0;
+  transform: translateY(8px);
+}
+.is-inview [data-reveal] {
+  animation: reveal-rise 0.55s cubic-bezier(0.2, 0.6, 0.2, 1) forwards;
+  animation-delay: var(--rd, 0s);
+}
+@keyframes reveal-rise {
+  to { opacity: 1; transform: none; }
+}
+
+/* Citation chips and the dictation result pop rather than rise. */
+.is-inview [data-reveal="pop"] {
+  transform: none;
+  scale: 0.85;
+  animation: reveal-pop 0.4s cubic-bezier(0.3, 1.4, 0.5, 1) forwards;
+  animation-delay: var(--rd, 0s);
+}
+@keyframes reveal-pop {
+  to { opacity: 1; scale: 1; }
+}
+
+/* Blinking accent caret on the transcript's live line. */
+.is-inview .type-caret::after {
+  content: "";
+  display: inline-block;
+  width: 2px;
+  height: 1em;
+  margin-left: 3px;
+  vertical-align: -0.15em;
+  background: var(--accent);
+  animation: caret-blink 1.1s steps(1) infinite;
+}
+@keyframes caret-blink {
+  50% { opacity: 0; }
+}
+
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   .wave i {
@@ -84,6 +126,16 @@ body {
   .wave i:nth-child(6n + 4) { transform: scaleY(6); }
   .wave i:nth-child(6n + 5) { transform: scaleY(1.8); }
   .wave i:nth-child(6n)     { transform: scaleY(4.2); }
+  /* Reveals become instant; the caret holds steady. */
+  [data-reveal] {
+    opacity: 1;
+    transform: none;
+    scale: 1;
+    animation: none !important;
+  }
+  .is-inview .type-caret::after {
+    animation: none;
+  }
 }
 
 /* Native FAQ accordion polish */

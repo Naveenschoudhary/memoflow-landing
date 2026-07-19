@@ -52,8 +52,10 @@ const faqJsonLd = {
   })),
 };
 
+// The app's mark: a waveform mirrored around the centerline (items-center),
+// not a bar chart sitting on a baseline.
 const WaveMark = () => (
-  <span className="flex h-5 items-end gap-[2px]" aria-hidden="true">
+  <span className="flex h-5 items-center gap-[2px]" aria-hidden="true">
     {[8, 14, 20, 14, 8].map((h, i) => (
       <span
         key={i}
