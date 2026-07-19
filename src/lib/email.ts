@@ -5,18 +5,12 @@ import { EmailTemplate } from '@/components/EmailTemplate';
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
-const getDownloadLink = (os: 'mac' | 'windows' | 'linux') => {
-  switch (os) {
-    case 'mac':
-      return 'https://assets.naveenschoudhary.com/memoflow/macos/Memoflow-1.0.0-arm64.dmg';
-    case 'windows':
-      return 'https://assets.naveenschoudhary.com/memoflow/windows/Memoflow%20Setup%201.0.0.exe';
-    case 'linux':
-      return 'https://assets.naveenschoudhary.com/memoflow/ubantu/memoflow_1.0.0_arm64.deb';
-    default:
-      throw new Error(`Invalid OS: ${os}`);
-  }
-};
+// MemoFlow is a native macOS app — one notarized DMG, hosted as a GitHub
+// release asset. Bump both constants together on each release.
+const APP_VERSION = '0.2.0';
+const MAC_DMG_URL = `https://github.com/Naveenschoudhary/memoflow-models/releases/download/v${APP_VERSION}/MemoFlow-${APP_VERSION}.dmg`;
+
+const getDownloadLink = (_os: 'mac' | 'windows' | 'linux') => MAC_DMG_URL;
 
 export async function sendWelcomeEmail(email: string, os: 'mac' | 'windows' | 'linux') {
   try {

@@ -7,7 +7,6 @@ interface EmailTemplateProps {
 
 export const EmailTemplate: React.FC<EmailTemplateProps> = ({
   downloadUrl,
-  os,
 }) => (
   <div style={{
     fontFamily: "'Helvetica Neue', Arial, sans-serif",
@@ -18,21 +17,22 @@ export const EmailTemplate: React.FC<EmailTemplateProps> = ({
       <img src="https://memoflow.app/logo.png" alt="MemoFlow Logo" style={{ width: '100px' }} />
     </div>
 
-    <div style={{ background: 'linear-gradient(to right, #fbbf24, #f59e0b)', padding: '2px' }}>
+    <div style={{ background: '#ff453a', padding: '2px' }}>
       <div style={{ background: 'white', padding: '30px', borderRadius: '8px' }}>
         <h1 style={{ color: '#1f2937', fontSize: '24px', marginBottom: '20px' }}>
           Welcome to MemoFlow!
         </h1>
 
         <p style={{ color: '#4b5563', lineHeight: '1.6' }}>
-          Thank you for choosing MemoFlow! We're excited to help you transform your meetings into actionable insights.
+          Thank you for choosing MemoFlow! Your meetings and dictation stay
+          on your Mac — nothing you record ever leaves it.
         </p>
 
         <div style={{ textAlign: 'center', margin: '30px 0' }}>
           <a
             href={downloadUrl}
             style={{
-              background: 'linear-gradient(to right, #fbbf24, #f59e0b)',
+              background: '#ff453a',
               color: 'white',
               padding: '12px 30px',
               borderRadius: '8px',
@@ -40,14 +40,14 @@ export const EmailTemplate: React.FC<EmailTemplateProps> = ({
               fontWeight: 'bold',
             }}
           >
-            Download MemoFlow for {os === 'mac' ? 'macOS' : os === 'windows' ? 'Windows' : 'Linux'}
+            Download MemoFlow for macOS
           </a>
           <p style={{
             fontSize: '12px',
             color: '#666',
             marginTop: '10px'
           }}>
-            This download link will expire in 10 minutes
+            Requires macOS 26 or later · this link expires in 10 minutes
           </p>
         </div>
 
@@ -55,4 +55,4 @@ export const EmailTemplate: React.FC<EmailTemplateProps> = ({
       </div>
     </div>
   </div>
-); 
+);
