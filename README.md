@@ -11,8 +11,12 @@ npm run dev     # http://localhost:3000
 npm run build   # production check (needs the env vars below)
 ```
 
-Env vars (set in Vercel): `NEXT_PUBLIC_SUPABASE_URL`, `SUPABASE_SERVICE_KEY`,
+Env vars (set in Vercel): `DATABASE_URL` (self-hosted Postgres — apply
+`schema.sql` once with `psql "$DATABASE_URL" -f schema.sql`),
 `RESEND_API_KEY`, `NEXT_PUBLIC_APP_URL`.
+
+`/api/debug/db` reports whether the database is reachable (signup/download
+counts only, no personal data).
 
 ## Design
 
