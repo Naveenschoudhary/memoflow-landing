@@ -12,6 +12,12 @@ const MAC_DMG_URL = `https://github.com/Naveenschoudhary/memoflow-models/release
 
 const getDownloadLink = (_os: 'mac' | 'windows' | 'linux') => MAC_DMG_URL;
 
+// Resend's shared address works without domain verification (but only
+// delivers to the Resend account owner). Once memoflow.app is verified on
+// https://resend.com/domains, set EMAIL_FROM="MemoFlow <naveen@memoflow.app>"
+// in Vercel — no code change needed.
+const EMAIL_FROM = process.env.EMAIL_FROM || 'MemoFlow <onboarding@resend.dev>';
+
 export async function sendWelcomeEmail(email: string, os: 'mac' | 'windows' | 'linux') {
   if (!db || !isInitialized()) {
     throw new Error('Database is not configured — set DATABASE_URL');
@@ -33,7 +39,7 @@ export async function sendWelcomeEmail(email: string, os: 'mac' | 'windows' | 'l
   );
 
   const { data: emailData, error: emailError } = await resend.emails.send({
-    from: 'MemoFlow <naveen@memoflow.app>',
+    from: EMAIL_FROM,
     to: [email],
     subject: 'Welcome to MemoFlow! Download Your App',
     react: EmailTemplate({ downloadUrl, os }) as React.ReactElement
