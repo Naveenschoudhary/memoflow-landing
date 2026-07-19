@@ -42,7 +42,9 @@ export async function sendWelcomeEmail(email: string, os: 'mac' | 'windows' | 'l
     from: EMAIL_FROM,
     to: [email],
     subject: 'Welcome to MemoFlow! Download Your App',
-    react: EmailTemplate({ downloadUrl, os }) as React.ReactElement
+    react: EmailTemplate({ downloadUrl, os }) as React.ReactElement,
+    // A plain-text part improves spam-filter scores over HTML-only mail.
+    text: `Welcome to MemoFlow!\n\nDownload MemoFlow for macOS: ${downloadUrl}\n\nRequires macOS 26 or later. This link expires in 10 minutes.\nNothing you record ever leaves your Mac.`
   });
 
   if (emailError) {
