@@ -45,7 +45,7 @@ export async function sendWelcomeEmail(email: string, os: 'mac' | 'windows' | 'l
       `UPDATE downloads SET status = 'email_failed', email_status = 'failed' WHERE id = ?`,
       [downloadId]
     );
-    throw new Error('Failed to send email');
+    throw new Error(`Email delivery failed: ${emailError.message || emailError.name}`);
   }
 
   await db.execute(`UPDATE downloads SET email_status = 'sent' WHERE id = ?`, [downloadId]);
