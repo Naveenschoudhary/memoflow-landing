@@ -1,6 +1,6 @@
 import { Resend } from 'resend';
 import { v4 as uuidv4 } from 'uuid';
-import { sql, isInitialized } from './db';
+import { db, isInitialized } from './db';
 import { EmailTemplate } from '@/components/EmailTemplate';
 
 const resend = new Resend(process.env.RESEND_API_KEY);
@@ -13,7 +13,7 @@ const MAC_DMG_URL = `https://github.com/Naveenschoudhary/memoflow-models/release
 const getDownloadLink = (_os: 'mac' | 'windows' | 'linux') => MAC_DMG_URL;
 
 export async function sendWelcomeEmail(email: string, os: 'mac' | 'windows' | 'linux') {
-  if (!sql || !isInitialized()) {
+  if (!db || !isInitialized()) {
     throw new Error('Database is not configured — set DATABASE_URL');
   }
 
@@ -26,10 +26,11 @@ export async function sendWelcomeEmail(email: string, os: 'mac' | 'windows' | 'l
 
   const downloadUrl = `${process.env.NEXT_PUBLIC_APP_URL}/api/download/${downloadId}`;
 
-  await sql`
-    INSERT INTO downloads (id, email, os, download_link, status, email_status)
-    VALUES (${downloadId}, ${email}, ${os}, ${actualDownloadLink}, 'pending', 'pending')
-  `;
+  await db.execute(
+    `INSERT INTO downloads (id, email, os, download_link, status, email_status)
+     VALUES (?, ?, ?, ?, 'pending', 'pending')`,
+    [downloadId, email, os, actualDownloadLink]
+  );
 
   const { data: emailData, error: emailError } = await resend.emails.send({
     from: 'MemoFlow <naveen@memoflow.app>',
@@ -40,14 +41,14 @@ export async function sendWelcomeEmail(email: string, os: 'mac' | 'windows' | 'l
 
   if (emailError) {
     console.error('Resend error:', emailError);
-    await sql`
-      UPDATE downloads SET status = 'email_failed', email_status = 'failed'
-      WHERE id = ${downloadId}
-    `;
+    await db.execute(
+      `UPDATE downloads SET status = 'email_failed', email_status = 'failed' WHERE id = ?`,
+      [downloadId]
+    );
     throw new Error('Failed to send email');
   }
 
-  await sql`UPDATE downloads SET email_status = 'sent' WHERE id = ${downloadId}`;
+  await db.execute(`UPDATE downloads SET email_status = 'sent' WHERE id = ?`, [downloadId]);
 
   return { success: true, data: emailData };
 }

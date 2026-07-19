@@ -1,17 +1,18 @@
-import postgres from "postgres";
+import mysql from "mysql2/promise";
 
-// Self-hosted Postgres, configured with a single connection string:
-//   DATABASE_URL=postgres://user:password@host:5432/memoflow
-// Append ?sslmode=require if the server has TLS. Schema lives in schema.sql.
+// Hosted MySQL (Hostinger), configured with a single connection string:
+//   DATABASE_URL=mysql://user:password@host:3306/database
+// (percent-encode special characters in the password, e.g. $ -> %24).
+// Schema lives in schema.sql.
 const url = process.env.DATABASE_URL;
 
-// max 1: each Vercel serverless invocation holds a single short-lived
-// connection — signup traffic never needs pooling beyond that.
-export const sql = url
-  ? postgres(url, { max: 1, idle_timeout: 20, connect_timeout: 10 })
+// A tiny pool per serverless instance — signup traffic never needs more,
+// and shared MySQL hosting caps concurrent connections.
+export const db = url
+  ? mysql.createPool({ uri: url, connectionLimit: 2, waitForConnections: true })
   : null;
 
-export const isInitialized = () => !!sql;
+export const isInitialized = () => !!db;
 
 export interface DownloadRow {
   id: string;

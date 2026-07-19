@@ -1,7 +1,6 @@
-import { sql, DownloadRow } from '@/lib/db';
+import { db, DownloadRow } from '@/lib/db';
 import { redirect } from 'next/navigation';
-
-const EXPIRATION_TIME = 10 * 60 * 1000; // 10 minutes in milliseconds
+import type { RowDataPacket } from 'mysql2';
 
 export async function GET(
   request: Request,
@@ -10,31 +9,32 @@ export async function GET(
   try {
     const id = (await params).id;
 
-    if (!sql) {
+    if (!db) {
       return Response.json({ error: 'Database is not configured' }, { status: 500 });
     }
 
-    const rows = await sql<DownloadRow[]>`
-      SELECT * FROM downloads WHERE id = ${id}
-    `;
+    // Expiry is computed on the database server — its clock stamped
+    // created_at, so comparing there is immune to timezone differences.
+    const [rows] = await db.execute<(DownloadRow & { expired: number } & RowDataPacket)[]>(
+      `SELECT *, (created_at < NOW() - INTERVAL 10 MINUTE) AS expired
+       FROM downloads WHERE id = ?`,
+      [id]
+    );
     const data = rows[0];
 
     if (!data) {
       return Response.json({ error: 'Download link not found' }, { status: 404 });
     }
 
-    // Check if the link has expired
-    const createdAt = new Date(data.created_at).getTime();
-    if (Date.now() - createdAt > EXPIRATION_TIME) {
-      await sql`UPDATE downloads SET status = 'expired' WHERE id = ${id}`;
+    if (data.expired) {
+      await db.execute(`UPDATE downloads SET status = 'expired' WHERE id = ?`, [id]);
       return redirect('/download/expired');
     }
 
-    await sql`
-      UPDATE downloads
-      SET status = 'downloaded', downloaded_at = now()
-      WHERE id = ${id}
-    `;
+    await db.execute(
+      `UPDATE downloads SET status = 'downloaded', downloaded_at = NOW() WHERE id = ?`,
+      [id]
+    );
 
     return Response.redirect(data.download_link);
   } catch (error) {

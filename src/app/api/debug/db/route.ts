@@ -1,9 +1,10 @@
-import { sql } from '@/lib/db';
+import { db } from '@/lib/db';
+import type { RowDataPacket } from 'mysql2';
 
 /// Health check: confirms DATABASE_URL is set, reachable, and the downloads
 /// table exists. Returns counts only — no emails or links.
 export async function GET() {
-  if (!sql) {
+  if (!db) {
     return Response.json(
       { error: 'DATABASE_URL is not set' },
       { status: 500 }
@@ -11,15 +12,15 @@ export async function GET() {
   }
 
   try {
-    const [row] = await sql<{ total: string; downloaded: string }[]>`
-      SELECT count(*) AS total,
-             count(*) FILTER (WHERE status = 'downloaded') AS downloaded
-      FROM downloads
-    `;
+    const [rows] = await db.execute<({ total: number; downloaded: number } & RowDataPacket)[]>(
+      `SELECT COUNT(*) AS total,
+              COALESCE(SUM(status = 'downloaded'), 0) AS downloaded
+       FROM downloads`
+    );
     return Response.json({
       success: true,
-      signups: Number(row.total),
-      downloaded: Number(row.downloaded),
+      signups: Number(rows[0].total),
+      downloaded: Number(rows[0].downloaded),
     });
   } catch (error) {
     return Response.json(

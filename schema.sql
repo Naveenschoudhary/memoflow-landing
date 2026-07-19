@@ -1,18 +1,16 @@
--- MemoFlow landing database schema. Run once against the Postgres database
--- that DATABASE_URL points at:
---   psql "$DATABASE_URL" -f schema.sql
+-- MemoFlow landing database schema (MySQL). Run once against the database
+-- that DATABASE_URL points at, e.g. via phpMyAdmin or:
+--   mysql -h srv1870.hstgr.io -u <user> -p <database> < schema.sql
 
 CREATE TABLE IF NOT EXISTS downloads (
-    id            uuid PRIMARY KEY,
-    email         text        NOT NULL,
-    os            text        NOT NULL,
-    download_link text        NOT NULL,
-    created_at    timestamptz NOT NULL DEFAULT now(),
-    status        text        NOT NULL DEFAULT 'pending',
-    email_status  text        NOT NULL DEFAULT 'pending',
-    downloaded_at timestamptz
+    id            CHAR(36)     NOT NULL PRIMARY KEY,
+    email         VARCHAR(320) NOT NULL,
+    os            VARCHAR(16)  NOT NULL,
+    download_link VARCHAR(512) NOT NULL,
+    created_at    TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    status        VARCHAR(32)  NOT NULL DEFAULT 'pending',
+    email_status  VARCHAR(32)  NOT NULL DEFAULT 'pending',
+    downloaded_at TIMESTAMP    NULL DEFAULT NULL,
+    INDEX downloads_email_idx (email),
+    INDEX downloads_created_at_idx (created_at)
 );
-
--- The signup list you actually market to.
-CREATE INDEX IF NOT EXISTS downloads_email_idx ON downloads (email);
-CREATE INDEX IF NOT EXISTS downloads_created_at_idx ON downloads (created_at DESC);
