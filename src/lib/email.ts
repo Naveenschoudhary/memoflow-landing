@@ -7,7 +7,7 @@ const resend = new Resend(process.env.RESEND_API_KEY);
 
 // MemoFlow is a native macOS app — one notarized DMG, hosted as a GitHub
 // release asset. Bump both constants together on each release.
-const APP_VERSION = '0.4.1';
+const APP_VERSION = '0.4.2';
 const MAC_DMG_URL = `https://github.com/Naveenschoudhary/memoflow-models/releases/download/v${APP_VERSION}/MemoFlow-${APP_VERSION}.dmg`;
 
 const getDownloadLink = (_os: 'mac' | 'windows' | 'linux') => MAC_DMG_URL;
