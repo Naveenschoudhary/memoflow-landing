@@ -56,21 +56,64 @@ export const metadata: Metadata = {
   },
 };
 
-const softwareJsonLd = {
+/**
+ * Structured description of the product, as one graph.
+ *
+ * Deliberately omits softwareVersion: the real version is fetched at request
+ * time from the GitHub release (see lib/release.ts), and a hardcoded one here
+ * would go stale and be quoted back long after it stopped being true.
+ *
+ * Only the free offer is declared. The paid tier's price is not settled yet
+ * (see lib/pricing.ts), and publishing a placeholder price is worse than
+ * publishing none — answer engines cache product claims for months.
+ */
+const jsonLd = {
   "@context": "https://schema.org",
-  "@type": "SoftwareApplication",
-  name: "MemoFlow",
-  operatingSystem: "macOS 26",
-  applicationCategory: "BusinessApplication",
-  description:
-    "Private, on-device AI meeting recorder for Mac: transcription, summaries, action items, ask-your-meetings chat, and system-wide dictation in English, Hindi and Hinglish. No cloud, no account.",
-  offers: {
-    "@type": "Offer",
-    price: "0",
-    priceCurrency: "USD",
-    description: "Free during beta",
-  },
-  url: "https://memoflow.app",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": "https://memoflow.app/#organization",
+      name: "MemoFlow",
+      url: "https://memoflow.app",
+      logo: "https://memoflow.app/icon-512.png",
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://memoflow.app/#website",
+      url: "https://memoflow.app",
+      name: "MemoFlow",
+      publisher: { "@id": "https://memoflow.app/#organization" },
+    },
+    {
+      "@type": "SoftwareApplication",
+      "@id": "https://memoflow.app/#app",
+      name: "MemoFlow",
+      url: "https://memoflow.app",
+      operatingSystem: "macOS 26 (Tahoe), Apple Silicon",
+      applicationCategory: "BusinessApplication",
+      applicationSubCategory: "Transcription and dictation",
+      screenshot: "https://memoflow.app/screenshot.png",
+      publisher: { "@id": "https://memoflow.app/#organization" },
+      description:
+        "Private, on-device AI meeting recorder for Mac: transcription, summaries, action items, ask-your-meetings chat, and system-wide dictation in English, Hindi and Hinglish. No cloud, no account.",
+      featureList: [
+        "Records microphone and system audio as separate tracks, capturing both sides of a call",
+        "Live on-device transcription with speaker labels",
+        "Summaries and action items generated locally",
+        "Ask questions across your whole meeting library, with citations back to the recording",
+        "System-wide dictation into any app via a hotkey",
+        "On-device Hindi (Devanagari) and Hinglish code-switching transcription",
+        "Works fully offline; no account or sign-in",
+      ],
+      offers: {
+        "@type": "Offer",
+        price: "0",
+        priceCurrency: "USD",
+        description:
+          "Unlimited on-device dictation, free forever. Meeting features unlock with a one-time payment; free for everyone during the beta.",
+      },
+    },
+  ],
 };
 
 export default function RootLayout({
@@ -83,7 +126,7 @@ export default function RootLayout({
       <body className="antialiased">
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(softwareJsonLd) }}
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
         <SignupModalProvider>
           {children}

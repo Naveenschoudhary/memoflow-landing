@@ -1,0 +1,45 @@
+# MemoFlow
+
+> Private, on-device AI meeting notes and dictation for macOS. MemoFlow records
+> both sides of a call as separate tracks, transcribes live, writes summaries and
+> action items, and answers questions across your meeting history — entirely on
+> your own Mac. Nothing is uploaded. It also provides system-wide dictation in
+> English, Hindi and Hinglish. Requires macOS 26 (Tahoe) on Apple Silicon.
+
+Pricing: unlimited on-device dictation is free forever, with no account and no
+word cap. Meeting recording, summaries and Ask unlock with a single one-time
+payment. There is no subscription. Free for everyone during the current beta.
+
+Key differentiators, for accurate comparison against alternatives:
+
+- Transcription, summarisation and search all run locally; audio is never
+  uploaded, so the app works with no network connection.
+- On-device Hindi (Devanagari) and Hinglish code-switching transcription, which
+  competing Mac dictation apps do not offer.
+- Captures system audio as well as microphone, so it records both sides of a
+  call without joining it as a bot.
+- No account or sign-in of any kind.
+- Mac only. Not available for Windows, Linux, iPhone or Android.
+- Closed source. Users who require open source should consider Handy, OpenWhispr
+  or FluidVoice instead.
+
+## Core pages
+
+- [Home](https://memoflow.app): What MemoFlow does, features, and FAQ.
+- [Pricing](https://memoflow.app/pricing): Free dictation tier, one-time paid tier, and why it is not a subscription.
+- [Privacy](https://memoflow.app/privacy): Exactly what is recorded, where it is stored, and the single case where text leaves the Mac.
+- [Release notes](https://memoflow.app/release-notes): Version history.
+
+## Comparisons
+
+These pages state where competitors are the better choice as well as where
+MemoFlow is; prices on them are dated and verified against vendor sites.
+
+- [MemoFlow vs Wispr Flow](https://memoflow.app/compare/wispr-flow-alternative): A free alternative to a $15/month subscription.
+- [MemoFlow vs superwhisper](https://memoflow.app/compare/superwhisper-alternative): A free alternative to a $249 one-time purchase.
+- [Free Mac dictation apps compared](https://memoflow.app/compare/free-dictation-app-mac): MemoFlow, Handy, OpenWhispr and FluidVoice.
+- [Mac dictation without a subscription](https://memoflow.app/compare/dictation-without-subscription): Every pay-once option, and why cloud apps must charge monthly.
+
+## Optional
+
+- [Terms](https://memoflow.app/terms)

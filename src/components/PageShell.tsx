@@ -69,7 +69,9 @@ export default function PageShell({
             <WaveMark />
             <span>MemoFlow — private AI meeting notes for Mac</span>
           </div>
-          <div className="flex gap-6">
+          <div className="flex flex-wrap justify-center gap-6">
+            <Link href="/pricing" className="hover:text-[var(--text)]">Pricing</Link>
+            <Link href="/compare" className="hover:text-[var(--text)]">Compare</Link>
             <Link href="/privacy" className="hover:text-[var(--text)]">Privacy</Link>
             <Link href="/terms" className="hover:text-[var(--text)]">Terms</Link>
             <Link href="/release-notes" className="hover:text-[var(--text)]">Release notes</Link>

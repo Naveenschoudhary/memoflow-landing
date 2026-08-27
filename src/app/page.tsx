@@ -34,7 +34,7 @@ const faqs = [
   },
   {
     q: "How much does it cost?",
-    a: "MemoFlow is free during the beta. No account, no credit card.",
+    a: "Dictation is free forever — unlimited, no account, no word cap. Meeting recording, summaries and Ask unlock with a single one-time payment, never a subscription. Everything is free for everyone during the beta.",
   },
   {
     q: "Can I ask questions about old meetings?",
@@ -78,6 +78,7 @@ function Nav() {
           <a href="#features" className="hover:text-[var(--text)]">Features</a>
           <a href="#privacy" className="hover:text-[var(--text)]">Privacy</a>
           <a href="#hinglish" className="hover:text-[var(--text)]">हिन्दी + English</a>
+          <a href="/pricing" className="hover:text-[var(--text)]">Pricing</a>
           <a href="#faq" className="hover:text-[var(--text)]">FAQ</a>
         </div>
         <CTAButton variant="ghost">Download</CTAButton>
@@ -330,8 +331,8 @@ function FinalCTA() {
           Your next meeting deserves a private notetaker.
         </h2>
         <p className="mx-auto mt-3 max-w-xl text-[var(--muted)]">
-          Free during beta. macOS 26, Apple Silicon. Nothing you say ever
-          leaves your Mac.
+          Free dictation, forever. macOS 26, Apple Silicon. Nothing you say
+          ever leaves your Mac.
         </p>
         <div className="mt-8">
           <CTAButton>Download MemoFlow for macOS</CTAButton>
@@ -349,7 +350,9 @@ function Footer() {
           <WaveMark />
           <span>MemoFlow — private AI meeting notes for Mac</span>
         </div>
-        <div className="flex gap-6">
+        <div className="flex flex-wrap justify-center gap-6">
+          <a href="/pricing" className="hover:text-[var(--text)]">Pricing</a>
+          <a href="/compare" className="hover:text-[var(--text)]">Compare</a>
           <a href="/privacy" className="hover:text-[var(--text)]">Privacy</a>
           <a href="/terms" className="hover:text-[var(--text)]">Terms</a>
           <a href="/release-notes" className="hover:text-[var(--text)]">Release notes</a>
