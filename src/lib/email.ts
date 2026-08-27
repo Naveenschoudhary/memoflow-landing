@@ -2,15 +2,15 @@ import { Resend } from 'resend';
 import { v4 as uuidv4 } from 'uuid';
 import { db, isInitialized } from './db';
 import { EmailTemplate } from '@/components/EmailTemplate';
+import { getLatestRelease } from './release';
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
 // MemoFlow is a native macOS app — one notarized DMG, hosted as a GitHub
-// release asset. Bump both constants together on each release.
-const APP_VERSION = '0.5.0';
-const MAC_DMG_URL = `https://github.com/Naveenschoudhary/memoflow-models/releases/download/v${APP_VERSION}/MemoFlow-${APP_VERSION}.dmg`;
-
-const getDownloadLink = (_os: 'mac' | 'windows' | 'linux') => MAC_DMG_URL;
+// release asset. The asset URL is read from the latest release (see
+// ./release), so shipping a version needs no change here.
+const getDownloadLink = async (_os: 'mac' | 'windows' | 'linux') =>
+  (await getLatestRelease()).dmgUrl;
 
 // Resend's shared address works without domain verification (but only
 // delivers to the Resend account owner). Once memoflow.app is verified on
@@ -24,7 +24,7 @@ export async function sendWelcomeEmail(email: string, os: 'mac' | 'windows' | 'l
   }
 
   const downloadId = uuidv4();
-  const actualDownloadLink = getDownloadLink(os);
+  const actualDownloadLink = await getDownloadLink(os);
 
   if (!process.env.NEXT_PUBLIC_APP_URL) {
     throw new Error('NEXT_PUBLIC_APP_URL environment variable is not set');
