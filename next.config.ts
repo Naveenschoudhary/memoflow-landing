@@ -32,6 +32,24 @@ const nextConfig: NextConfig = {
         destination: "/compare/free-dictation-app-mac",
         permanent: false,
       },
+      // Article aliases. The Hinglish guide is the page most likely to be
+      // linked from a chat message or a talk, where nobody retypes a 49-character
+      // slug correctly, so the obvious shorter forms resolve to it.
+      {
+        source: "/blog/best-hinglish-transcription-apps-for-indian-teams-in-2026",
+        destination: "/blog/best-hinglish-transcription-apps-indian-teams-2026",
+        permanent: true,
+      },
+      {
+        source: "/blog/hinglish-transcription",
+        destination: "/blog/best-hinglish-transcription-apps-indian-teams-2026",
+        permanent: true,
+      },
+      {
+        source: "/hinglish",
+        destination: "/blog/best-hinglish-transcription-apps-indian-teams-2026",
+        permanent: false,
+      },
     ];
   },
 };

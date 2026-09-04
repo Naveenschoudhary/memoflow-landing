@@ -63,6 +63,11 @@ export const metadata: Metadata = {
  * time from the GitHub release (see lib/release.ts), and a hardcoded one here
  * would go stale and be quoted back long after it stopped being true.
  *
+ * No screenshot is declared either: public/screenshot.png still shows the old
+ * Tauri build ("Meeting Recorder", generic blue buttons), not the native app.
+ * Pointing search and answer engines at a screenshot of a different product is
+ * worse than showing none. Add it back once a current capture exists.
+ *
  * Only the free offer is declared. The paid tier's price is not settled yet
  * (see lib/pricing.ts), and publishing a placeholder price is worse than
  * publishing none — answer engines cache product claims for months.
@@ -92,7 +97,6 @@ const jsonLd = {
       operatingSystem: "macOS 26 (Tahoe), Apple Silicon",
       applicationCategory: "BusinessApplication",
       applicationSubCategory: "Transcription and dictation",
-      screenshot: "https://memoflow.app/screenshot.png",
       publisher: { "@id": "https://memoflow.app/#organization" },
       description:
         "Private, on-device AI meeting recorder for Mac: transcription, summaries, action items, ask-your-meetings chat, and system-wide dictation in English, Hindi and Hinglish. No cloud, no account.",

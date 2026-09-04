@@ -28,11 +28,21 @@ export default function PageShell({
   eyebrow,
   title,
   updated,
+  meta,
+  hero,
+  backHref = '/',
+  backLabel = '\u2190 Back to home',
   children,
 }: {
   eyebrow?: string;
   title: string;
   updated?: string;
+  /** Replaces the "Last updated" line — used by articles for a byline row. */
+  meta?: React.ReactNode;
+  /** Full-column media directly under the title, before the body. */
+  hero?: React.ReactNode;
+  backHref?: string;
+  backLabel?: string;
   children: React.ReactNode;
 }) {
   return (
@@ -44,10 +54,10 @@ export default function PageShell({
             MemoFlow
           </Link>
           <Link
-            href="/"
+            href={backHref}
             className="text-sm text-[var(--muted)] transition-colors hover:text-[var(--text)]"
           >
-            ← Back to home
+            {backLabel}
           </Link>
         </nav>
       </header>
@@ -60,6 +70,8 @@ export default function PageShell({
         {updated && (
           <p className="mt-3 text-sm text-[var(--muted)]">Last updated {updated}</p>
         )}
+        {meta && <div className="mt-4">{meta}</div>}
+        {hero && <div className="mt-8">{hero}</div>}
         <div className="mt-12 space-y-10">{children}</div>
       </main>
 
@@ -72,6 +84,7 @@ export default function PageShell({
           <div className="flex flex-wrap justify-center gap-6">
             <Link href="/pricing" className="hover:text-[var(--text)]">Pricing</Link>
             <Link href="/compare" className="hover:text-[var(--text)]">Compare</Link>
+            <Link href="/blog" className="hover:text-[var(--text)]">Blog</Link>
             <Link href="/privacy" className="hover:text-[var(--text)]">Privacy</Link>
             <Link href="/terms" className="hover:text-[var(--text)]">Terms</Link>
             <Link href="/release-notes" className="hover:text-[var(--text)]">Release notes</Link>
@@ -85,13 +98,16 @@ export default function PageShell({
 /** A titled block of legal or explanatory prose. */
 export function Section({
   title,
+  id,
   children,
 }: {
   title: string;
+  /** Anchor target, so a table of contents can link to the heading. */
+  id?: string;
   children: React.ReactNode;
 }) {
   return (
-    <section>
+    <section id={id} className={id ? 'scroll-mt-24' : undefined}>
       <h2 className="text-xl font-semibold tracking-tight">{title}</h2>
       <div className="mt-3 space-y-3 leading-relaxed text-[var(--muted)]">{children}</div>
     </section>

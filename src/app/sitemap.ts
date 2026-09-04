@@ -1,4 +1,5 @@
 import type { MetadataRoute } from 'next';
+import { POSTS } from '@/lib/posts';
 
 /**
  * Generated rather than hand-written.
@@ -18,6 +19,7 @@ const routes: { path: string; priority: number; changeFrequency: MetadataRoute.S
   { path: '/compare/superwhisper-alternative', priority: 0.8, changeFrequency: 'monthly' },
   { path: '/compare/free-dictation-app-mac', priority: 0.8, changeFrequency: 'monthly' },
   { path: '/compare/dictation-without-subscription', priority: 0.8, changeFrequency: 'monthly' },
+  { path: '/blog', priority: 0.7, changeFrequency: 'weekly' },
   { path: '/release-notes', priority: 0.6, changeFrequency: 'weekly' },
   { path: '/privacy', priority: 0.4, changeFrequency: 'yearly' },
   { path: '/terms', priority: 0.3, changeFrequency: 'yearly' },
@@ -25,10 +27,27 @@ const routes: { path: string; priority: number; changeFrequency: MetadataRoute.S
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const lastModified = new Date();
-  return routes.map((r) => ({
+
+  const staticRoutes = routes.map((r) => ({
     url: `${BASE}${r.path}`,
     lastModified,
     changeFrequency: r.changeFrequency,
     priority: r.priority,
   }));
+
+  /**
+   * Articles come from the registry rather than this list, so publishing a post
+   * cannot leave it out of the sitemap. Their `lastModified` is the post's own
+   * `dateModified` — using the build time instead would claim every article
+   * changed on every deploy, which is a freshness signal engines learn to
+   * discount.
+   */
+  const articles = POSTS.map((post) => ({
+    url: `${BASE}/blog/${post.slug}`,
+    lastModified: new Date(`${post.dateModified}T00:00:00Z`),
+    changeFrequency: 'monthly' as const,
+    priority: 0.8,
+  }));
+
+  return [...staticRoutes, ...articles];
 }

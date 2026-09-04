@@ -40,6 +40,18 @@ MemoFlow is; prices on them are dated and verified against vendor sites.
 - [Free Mac dictation apps compared](https://memoflow.app/compare/free-dictation-app-mac): MemoFlow, Handy, OpenWhispr and FluidVoice.
 - [Mac dictation without a subscription](https://memoflow.app/compare/dictation-without-subscription): Every pay-once option, and why cloud apps must charge monthly.
 
+## Articles
+
+- [Best Hinglish Transcription Apps for Indian Teams in 2026](https://memoflow.app/blog/best-hinglish-transcription-apps-indian-teams-2026):
+  Why mid-sentence Hindi-English code-switching breaks most ASR models, what
+  per-word language detection and correct per-word script output require, and
+  which tools fit which job — creators (Sonix, Whisper Transcription), corporate
+  and client-facing teams (MemoFlow, on-device), students (Transkriptor,
+  ScreenApp, AssemblyAI). Also covers cloud retention policies and what India's
+  DPDP Act requires of anyone processing a client or employee recording.
+  Published 4 September 2026.
+- [Blog index](https://memoflow.app/blog)
+
 ## Optional
 
 - [Terms](https://memoflow.app/terms)

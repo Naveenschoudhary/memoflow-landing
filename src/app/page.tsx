@@ -79,6 +79,7 @@ function Nav() {
           <a href="#privacy" className="hover:text-[var(--text)]">Privacy</a>
           <a href="#hinglish" className="hover:text-[var(--text)]">हिन्दी + English</a>
           <a href="/pricing" className="hover:text-[var(--text)]">Pricing</a>
+          <a href="/blog" className="hover:text-[var(--text)]">Blog</a>
           <a href="#faq" className="hover:text-[var(--text)]">FAQ</a>
         </div>
         <CTAButton variant="ghost">Download</CTAButton>
@@ -353,6 +354,7 @@ function Footer() {
         <div className="flex flex-wrap justify-center gap-6">
           <a href="/pricing" className="hover:text-[var(--text)]">Pricing</a>
           <a href="/compare" className="hover:text-[var(--text)]">Compare</a>
+          <a href="/blog" className="hover:text-[var(--text)]">Blog</a>
           <a href="/privacy" className="hover:text-[var(--text)]">Privacy</a>
           <a href="/terms" className="hover:text-[var(--text)]">Terms</a>
           <a href="/release-notes" className="hover:text-[var(--text)]">Release notes</a>
