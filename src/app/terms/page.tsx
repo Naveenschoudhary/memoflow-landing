@@ -4,6 +4,7 @@ import PageShell, { Section, Panel, Bullets } from '@/components/PageShell';
 export const metadata: Metadata = {
   title: 'Terms — MemoFlow',
   description: 'The terms you agree to by using MemoFlow.',
+  alternates: { canonical: 'https://memoflow.app/terms' },
 };
 
 export default function Terms() {

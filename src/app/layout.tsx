@@ -22,9 +22,6 @@ export const metadata: Metadata = {
     "meeting summary app macOS",
     "Otter alternative private",
   ],
-  alternates: {
-    canonical: "https://memoflow.app",
-  },
   icons: {
     icon: [{ url: "/favicon.ico", sizes: "any" }],
     apple: [{ url: "/apple-touch-icon.png", sizes: "180x180" }],

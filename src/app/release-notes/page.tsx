@@ -4,6 +4,7 @@ import PageShell, { Bullets } from '@/components/PageShell';
 export const metadata: Metadata = {
   title: 'Release notes — MemoFlow',
   description: 'What changed in each version of MemoFlow.',
+  alternates: { canonical: 'https://memoflow.app/release-notes' },
 };
 
 type Release = {

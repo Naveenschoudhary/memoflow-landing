@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import ResendButton from '@/components/superadmin/ResendButton';
 import { Empty, PageHeader, Panel, StatusPill, compact, stamp } from '@/components/superadmin/ui';
 import { STATUSES, getSignups } from '@/lib/superadmin/stats';
 
@@ -97,7 +98,7 @@ export default async function SignupsPage({
       ) : (
         <Panel className="!p-0">
           <div className="overflow-x-auto">
-            <table className="w-full min-w-[760px] text-left text-sm">
+            <table className="w-full min-w-[880px] text-left text-sm">
               <thead className="text-xs text-[var(--muted)]">
                 <tr className="border-b border-[var(--line)]">
                   <th className="px-5 py-3 font-medium">Email</th>
@@ -106,6 +107,9 @@ export default async function SignupsPage({
                   <th className="px-5 py-3 font-medium">Delivery</th>
                   <th className="px-5 py-3 font-medium">Signed up (UTC)</th>
                   <th className="px-5 py-3 font-medium">Downloaded (UTC)</th>
+                  <th className="px-5 py-3 text-right font-medium">
+                    <span className="sr-only">Actions</span>
+                  </th>
                 </tr>
               </thead>
               <tbody>
@@ -125,6 +129,18 @@ export default async function SignupsPage({
                     </td>
                     <td className="px-5 py-3 tabular-nums text-[var(--muted)]">
                       {stamp(row.downloaded_at)}
+                    </td>
+                    <td className="px-5 py-3 text-right">
+                      {/*
+                        Offered only where a new link is the fix. A row that was
+                        already downloaded needs nothing, and a Resend button on it
+                        would invite mailing people who have the app.
+                      */}
+                      {row.status !== 'downloaded' && (
+                        <div className="flex justify-end">
+                          <ResendButton email={row.email} os={row.os} />
+                        </div>
+                      )}
                     </td>
                   </tr>
                 ))}
