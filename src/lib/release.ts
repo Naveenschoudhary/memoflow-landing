@@ -1,6 +1,8 @@
 // Where the site learns what "latest" means, so no constant here needs bumping
 // on release day.
-const REPO = 'Naveenschoudhary/memoflow-models';
+// Exported so the superadmin dashboard reads download counts from the same
+// repository this file already treats as the source of releases.
+export const REPO = 'Naveenschoudhary/memoflow-models';
 
 // Primary source: the GitHub release. It exists the moment the DMG is uploaded,
 // and the asset URL comes straight from it, so the link can't point at a
