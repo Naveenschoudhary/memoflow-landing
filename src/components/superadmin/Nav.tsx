@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { ChartBar, Envelope, Package } from '@phosphor-icons/react';
+import { ChartBar, Envelope, PaperPlaneTilt, Package } from '@phosphor-icons/react';
 
 /**
  * The sidebar's navigation.
@@ -17,6 +17,7 @@ export const TABS = [
   { href: '/superadmin', label: 'Overview', icon: ChartBar },
   { href: '/superadmin/signups', label: 'Signups', icon: Envelope },
   { href: '/superadmin/releases', label: 'Releases', icon: Package },
+  { href: '/superadmin/emails', label: 'Emails', icon: PaperPlaneTilt },
 ];
 
 export default function Nav({

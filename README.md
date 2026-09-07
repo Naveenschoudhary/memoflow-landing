@@ -29,11 +29,49 @@ live business numbers, so it is not something to leave open.
 - **Signups** (`/superadmin/signups`) — the full list, searchable by email and
   filterable by status. Filters live in the URL, so a view is linkable.
 - **Releases** (`/superadmin/releases`) — downloads per shipped version.
+- **Emails** (`/superadmin/emails`) — re-send download links, and write to the
+  list. See below.
 
 Two different numbers, deliberately. The GitHub count is every DMG fetched,
 including forwarded links, the release page, and Sparkle in-app updates, but
 cannot be attributed to a person. The `downloads` table only counts emailed
 links that were clicked, but knows who clicked them.
+
+### Sending email
+
+Two different jobs on `/superadmin/emails`, plus a **Resend** button on each
+non-downloaded row of the signups table.
+
+**Re-sending download links.** Picks people, not rows. The `downloads` table
+holds one row per emailed link, so 47 failed/expired/unopened rows are only 24
+people — and 12 of those succeeded on a later attempt. Every audience is
+`DISTINCT` on email and excludes anyone who has *ever* downloaded, so nobody
+who already has the app gets chased. Each send mints a genuinely new link,
+because the old id is spent.
+
+**Promotions.** Plain text in, branded HTML out — blank line for a paragraph,
+`**bold**`, `[text](url)`. The body is HTML-escaped before that markup is
+re-applied, and non-http(s) URLs are stripped, so a `javascript:` link cannot
+reach a recipient. The preview runs the real renderer, so what you see is what
+sends. Always use **Send test** first: it goes to one typed address and is not
+recorded as a campaign.
+
+**Guardrails.** Every bulk send needs `CONFIRM` typed (checked on the server,
+not just the button), is capped at 500 recipients per run, and paces at ~600ms
+between messages to stay under Resend's 2/second limit. Sends are sequential
+rather than batched because each message carries that person's own unsubscribe
+link.
+
+**Unsubscribes.** Every promotional email carries an unsubscribe link and a
+`List-Unsubscribe` header, and opted-out addresses are excluded from every
+audience on the page. The token is a random per-address value in
+`email_contacts`, *not* a signature — so links stay valid forever instead of
+breaking the next time a credential is rotated. `/unsubscribe` is public by
+design; the recipient is not signed in. Transactional download links still go
+out to people who opted out of marketing.
+
+Two additive tables back this (`email_contacts`, `email_campaigns`) — see
+`schema.sql`. The `downloads` table is unchanged.
 
 ### Signing in
 

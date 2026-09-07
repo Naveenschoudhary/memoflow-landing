@@ -5,6 +5,7 @@ export const metadata: Metadata = {
   title: 'Privacy — MemoFlow',
   description:
     'What MemoFlow records, where it is stored, and the one case where text leaves your Mac.',
+  alternates: { canonical: 'https://memoflow.app/privacy' },
 };
 
 export default function Privacy() {

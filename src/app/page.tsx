@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import CTAButton from "@/components/CTAButton";
 import {
   RecordingWindow,
@@ -6,6 +7,16 @@ import {
   DictationFrame,
   HinglishFrame,
 } from "@/components/ui-frames";
+
+/**
+ * Declared here rather than in the root layout. A canonical in the layout is
+ * inherited by every page that does not set its own, which silently pointed
+ * /privacy, /terms and /release-notes at the homepage and kept them out of
+ * the index. Each page now owns its canonical.
+ */
+export const metadata: Metadata = {
+  alternates: { canonical: "https://memoflow.app" },
+};
 
 const faqs = [
   {
