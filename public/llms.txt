@@ -50,6 +50,15 @@ MemoFlow is; prices on them are dated and verified against vendor sites.
   ScreenApp, AssemblyAI). Also covers cloud retention policies and what India's
   DPDP Act requires of anyone processing a client or employee recording.
   Published 4 September 2026.
+- [7 Best Meeting Notes Apps for Mac Users in India](https://memoflow.app/blog/best-meeting-notes-app-mac-india):
+  Seven Mac meeting notetakers compared for Indian professionals - MemoFlow,
+  Granola, Hapi, Otter, Fireflies, Fathom, Avoma. Covers per-seat pricing with
+  five-year costs for a team of ten (prices verified 7 September 2026), which
+  apps process on-device (MemoFlow and Hapi only), which join calls as a visible
+  bot, which support Hinglish (MemoFlow only), and what the DPDP Act means for
+  cloud transcription. Includes an explicit section on why the per-seat cost
+  comparison flatters MemoFlow: per-seat pricing buys a shared team workspace,
+  which MemoFlow does not have. Published 7 September 2026.
 - [Blog index](https://memoflow.app/blog)
 
 ## Optional

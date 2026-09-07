@@ -157,3 +157,179 @@ export const PAID_COMPETITORS = COMPETITORS.filter((c) => c.fiveYear !== '$0');
 
 /** The subset worth showing on a page about free alternatives. */
 export const FREE_COMPETITORS = COMPETITORS.filter((c) => c.fiveYear === '$0');
+
+/* ————————————————————————————————————————————————————————————————
+   Meeting notetakers
+   ———————————————————————————————————————————————————————————————— */
+
+/**
+ * The meeting-notes field, which is priced completely differently from the
+ * dictation field above.
+ *
+ * Every tool here bills **per seat per month**; MemoFlow and Hapi are one-time
+ * per Mac. That difference is the whole reason this is a separate type rather
+ * than more `Competitor` rows: `yearOne` for a single user hides the number
+ * that actually decides a purchase, which is what ten seats cost over five
+ * years.
+ *
+ * A warning that belongs next to the data: the per-seat number is **not**
+ * like-for-like. $19.99/seat on Otter buys a shared team workspace — one
+ * searchable archive, comments, permissions, CRM sync. A one-time local licence
+ * buys N independent installs with no sharing between them. The blog post that
+ * renders this table says so in its own section, and any new page using this
+ * data must do the same, or it is comparing a team product against a
+ * single-player one and calling it a discount.
+ */
+export type MeetingCompetitor = {
+  name: string;
+  url: string;
+  /** The tier being quoted, e.g. "Business". */
+  tier: string;
+  /** Per seat per month on monthly billing, or null where only annual is sold. */
+  monthlyUsd: number | null;
+  /** Per seat per month on annual billing — every vendor's cheaper number. */
+  annualUsd: number | null;
+  /** Seats the vendor bills as a floor, regardless of team size. */
+  minSeats: number | null;
+  /** Where transcription and summarisation run. */
+  processing: 'On your Mac' | 'Cloud' | 'Cloud (summaries)';
+  /** Does it join the call as a visible participant? */
+  bot: 'Yes' | 'No';
+  hinglish: 'Yes' | 'No';
+  /** What it is genuinely better at than MemoFlow. Written to be fair. */
+  strength: string;
+  /** The free tier, in a few words, or null where there is none. */
+  freeTier: string | null;
+  /** For one-time products, the published figure. Null for per-seat vendors. */
+  oneTimeLabel?: string;
+};
+
+/**
+ * Verified 7 September 2026 against vendor pricing pages. Separate from
+ * `PRICES_CHECKED` because the two competitor sets get re-verified on different
+ * days, and one shared date would silently vouch for whichever set was not
+ * checked.
+ */
+export const MEETING_PRICES_CHECKED = '7 September 2026';
+
+/**
+ * The rate the INR figures in prose assume. Vendors bill in USD, so the rupee
+ * cost moves with the exchange rate — quoted as approximate for that reason,
+ * and dated so a reader can tell how stale it is.
+ */
+export const USD_INR_ASSUMED = 83;
+
+export const MEETING_COMPETITORS: MeetingCompetitor[] = [
+  {
+    name: 'Granola',
+    url: 'https://www.granola.ai',
+    tier: 'Business',
+    monthlyUsd: null,
+    annualUsd: 14,
+    minSeats: null,
+    processing: 'Cloud (summaries)',
+    bot: 'No',
+    hinglish: 'No',
+    strength:
+      'The nicest note-taking experience during a call of anything here — you type your own rough notes and it fills them out afterwards. Mac-native and bot-free.',
+    freeTier: 'Basic, $0, limited meeting history',
+  },
+  {
+    name: 'Hapi',
+    url: 'https://speakhapi.com',
+    tier: 'Professional',
+    monthlyUsd: null,
+    annualUsd: null,
+    minSeats: null,
+    processing: 'On your Mac',
+    bot: 'No',
+    hinglish: 'No',
+    strength:
+      'The closest thing to MemoFlow on this list: fully local, Mac-only, speaker labels, one-time price. If you want local processing and do not need Hindi or Hinglish, it is a direct alternative rather than a compromise.',
+    freeTier: null,
+    oneTimeLabel: '€79 personal / €129 professional, one-time',
+  },
+  {
+    name: 'Otter.ai',
+    url: 'https://otter.ai',
+    tier: 'Business',
+    monthlyUsd: 30,
+    annualUsd: 19.99,
+    minSeats: 5,
+    processing: 'Cloud',
+    bot: 'Yes',
+    hinglish: 'No',
+    strength:
+      'Live captions during the call and the most established shared workspace here. If several people need to read the same transcript as it happens, this is what it is built for.',
+    freeTier: '300 min/month, 30 min per conversation',
+  },
+  {
+    name: 'Fireflies.ai',
+    url: 'https://fireflies.ai',
+    tier: 'Business',
+    monthlyUsd: 29,
+    annualUsd: 19,
+    minSeats: null,
+    processing: 'Cloud',
+    bot: 'Yes',
+    hinglish: 'No',
+    strength:
+      'The best post-meeting search across a whole team’s history, plus the broadest integrations list. Pro at $10/seat/month annually is the cheapest credible team tier on this list.',
+    freeTier: 'Limited storage',
+  },
+  {
+    name: 'Fathom',
+    url: 'https://fathom.ai',
+    tier: 'Team',
+    monthlyUsd: 19,
+    annualUsd: 15,
+    minSeats: 2,
+    processing: 'Cloud',
+    bot: 'Yes',
+    hinglish: 'No',
+    strength:
+      'The most generous free tier of anything here — unlimited recordings and transcriptions at $0. Heavily optimised for Zoom.',
+    freeTier: 'Unlimited recordings and transcriptions',
+  },
+  {
+    name: 'Avoma',
+    url: 'https://www.avoma.com',
+    tier: 'Organization',
+    monthlyUsd: 39,
+    annualUsd: 24,
+    minSeats: null,
+    processing: 'Cloud',
+    bot: 'Yes',
+    hinglish: 'No',
+    strength:
+      'Genuine revenue-team tooling: coaching metrics, deal intelligence, CRM sync, pipeline analytics. Nothing else here competes on that, and no local app comes close.',
+    freeTier: '14-day trial; viewers free',
+  },
+];
+
+/** What a team of `seats` pays per year on annual billing, respecting minimums. */
+export function meetingTeamYear(c: MeetingCompetitor, seats: number): string {
+  const rate = c.annualUsd ?? c.monthlyUsd;
+  if (rate == null) return 'One-time';
+  const billed = Math.max(seats, c.minSeats ?? 0);
+  return `$${Math.round(rate * 12 * billed).toLocaleString('en-US')}`;
+}
+
+/** The five-year column. The one that decides things. */
+export function meetingTeamFiveYear(c: MeetingCompetitor, seats: number): string {
+  const rate = c.annualUsd ?? c.monthlyUsd;
+  if (rate == null) return 'One-time';
+  const billed = Math.max(seats, c.minSeats ?? 0);
+  return `$${Math.round(rate * 12 * billed * 5).toLocaleString('en-US')}`;
+}
+
+/** "$19.99/seat/mo annually, or $30 monthly" — however much of that is known. */
+export function meetingRateLabel(c: MeetingCompetitor): string {
+  if (c.annualUsd == null && c.monthlyUsd == null) {
+    return c.oneTimeLabel ?? 'One-time purchase';
+  }
+  const parts: string[] = [];
+  if (c.annualUsd != null) parts.push(`$${c.annualUsd}/seat/mo annually`);
+  if (c.monthlyUsd != null) parts.push(`$${c.monthlyUsd} monthly`);
+  return parts.join(', or ');
+}
