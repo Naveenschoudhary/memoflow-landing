@@ -88,6 +88,36 @@ export const POSTS: Post[] = [
     },
     ogImage: '/blog/hinglish-transcription-2026/og.jpg',
   },
+  {
+    slug: 'best-meeting-notes-app-mac-india',
+    title: '7 Best Meeting Notes Apps for Mac Users in India',
+    metaTitle: 'Best Meeting Notes Apps for Mac Users in India (2026)',
+    description:
+      'Seven Mac meeting notes apps compared for Indian professionals: what each costs per seat, where your audio is processed, which join calls as a bot, and which handle Hinglish.',
+    excerpt:
+      'The tools topping global review sites were not built for Indian workflows. Seven Mac apps compared on the three things that actually decide it: where your recording is processed, what per-seat pricing costs a team over five years, and whether it can transcribe a Hinglish standup.',
+    datePublished: '2026-09-07',
+    dateModified: '2026-09-07',
+    readingMinutes: 12,
+    keywords: [
+      'best meeting notes app for Mac users in India',
+      'best meeting notes app India',
+      'AI notetaker for Indian teams',
+      'private meeting transcription Mac',
+      'Otter alternative that does not upload audio',
+      'on-device AI notetaker macOS',
+      'Granola alternative offline',
+      'meeting recorder without a bot',
+      'DPDP Act meeting transcription',
+    ],
+    hero: {
+      src: '/blog/meeting-notes-india-2026/hero.webp',
+      alt: 'Banner reading “7 Meeting Notes Apps for Mac Users, India” beside a MacBook showing a meeting-notes window with Summary, Key Points, Action Items and Decisions sections, a cloud icon, and the India Gate.',
+      width: 1536,
+      height: 480,
+    },
+    ogImage: '/blog/meeting-notes-india-2026/og.jpg',
+  },
 ];
 
 export function getPost(slug: string): Post | undefined {

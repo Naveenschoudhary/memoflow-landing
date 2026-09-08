@@ -50,6 +50,21 @@ const nextConfig: NextConfig = {
         destination: "/blog/best-hinglish-transcription-apps-indian-teams-2026",
         permanent: false,
       },
+      {
+        source: "/blog/7-best-meeting-notes-apps-for-mac-users-in-india-2026",
+        destination: "/blog/best-meeting-notes-app-mac-india",
+        permanent: true,
+      },
+      {
+        source: "/blog/best-meeting-notes-apps-mac-india",
+        destination: "/blog/best-meeting-notes-app-mac-india",
+        permanent: true,
+      },
+      {
+        source: "/meeting-notes",
+        destination: "/blog/best-meeting-notes-app-mac-india",
+        permanent: false,
+      },
     ];
   },
 };
