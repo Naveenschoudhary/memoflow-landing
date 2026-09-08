@@ -45,7 +45,7 @@ const faqs = [
   },
   {
     q: "How much does it cost?",
-    a: "Dictation is free forever — unlimited, no account, no word cap. Meeting recording, summaries and Ask unlock with a single one-time payment, never a subscription. Everything is free for everyone during the beta.",
+    a: "Free for 7 days, everything included. After that it's a one-time licence, yours for life: $20 for one person (Mac + iPhone), $40 for three people, $300 for a team of up to twenty. Never a subscription.",
   },
   {
     q: "Can I ask questions about old meetings?",
@@ -115,7 +115,7 @@ function Hero() {
         calls.
       </p>
       <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
-        <CTAButton>Download for macOS — free beta</CTAButton>
+        <CTAButton>Download for macOS — free 7-day trial</CTAButton>
         <a
           href="#features"
           className="px-4 py-3 text-sm text-[var(--muted)] hover:text-[var(--text)]"
@@ -343,8 +343,8 @@ function FinalCTA() {
           Your next meeting deserves a private notetaker.
         </h2>
         <p className="mx-auto mt-3 max-w-xl text-[var(--muted)]">
-          Free dictation, forever. macOS 26, Apple Silicon. Nothing you say
-          ever leaves your Mac.
+          Free for 7 days, then one payment for life. macOS 26, Apple Silicon.
+          Nothing you say ever leaves your Mac.
         </p>
         <div className="mt-8">
           <CTAButton>Download MemoFlow for macOS</CTAButton>
@@ -368,6 +368,7 @@ function Footer() {
           <a href="/blog" className="hover:text-[var(--text)]">Blog</a>
           <a href="/privacy" className="hover:text-[var(--text)]">Privacy</a>
           <a href="/terms" className="hover:text-[var(--text)]">Terms</a>
+          <a href="/refunds" className="hover:text-[var(--text)]">Refunds</a>
           <a href="/release-notes" className="hover:text-[var(--text)]">Release notes</a>
         </div>
       </div>

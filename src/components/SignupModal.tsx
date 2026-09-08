@@ -82,8 +82,8 @@ const SignupModal: React.FC<SignupModalProps> = ({ isOpen, onClose, onSubmit }) 
           Get MemoFlow for macOS
         </h2>
         <p className="mt-1.5 text-sm text-[var(--muted)]">
-          Enter your email and we&apos;ll send the download link. Free during
-          beta — no account needed.
+          Enter your email and we&apos;ll send the download link. Free for 7
+          days — no account needed.
         </p>
 
         {status === "success" ? (

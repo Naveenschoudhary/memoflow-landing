@@ -73,10 +73,11 @@ export default function FreeDictationAppMac() {
           caption="Free options only."
         />
         <p>
-          If your requirement is &ldquo;free dictation, nothing more&rdquo;, any
-          of these will do the job and the open-source ones have the advantage of
-          being auditable. MemoFlow earns its place on this list only if the
-          meeting side is useful to you, or if you need Hindi and Hinglish.
+          If your requirement is &ldquo;free dictation, nothing more&rdquo;, the
+          open-source ones do the job and have the advantage of being auditable.
+          MemoFlow is not free beyond its 7-day trial — it earns a mention here
+          only if the meeting side is useful to you, or if you need Hindi and
+          Hinglish, and it costs $20 once.
         </p>
       </Section>
 
@@ -97,7 +98,7 @@ export default function FreeDictationAppMac() {
           across your history.
         </Answer>
         <p>
-          Dictation is free forever. The meeting features are one payment, never a
+          MemoFlow is free for 7 days, then one payment for everything — never a
           subscription — see{' '}
           <Link href="/pricing" className="text-[var(--text)] underline decoration-[var(--line)] underline-offset-4">
             pricing

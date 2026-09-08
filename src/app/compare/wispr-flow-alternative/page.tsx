@@ -16,7 +16,7 @@ export const metadata: Metadata = {
 const faqs: Faq[] = [
   {
     q: 'Is there a free alternative to Wispr Flow?',
-    a: 'Yes. MemoFlow gives unlimited on-device dictation free forever on macOS, with no account and no word cap. Handy, OpenWhispr and FluidVoice are also free and open source, and are cross-platform. Wispr Flow itself is $15/month after its limited free tier.',
+    a: 'Yes. Handy, OpenWhispr and FluidVoice are free, open source and cross-platform. MemoFlow is free for 7 days and then a $20 one-time licence on macOS, with no account. Wispr Flow itself is $15/month after its limited free tier.',
   },
   {
     q: 'How much does Wispr Flow cost over time?',
@@ -50,10 +50,10 @@ export default function WisprFlowAlternative() {
 
       <Section title="Is there a free alternative to Wispr Flow?">
         <Answer>
-          Yes — several. MemoFlow gives unlimited on-device dictation free forever
-          on macOS, with no account and no word cap. Handy, OpenWhispr and
-          FluidVoice are free, open source and cross-platform. Wispr Flow itself
-          is $15/month once you pass its limited free tier.
+          Yes — several. Handy, OpenWhispr and FluidVoice are free, open source
+          and cross-platform. MemoFlow is free for 7 days, then a $20 one-time
+          licence on macOS, with no account. Wispr Flow itself is $15/month once
+          you pass its limited free tier.
         </Answer>
         <p>
           The useful distinction is not free versus paid, it is{' '}
@@ -131,7 +131,7 @@ export default function WisprFlowAlternative() {
 
       <div className="rounded-2xl border border-[var(--line)] bg-[var(--panel)] p-8 text-center">
         <p className="text-lg font-medium text-[var(--text)]">
-          Free dictation, on your Mac, with nothing uploaded.
+          Dictation on your Mac, with nothing uploaded. Free for 7 days.
         </p>
         <div className="mt-5">
           <CTAButton>Download MemoFlow for macOS</CTAButton>

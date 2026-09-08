@@ -35,7 +35,7 @@ export default function CompareTable({
             <tr className="border-b border-[var(--line)] bg-[var(--accent)]/[0.07]">
               <th scope="row" className="px-4 py-3 font-semibold text-[var(--text)]">MemoFlow</th>
               <td className="px-4 py-3 text-[var(--muted)]">
-                Free dictation forever, then {paidPriceLabel().toLowerCase()}
+                Free for 7 days, then {paidPriceLabel().toLowerCase()}
               </td>
               <td className="px-4 py-3 text-[var(--muted)]">{memoflowFiveYear()}</td>
               <td className="px-4 py-3 text-[var(--muted)]">{memoflowFiveYear()}</td>

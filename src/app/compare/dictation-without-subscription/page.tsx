@@ -93,8 +93,8 @@ export default function DictationWithoutSubscription() {
         <Answer>
           superwhisper if you want the deepest Mac dictation workflow and the
           $249 is not an obstacle. MacWhisper if you mainly transcribe recorded
-          audio files. MemoFlow if you want free dictation now and the option of
-          meeting recording later for one small payment.
+          audio files. MemoFlow if you want dictation and meeting recording
+          together for one small payment, after a 7-day trial.
         </Answer>
         <CompareTable competitors={PAID_COMPETITORS} caption="Pay-once options only." />
         <p>

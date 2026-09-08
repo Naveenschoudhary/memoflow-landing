@@ -108,10 +108,10 @@ const jsonLd = {
       ],
       offers: {
         "@type": "Offer",
-        price: "0",
+        price: "20",
         priceCurrency: "USD",
         description:
-          "Unlimited on-device dictation, free forever. Meeting features unlock with a one-time payment; free for everyone during the beta.",
+          "Free for 7 days, then a one-time licence: $20 for one person, $40 for three, $300 for up to twenty. Never a subscription.",
       },
     },
   ],

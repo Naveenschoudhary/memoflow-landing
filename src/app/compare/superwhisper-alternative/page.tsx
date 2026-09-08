@@ -16,7 +16,7 @@ export const metadata: Metadata = {
 const faqs: Faq[] = [
   {
     q: 'Is there a free superwhisper alternative?',
-    a: 'Yes. MemoFlow offers unlimited on-device dictation free forever on macOS. Handy, OpenWhispr and FluidVoice are free and open source. superwhisper itself is a $249 one-time purchase, with no permanently free tier.',
+    a: 'Handy, OpenWhispr and FluidVoice are free and open source. MemoFlow is free for 7 days, then $20 once — on-device, on macOS. superwhisper itself is a $249 one-time purchase, with no permanently free tier.',
   },
   {
     q: 'How much does superwhisper cost?',
@@ -49,10 +49,9 @@ export default function SuperwhisperAlternative() {
 
       <Section title="Is there a free superwhisper alternative?">
         <Answer>
-          Yes. MemoFlow gives unlimited on-device dictation free forever on macOS
-          — no account, no word cap, no trial clock. Handy, OpenWhispr and
-          FluidVoice are free and open source. superwhisper has no permanently
-          free tier; it is $249 once.
+          Handy, OpenWhispr and FluidVoice are free and open source. MemoFlow is
+          free for 7 days, then $20 once — on-device, on macOS, no account.
+          superwhisper has no permanently free tier; it is $249 once.
         </Answer>
         <p>
           All of these run the same class of speech model on your own hardware, so
@@ -119,7 +118,7 @@ export default function SuperwhisperAlternative() {
 
       <div className="rounded-2xl border border-[var(--line)] bg-[var(--panel)] p-8 text-center">
         <p className="text-lg font-medium text-[var(--text)]">
-          Try free dictation before spending $249.
+          Try MemoFlow free for 7 days before spending $249.
         </p>
         <div className="mt-5">
           <CTAButton>Download MemoFlow for macOS</CTAButton>

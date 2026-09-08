@@ -6,66 +6,107 @@
  * cache product claims for months, so a price that appears in three places and
  * drifts in one of them will be quoted back at us wrong long after it is fixed.
  *
- * Until `announced` flips to true the pages render the model without a number,
- * which is publishable today and honest. Set the number, flip the flag, and the
- * price appears everywhere at once.
+ * The tiers and the trial length live here and nowhere else.
  */
 
-export const PRICING = {
-  /** Unlimited local dictation, permanently. Not a trial. */
-  free: {
-    name: 'Free',
-    price: 'Free forever',
-    tagline: 'Unlimited on-device dictation.',
-    includes: [
-      'Unlimited system-wide dictation, in any app',
-      'On-device Whisper and Apple speech recognition',
-      'English, हिन्दी and Hinglish',
-      'Filler-word removal, punctuation, self-corrections',
-      'Custom dictation modes and word replacements',
-      'No account, no time limit, no word cap',
-    ],
-  },
+/** Everything is free for this long, then a licence is needed. */
+export const TRIAL_DAYS = 7;
 
-  /** One-time, lifetime. Never a subscription. */
-  paid: {
-    name: 'MemoFlow Complete',
-    tagline: 'Everything above, plus the meeting side of the app.',
+export type TierId = 'personal' | 'team' | 'organisation';
+
+export type Tier = {
+  id: TierId;
+  name: string;
+  priceUsd: number;
+  /** Who it is for, in a few words. */
+  seats: string;
+  /** Devices the key activates on. */
+  devices: string;
+  includes: string[];
+  /** Dodo Payments product ids. Live ids are filled in after account approval. */
+  productId: { test: string; live: string | null };
+  featured?: boolean;
+};
+
+/**
+ * Decided 2026-09-08: a 7-day trial of the whole app, then one payment for
+ * life. Never a subscription. The three tiers differ only in how many people
+ * and devices a key covers.
+ */
+export const TIERS: Tier[] = [
+  {
+    id: 'personal',
+    name: 'Personal',
+    priceUsd: 20,
+    seats: 'One person',
+    devices: '1 Mac + 1 iPhone',
     includes: [
-      'Meeting recording with both sides captured as separate tracks',
+      'Meeting recording, both sides as separate tracks',
       'Live transcripts with speaker labels',
       'Summaries and action items',
-      'Ask — questions answered across your whole meeting library, with citations',
-      'Standups, reminders and calendar sync',
+      'Ask — questions across your whole library, with citations',
+      'System-wide dictation in any app',
+      'English, हिन्दी and Hinglish, on-device',
     ],
+    productId: { test: 'pdt_0Nn9CLx3ct5yH1uX9fep7', live: null },
+    featured: true,
   },
+  {
+    id: 'team',
+    name: 'Team',
+    priceUsd: 40,
+    seats: 'Three people',
+    devices: 'One shared key, 6 devices',
+    includes: ['Everything in Personal', 'For a small team or a family', 'One key to hand around'],
+    productId: { test: 'pdt_0Nn9CM1K3jt6HqIzfr5jV', live: null },
+  },
+  {
+    id: 'organisation',
+    name: 'Organisation',
+    priceUsd: 300,
+    seats: 'Up to 20 people',
+    devices: 'One shared key, 40 devices',
+    includes: ['Everything in Personal', 'One invoice for the whole team', 'Email us for more than 20'],
+    productId: { test: 'pdt_0Nn9CM4uuMW4XUbMzMq1z', live: null },
+  },
+];
 
-  /**
-   * The number. Not yet decided as of 2026-08-27 — see
-   * claudedocs/AI_VISIBILITY_PLAN.md §2 for why this must be settled *before*
-   * these pages are deployed, and for the recommended $19–29 range.
-   */
-  priceUsd: null as number | null,
-  announced: false,
+/**
+ * Which Dodo environment the Buy buttons point at. Live by default; set
+ * NEXT_PUBLIC_DODO_MODE=test locally to exercise the test checkout.
+ */
+export const DODO_MODE: 'test' | 'live' =
+  process.env.NEXT_PUBLIC_DODO_MODE === 'test' ? 'test' : 'live';
 
-  /** True until the paid tier ships. */
-  freeDuringBeta: true,
+/**
+ * Dodo's static checkout link for a tier, or null while the live product does
+ * not exist yet — the button then says so instead of linking nowhere.
+ */
+export function checkoutURL(tier: Tier): string | null {
+  const id = tier.productId[DODO_MODE];
+  if (!id) return null;
+  const host =
+    DODO_MODE === 'test'
+      ? 'https://test.checkout.dodopayments.com'
+      : 'https://checkout.dodopayments.com';
+  const redirect = encodeURIComponent('https://memoflow.app/thanks');
+  return `${host}/buy/${id}?quantity=1&redirect_url=${redirect}`;
+}
+
+/** Kept for the comparison tables and JSON-LD: the entry price, in prose. */
+export const PRICING = {
+  priceUsd: TIERS[0].priceUsd,
+  announced: true,
 } as const;
 
-/** What the paid tier costs, in prose, wherever it is mentioned. */
+/** What MemoFlow costs, in prose, wherever it is mentioned. */
 export function paidPriceLabel(): string {
-  if (PRICING.announced && PRICING.priceUsd != null) {
-    return `$${PRICING.priceUsd} once`;
-  }
-  return 'One-time price, announced at launch';
+  return `$${PRICING.priceUsd} once`;
 }
 
 /** The five-year column for MemoFlow itself. */
 export function memoflowFiveYear(): string {
-  if (PRICING.announced && PRICING.priceUsd != null) {
-    return `$${PRICING.priceUsd}`;
-  }
-  return 'One-time';
+  return `$${PRICING.priceUsd}`;
 }
 
 export type Competitor = {

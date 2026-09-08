@@ -603,7 +603,7 @@ export default function HinglishTranscriptionApps() {
           <CTAButton>Download MemoFlow for macOS</CTAButton>
         </div>
         <p className="mt-4 text-xs text-[var(--muted)]/70">
-          macOS 26 · Apple Silicon · no account, free during beta
+          macOS 26 · Apple Silicon · no account, free for 7 days
         </p>
       </div>
 

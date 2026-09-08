@@ -87,6 +87,7 @@ export default function PageShell({
             <Link href="/blog" className="hover:text-[var(--text)]">Blog</Link>
             <Link href="/privacy" className="hover:text-[var(--text)]">Privacy</Link>
             <Link href="/terms" className="hover:text-[var(--text)]">Terms</Link>
+            <Link href="/refunds" className="hover:text-[var(--text)]">Refunds</Link>
             <Link href="/release-notes" className="hover:text-[var(--text)]">Release notes</Link>
           </div>
         </div>

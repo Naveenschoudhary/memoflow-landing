@@ -12,7 +12,7 @@ export default function Terms() {
     <PageShell
       eyebrow="Terms"
       title="Terms of use"
-      updated="27 August 2026"
+      updated="8 September 2026"
     >
       <Panel>
         MemoFlow is a Mac app that records meetings, transcribes them on your own
@@ -29,6 +29,52 @@ export default function Terms() {
         </p>
         <p>
           MemoFlow requires macOS 26 or later.
+        </p>
+      </Section>
+
+      <Section title="Trial and licence">
+        <p>
+          MemoFlow is free to use in full for 7 days after you first open it. After
+          that, recording, dictation, transcription and Ask need a licence key.
+          Anything you recorded during the trial stays on your Mac, readable and
+          exportable, whether or not you buy.
+        </p>
+        <p>
+          A licence is a one-time purchase, not a subscription. It covers the number of
+          people and devices named on the tier you bought — one person on one Mac and one
+          iPhone for Personal, three people for Team, up to twenty for Organisation — and
+          it does not expire. Do not share a key beyond its tier; we may deactivate keys
+          that are.
+        </p>
+        <p>
+          The app checks your key with the licence server occasionally. It keeps working
+          offline for weeks between checks.
+        </p>
+      </Section>
+
+      <Section title="Who sells you the licence">
+        <p>
+          Purchases are handled by Dodo Payments, our merchant of record. Dodo takes the
+          payment, issues the invoice, collects and remits any sales tax, VAT or GST that
+          applies where you are, and emails you the licence key. Their{' '}
+          <a
+            href="https://dodopayments.com/legal/terms"
+            className="text-[var(--accent)] hover:underline"
+            rel="noopener"
+          >
+            terms
+          </a>{' '}
+          apply to the transaction itself; these terms apply to the app.
+        </p>
+      </Section>
+
+      <Section title="Refunds">
+        <p>
+          Full refund within 14 days of purchase, no questions asked. See the{' '}
+          <a href="/refunds" className="text-[var(--accent)] hover:underline">
+            refund policy
+          </a>
+          .
         </p>
       </Section>
 

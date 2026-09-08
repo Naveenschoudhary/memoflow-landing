@@ -354,10 +354,10 @@ export default function BestMeetingNotesAppIndia() {
             .
           </p>
           <p>
-            Dictation is free forever with no word cap. The meeting features — recording,
-            summaries, action items and Ask — unlock with a single payment rather than a
-            subscription; {paidPriceLabel().toLowerCase()}, and they are free for everyone
-            during the current beta. Requires macOS 26 on Apple Silicon. It is distributed
+            Everything is free for the first 7 days. After that the whole app — recording,
+            summaries, action items, Ask and dictation — is a single payment rather than a
+            subscription: {paidPriceLabel().toLowerCase()} for one person. Requires macOS 26
+            on Apple Silicon. It is distributed
             as a notarised download from{' '}
             <Link
               href="/"
@@ -728,7 +728,7 @@ export default function BestMeetingNotesAppIndia() {
           <CTAButton>Download MemoFlow for macOS</CTAButton>
         </div>
         <p className="mt-4 text-xs text-[var(--muted)]/70">
-          macOS 26 · Apple Silicon · no account in the app · free during beta
+          macOS 26 · Apple Silicon · no account in the app · free for 7 days
         </p>
       </div>
 
