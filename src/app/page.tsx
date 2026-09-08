@@ -1,5 +1,8 @@
 import type { Metadata } from "next";
 import CTAButton from "@/components/CTAButton";
+import TierCard from "@/components/TierCard";
+import { TIERS, TRIAL_DAYS } from "@/lib/pricing";
+import { latestRelease } from "@/lib/releaseNotes";
 import {
   RecordingWindow,
   SummaryFrame,
@@ -89,7 +92,7 @@ function Nav() {
           <a href="#features" className="hover:text-[var(--text)]">Features</a>
           <a href="#privacy" className="hover:text-[var(--text)]">Privacy</a>
           <a href="#hinglish" className="hover:text-[var(--text)]">हिन्दी + English</a>
-          <a href="/pricing" className="hover:text-[var(--text)]">Pricing</a>
+          <a href="#pricing" className="hover:text-[var(--text)]">Pricing</a>
           <a href="/blog" className="hover:text-[var(--text)]">Blog</a>
           <a href="#faq" className="hover:text-[var(--text)]">FAQ</a>
         </div>
@@ -126,6 +129,14 @@ function Hero() {
       <p className="mt-4 text-xs text-[var(--muted)]/70">
         macOS 26 · Apple Silicon · nothing is ever uploaded
       </p>
+      <a
+        href="/release-notes"
+        className="mt-5 inline-flex items-center gap-2 rounded-full border border-[var(--line)] bg-[var(--panel)] px-4 py-1.5 text-xs text-[var(--muted)] transition hover:text-[var(--text)]"
+      >
+        <span className="font-medium text-[var(--accent)]">New in {latestRelease.version}</span>
+        <span className="hidden sm:inline">{latestRelease.headline}</span>
+        <span aria-hidden="true">→</span>
+      </a>
 
       <div className="mt-14">
         <RecordingWindow />
@@ -289,8 +300,8 @@ function Hinglish() {
 function HowItWorks() {
   const steps = [
     ["Install", "Download the notarized app, drag to Applications. No account."],
-    ["Grant two permissions", "Microphone and system audio — so both sides of calls are captured."],
-    ["Record from anywhere", "Menu bar, ⌘N, or hold fn⇧ in any app. Notes appear when you stop."],
+    ["Grant the permissions", "Microphone, Accessibility and system audio, on one screen — so both sides of calls are captured and dictation can type."],
+    ["Record from anywhere", "Menu bar, ⌘N, or fn ⇥ in any app. Hold fn to dictate. Notes appear when you stop."],
   ];
   return (
     <section className="mx-auto max-w-6xl px-6 py-20">
@@ -306,6 +317,65 @@ function HowItWorks() {
           </div>
         ))}
       </div>
+    </section>
+  );
+}
+
+function Pricing() {
+  return (
+    <section id="pricing" className="border-y border-[var(--line)] bg-black/20">
+      <div className="mx-auto max-w-6xl px-6 py-20">
+        <p className="text-center text-sm font-medium text-[var(--accent)]">Pricing</p>
+        <h2 className="mt-3 text-center text-3xl font-semibold tracking-tight sm:text-4xl">
+          Free for {TRIAL_DAYS} days. Then one payment, for life.
+        </h2>
+        <p className="mx-auto mt-4 max-w-2xl text-center text-[var(--muted)]">
+          Everything is free for {TRIAL_DAYS} days — no card, no account. Keep it with a
+          licence you buy once. There is no subscription, and there never will be.
+        </p>
+        <div className="mt-12 grid gap-4 md:grid-cols-3">
+          {TIERS.map((tier) => (
+            <TierCard key={tier.id} tier={tier} source="web" />
+          ))}
+        </div>
+        <p className="mt-6 text-center text-xs text-[var(--muted)]/80">
+          US dollars; local taxes added at checkout · card, Apple Pay, Google Pay · 14-day full
+          refund ·{" "}
+          <a href="/pricing" className="text-[var(--accent)] hover:underline">
+            How the licence works →
+          </a>
+        </p>
+      </div>
+    </section>
+  );
+}
+
+function WhatsNew() {
+  const release = latestRelease;
+  return (
+    <section className="mx-auto max-w-6xl px-6 py-20">
+      <div className="flex flex-wrap items-baseline justify-between gap-3">
+        <h2 className="text-3xl font-semibold tracking-tight">
+          New in MemoFlow {release.version}
+        </h2>
+        <span className="text-sm text-[var(--muted)]">{release.date}</span>
+      </div>
+      {release.headline && (
+        <p className="mt-3 max-w-2xl text-[var(--muted)]">{release.headline}</p>
+      )}
+      <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {release.groups.slice(0, 6).map((group) => (
+          <div key={group.title} className="rounded-2xl border border-[var(--line)] bg-[var(--panel)] p-5">
+            <div className="font-semibold">{group.title}</div>
+            <p className="mt-1.5 text-sm text-[var(--muted)]">{group.items[0]}</p>
+          </div>
+        ))}
+      </div>
+      <p className="mt-6 text-sm">
+        <a href="/release-notes" className="text-[var(--accent)] hover:underline">
+          Full release notes, every version →
+        </a>
+      </p>
     </section>
   );
 }
@@ -389,6 +459,8 @@ export default function Home() {
       <Features />
       <Hinglish />
       <HowItWorks />
+      <Pricing />
+      <WhatsNew />
       <FAQ />
       <FinalCTA />
       <Footer />
