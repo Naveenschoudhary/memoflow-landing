@@ -82,7 +82,7 @@ export const DODO_MODE: 'test' | 'live' =
  * Dodo's static checkout link for a tier, or null while the live product does
  * not exist yet — the button then says so instead of linking nowhere.
  */
-export function checkoutURL(tier: Tier): string | null {
+export function checkoutURL(tier: Tier, source: 'web' | 'app' = 'web'): string | null {
   const id = tier.productId[DODO_MODE];
   if (!id) return null;
   const host =
@@ -90,7 +90,9 @@ export function checkoutURL(tier: Tier): string | null {
       ? 'https://test.checkout.dodopayments.com'
       : 'https://checkout.dodopayments.com';
   const redirect = encodeURIComponent('https://memoflow.app/thanks');
-  return `${host}/buy/${id}?quantity=1&redirect_url=${redirect}`;
+  // metadata_source lands on the payment in Dodo, so app-driven and
+  // web-driven purchases can be told apart later.
+  return `${host}/buy/${id}?quantity=1&redirect_url=${redirect}&metadata_source=${source}`;
 }
 
 /** Kept for the comparison tables and JSON-LD: the entry price, in prose. */
