@@ -17,6 +17,55 @@ type Release = {
 /** Newest first. Mirrors the GitHub releases on memoflow-models. */
 const releases: Release[] = [
   {
+    version: '0.6.0',
+    date: '8 September 2026',
+    headline:
+      'A 7-day trial and a one-time licence, shortcuts you learn by doing, and Parakeet for English.',
+    groups: [
+      {
+        title: 'Trial and licence',
+        items: [
+          'Everything is free for 7 days from the first launch of this version. After that, recording, dictation, transcription and Ask need a licence key; everything already recorded stays readable and exportable.',
+          'One-time licence, never a subscription: Personal $20 (one Mac and one iPhone), Team $40 (three people), Organisation $300 (up to twenty). Keys are issued by Dodo Payments at checkout and entered in Settings › License.',
+          'The app re-checks the key on launch and daily; a refunded or disabled key locks at the next launch. Deactivate this Mac from Settings to move the key to another.',
+        ],
+      },
+      {
+        title: 'Onboarding, redesigned',
+        items: [
+          'Four screens in their own window instead of six inside the main window.',
+          'All permissions on one screen — Microphone, Accessibility and System Audio — with status that updates the moment you grant them, and a Relaunch button when macOS needs one for system audio.',
+          'The System Audio request now actually registers MemoFlow in System Settings; before, the pane opened with no MemoFlow row to switch on.',
+          'Model downloads show real progress and each phase — downloading, optimizing, ready — in onboarding and in Settings.',
+          'Shortcuts are learned by doing: hold fn to dictate, double-tap fn to lock hands-free, fn ⇥ to start a meeting, rehearsed live. New installs get these defaults; existing shortcuts are unchanged.',
+        ],
+      },
+      {
+        title: 'Parakeet v3',
+        items: [
+          'A second local engine: English plus 25 European languages and Japanese, around 180× faster than real time, with nothing to optimize after the download. Recommended by default on English-first Macs; Hindi and Hinglish stay with the Apex model.',
+          'Parakeet-TDT 0.6B v3 is by NVIDIA (CC BY 4.0), run through FluidAudio’s Core ML conversion.',
+        ],
+      },
+      {
+        title: 'Updates',
+        items: [
+          'A new version shows in the sidebar and the menu bar with an Install button, and once as a popup.',
+          'A version that has to be retired asks you to update before continuing; nothing already recorded is affected.',
+        ],
+      },
+      {
+        title: 'Fixes',
+        items: [
+          'fn+Tab as a shortcut no longer hijacks the plain Tab key system-wide.',
+          'Deleting a model updates the card immediately, and a delete no longer triggers a re-download.',
+          'The Parakeet download shows a progress bar rather than sitting on “Loading…”.',
+          'The meeting-recording shortcut re-arms itself when the Accessibility permission is granted.',
+        ],
+      },
+    ],
+  },
+  {
     version: '0.5.0',
     date: '27 August 2026',
     headline:
