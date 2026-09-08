@@ -74,8 +74,8 @@ function TierCard({ tier, source }: { tier: Tier; source: 'web' | 'app' }) {
     <div
       className={
         tier.featured
-          ? 'relative rounded-2xl border border-[var(--accent)]/50 bg-[var(--panel)] p-6 shadow-lg shadow-[var(--accent)]/10'
-          : 'rounded-2xl border border-[var(--line)] bg-[var(--panel)] p-6'
+          ? 'relative flex flex-col rounded-2xl border border-[var(--accent)]/50 bg-[var(--panel)] p-6 shadow-lg shadow-[var(--accent)]/10'
+          : 'flex flex-col rounded-2xl border border-[var(--line)] bg-[var(--panel)] p-6'
       }
     >
       {tier.featured && (
@@ -99,17 +99,17 @@ function TierCard({ tier, source }: { tier: Tier; source: 'web' | 'app' }) {
           </li>
         ))}
       </ul>
-      <div className="mt-6">
+      <div className="mt-auto pt-6">
         {href ? (
           <a
             href={href}
             className={
               tier.featured
-                ? 'block rounded-xl bg-[var(--accent)] px-5 py-3 text-center text-sm font-semibold text-white shadow-lg shadow-[var(--accent)]/25 transition hover:brightness-110'
-                : 'block rounded-xl border border-[var(--line)] px-5 py-3 text-center text-sm font-medium text-[var(--text)] transition hover:bg-white/5'
+                ? 'block whitespace-nowrap rounded-xl bg-[var(--accent)] px-5 py-3 text-center text-sm font-semibold text-white shadow-lg shadow-[var(--accent)]/25 transition hover:brightness-110'
+                : 'block whitespace-nowrap rounded-xl border border-[var(--line)] px-5 py-3 text-center text-sm font-medium text-[var(--text)] transition hover:bg-white/5'
             }
           >
-            Buy {tier.name} · ${tier.priceUsd}
+            Buy for ${tier.priceUsd}
           </a>
         ) : (
           <span className="block rounded-xl border border-[var(--line)] px-5 py-3 text-center text-sm text-[var(--muted)]">
