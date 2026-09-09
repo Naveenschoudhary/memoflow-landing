@@ -28,7 +28,7 @@ const faqs = [
   },
   {
     q: "Does it work with Zoom, Google Meet, and Teams?",
-    a: "Yes — with any meeting app. MemoFlow captures your microphone and your Mac's system audio, so it hears both sides of any call, labels who said what (You vs. Others), and needs no bots or calendar integrations.",
+    a: "Yes — with any meeting app. MemoFlow captures your microphone and your Mac's system audio, so it hears both sides of any call and labels who said what (You vs. Others). No bot joins the call. Calendar connection is optional and can link Google, Outlook or iCloud events to their recordings.",
   },
   {
     q: "Does it really support Hindi and Hinglish?",

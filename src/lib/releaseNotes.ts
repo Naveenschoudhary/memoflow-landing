@@ -14,6 +14,54 @@ export type Release = {
 /** Newest first. Mirrors the GitHub releases on memoflow-models. */
 export const releases: Release[] = [
   {
+    version: '0.7.0',
+    date: '9 September 2026',
+    headline:
+      'A calendar built around today, editable synced meetings, and recordings that find the right event automatically.',
+    groups: [
+      {
+        title: 'Your day, in one calendar',
+        items: [
+          'Calendar opens on Today with every meeting and reminder in one schedule. Switch to day, week, month or agenda whenever you need a wider view.',
+          'Filter the view to the calendars you want and search meetings from the same screen.',
+          'The separate Reminders tab is gone. Meeting reminders now live where they belong: alongside the meeting in Calendar.',
+        ],
+      },
+      {
+        title: 'Google, Outlook and iCloud',
+        items: [
+          'MemoFlow shows calendars already connected to Calendar on this Mac, including Google, Outlook and iCloud accounts.',
+          'Create a meeting on the calendar account you choose and it syncs through that provider to your other devices.',
+          'Calendar access remains local through macOS; MemoFlow does not need your Google or Microsoft password.',
+        ],
+      },
+      {
+        title: 'Create, edit and delete meetings',
+        items: [
+          'Add a meeting or reminder with its title, time, all-day setting, calendar, location, meeting link, alert and notes.',
+          'Edit those details later or delete the event from MemoFlow.',
+          'For a recurring meeting, changes and deletion apply to the selected occurrence.',
+        ],
+      },
+      {
+        title: 'Recordings link themselves',
+        items: [
+          'Start recording from a calendar event, its detail view or its meeting-time notification and the new recording is linked to that exact event immediately.',
+          'Start recording another way and MemoFlow automatically matches the closest active calendar meeting and uses its title.',
+          'Open the meeting later to jump directly to its saved notes, summary or transcript.',
+        ],
+      },
+      {
+        title: 'Meeting-time notifications',
+        items: [
+          'MemoFlow can send a Mac notification when a meeting starts, with a Start Recording action built in.',
+          'Choose the reminder while creating or editing the event; recurring reminders are scheduled from the Calendar view.',
+          'Linked recordings, transcripts and notes remain in MemoFlow if the original calendar event is deleted.',
+        ],
+      },
+    ],
+  },
+  {
     version: '0.6.0',
     date: '8 September 2026',
     headline:
