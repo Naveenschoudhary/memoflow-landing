@@ -4,6 +4,7 @@ import { useActionState, useState } from 'react';
 import { useFormStatus } from 'react-dom';
 import { sendCampaign, type SendResult } from '@/lib/superadmin/email-actions';
 import { PROMO_AUDIENCES, type PromoAudience } from '@/lib/superadmin/audiences';
+import type { PromoStyle } from '@/lib/superadmin/promo-email';
 import { renderPromoHtml } from '@/lib/superadmin/promo-email';
 import SendResultNote from './SendResultNote';
 
@@ -26,6 +27,7 @@ export default function CampaignComposer({
   });
 
   const [audience, setAudience] = useState<PromoAudience>('all');
+  const [style, setStyle] = useState<PromoStyle>('plain');
   const [subject, setSubject] = useState('');
   const [body, setBody] = useState('');
 
@@ -60,8 +62,7 @@ export default function CampaignComposer({
         />
         <span className="mt-1.5 block text-xs text-[var(--muted)]">
           Blank line for a new paragraph · <code>**bold**</code> ·{' '}
-          <code>[text](https://…)</code>. The MemoFlow header and an unsubscribe link are
-          added automatically.
+          <code>[text](https://…)</code>. An unsubscribe link is added automatically.
         </span>
       </label>
 
@@ -81,7 +82,40 @@ export default function CampaignComposer({
         </select>
       </label>
 
-      <Preview subject={subject} body={body} />
+      {/*
+        A short personal note inside the logo-and-card template reads as a
+        campaign, and campaigns get skimmed — so plain is the default and the
+        preview shows whichever is selected.
+      */}
+      <fieldset className="border-0 p-0">
+        <legend className="mb-1.5 block text-sm text-[var(--muted)]">Look</legend>
+        <div className="flex flex-wrap gap-x-5 gap-y-2 text-sm">
+          <label className="flex cursor-pointer items-center gap-2">
+            <input
+              type="radio"
+              name="style"
+              value="plain"
+              checked={style === 'plain'}
+              onChange={() => setStyle('plain')}
+              className="accent-[var(--accent)]"
+            />
+            Plain — reads like a normal email
+          </label>
+          <label className="flex cursor-pointer items-center gap-2">
+            <input
+              type="radio"
+              name="style"
+              value="branded"
+              checked={style === 'branded'}
+              onChange={() => setStyle('branded')}
+              className="accent-[var(--accent)]"
+            />
+            Branded — logo and card
+          </label>
+        </div>
+      </fieldset>
+
+      <Preview subject={subject} body={body} style={style} />
 
       <TestSend />
 
@@ -104,10 +138,18 @@ export default function CampaignComposer({
  * escapes the body before re-introducing its own markup; the preview is
  * rendering the same escaped string that goes out over SMTP.
  */
-function Preview({ subject, body }: { subject: string; body: string }) {
+function Preview({
+  subject,
+  body,
+  style,
+}: {
+  subject: string;
+  body: string;
+  style: PromoStyle;
+}) {
   if (!subject && !body) return null;
 
-  const html = renderPromoHtml({ body, unsubscribeUrl: '#preview' });
+  const html = renderPromoHtml({ body, unsubscribeUrl: '#preview', style });
 
   return (
     <details className="rounded-lg border border-[var(--line)] p-3">

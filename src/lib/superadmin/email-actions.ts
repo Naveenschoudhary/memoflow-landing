@@ -3,7 +3,7 @@
 import { revalidatePath } from 'next/cache';
 import { Resend } from 'resend';
 import { sendWelcomeEmail } from '@/lib/email';
-import { renderPromoHtml, renderPromoText, unsubscribeUrlFor } from './promo-email';
+import { renderPromoHtml, renderPromoText, unsubscribeUrlFor, type PromoStyle } from './promo-email';
 import {
   type PromoAudience,
   type ResendAudience,
@@ -116,6 +116,7 @@ export async function sendCampaign(_prev: SendResult, formData: FormData): Promi
   const audience = String(formData.get('audience') ?? 'all') as PromoAudience;
   const testTo = String(formData.get('testTo') ?? '').trim();
   const isTest = String(formData.get('mode') ?? '') === 'test';
+  const style: PromoStyle = formData.get('style') === 'plain' ? 'plain' : 'branded';
 
   if (!subject) return { ok: false, message: 'The subject is empty.' };
   if (!body) return { ok: false, message: 'The message is empty.' };
@@ -128,7 +129,7 @@ export async function sendCampaign(_prev: SendResult, formData: FormData): Promi
     if (!EMAIL_PATTERN.test(testTo)) {
       return { ok: false, message: 'Enter a valid address to send the test to.' };
     }
-    const result = await sendOne(resend, testTo, subject, body);
+    const result = await sendOne(resend, testTo, subject, body, style);
     return result.ok
       ? { ok: true, message: `Test sent to ${testTo}.` }
       : { ok: false, message: `Test failed: ${result.error}` };
@@ -151,7 +152,7 @@ export async function sendCampaign(_prev: SendResult, formData: FormData): Promi
   // carries that person's own unsubscribe link, so the bodies differ and a
   // single failure should not take the rest of the batch with it.
   for (const [index, email] of recipients.entries()) {
-    const result = await sendOne(resend, email, subject, body);
+    const result = await sendOne(resend, email, subject, body, style);
     if (result.ok) sent += 1;
     else failures.push(`${email}: ${result.error}`);
     if (index < recipients.length - 1) await wait(SEND_GAP_MS);
@@ -177,7 +178,13 @@ export async function sendCampaign(_prev: SendResult, formData: FormData): Promi
   };
 }
 
-async function sendOne(resend: Resend, email: string, subject: string, body: string) {
+async function sendOne(
+  resend: Resend,
+  email: string,
+  subject: string,
+  body: string,
+  style: PromoStyle = 'branded'
+) {
   try {
     // Minted per recipient, and reused forever after — the same address always
     // gets the same link, so an old email's unsubscribe still works.
@@ -190,7 +197,7 @@ async function sendOne(resend: Resend, email: string, subject: string, body: str
       from: process.env.EMAIL_FROM || 'MemoFlow <onboarding@resend.dev>',
       to: [email],
       subject,
-      html: renderPromoHtml({ body, unsubscribeUrl }),
+      html: renderPromoHtml({ body, unsubscribeUrl, style }),
       text: renderPromoText({ body, unsubscribeUrl }),
       // The header Gmail and Apple Mail use to show their own unsubscribe
       // control, which materially improves deliverability for bulk mail.

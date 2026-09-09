@@ -45,17 +45,43 @@ function inline(text: string) {
   return html.replace(/\n/g, '<br />');
 }
 
+/**
+ * 'branded' — logo, red card, for anything announcement-shaped.
+ *
+ * 'plain' — black text in a system font and nothing else. A short personal
+ * note inside the branded card reads as a campaign, and campaigns get
+ * skimmed; this is for the mail that has to look like it came from a person.
+ */
+export type PromoStyle = 'branded' | 'plain';
+
 export function renderPromoHtml({
   body,
   unsubscribeUrl,
+  style = 'branded',
 }: {
   body: string;
   unsubscribeUrl: string;
+  style?: PromoStyle;
 }) {
-  const paragraphs = body
+  const blocks = body
     .split(/\n{2,}/)
     .map((block) => block.trim())
-    .filter(Boolean)
+    .filter(Boolean);
+
+  if (style === 'plain') {
+    // Left-aligned, 15px/1.55, no images: the shape of an ordinary reply.
+    const text = blocks
+      .map((block) => `<p style="margin:0 0 14px;">${inline(block)}</p>`)
+      .join('');
+    return `<div style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;font-size:15px;line-height:1.55;color:#111111;max-width:560px;margin:0;padding:8px 0;">
+  ${text}
+  <p style="margin:28px 0 0;font-size:12px;color:#8a8a8a;">
+    <a href="${escapeHtml(unsubscribeUrl)}" style="color:#8a8a8a;text-decoration:underline;">Unsubscribe from these emails</a>
+  </p>
+</div>`;
+  }
+
+  const paragraphs = blocks
     .map(
       (block) =>
         `<p style="color:#4b5563;line-height:1.6;margin:0 0 16px;">${inline(block)}</p>`
