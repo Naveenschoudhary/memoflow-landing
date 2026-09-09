@@ -35,7 +35,11 @@ const env = { ...fileEnv, ...process.env };
 const apiKey = env.DODO_API_KEY;
 if (!apiKey) { console.error('DODO_API_KEY missing — run: vercel env pull .env.production.local --environment=production'); process.exit(1); }
 const mode = env.DODO_MODE === 'test' ? 'test' : 'live';
-const site = env.NEXT_PUBLIC_APP_URL || 'https://memoflow.app';
+// The webhook URL must be the public site. A local NEXT_PUBLIC_APP_URL
+// (http://localhost:3000 in .env.local) once registered a localhost endpoint;
+// only an https value is trusted, and --site overrides.
+const siteArg = process.argv.find((a) => a.startsWith('--site='))?.slice(7);
+const site = siteArg || (env.NEXT_PUBLIC_APP_URL?.startsWith('https://') ? env.NEXT_PUBLIC_APP_URL : 'https://memoflow.app');
 const client = new DodoPayments({ bearerToken: apiKey, environment: mode === 'test' ? 'test_mode' : 'live_mode' });
 
 const PRODUCTS = [
