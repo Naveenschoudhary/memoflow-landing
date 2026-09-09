@@ -160,10 +160,10 @@ export default function Terms() {
         <p>
           Questions about these terms, or about MemoFlow generally, can go to{' '}
           <a
-            href="mailto:naveen@bigpicturesoft.com"
+            href="mailto:hello@naveenschoudhary.com"
             className="text-[var(--accent)] hover:underline"
           >
-            naveen@bigpicturesoft.com
+            hello@naveenschoudhary.com
           </a>
           .
         </p>

@@ -19,8 +19,8 @@ export default function Refunds() {
       <Section title="How to ask">
         <p>
           Email{' '}
-          <a href="mailto:naveen@bigpicturesoft.com" className="text-[var(--accent)] hover:underline">
-            naveen@bigpicturesoft.com
+          <a href="mailto:hello@naveenschoudhary.com" className="text-[var(--accent)] hover:underline">
+            hello@naveenschoudhary.com
           </a>{' '}
           from the address you bought with, or reply to your purchase email. Include the
           order number or the licence key if you have it handy; if not, the email address

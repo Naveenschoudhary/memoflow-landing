@@ -106,8 +106,8 @@ export default async function Pricing({
       {checkoutBounced && (
         <div className="rounded-2xl border border-[var(--accent)]/40 bg-[var(--accent)]/10 p-4 text-sm">
           Checkout isn&apos;t available right now. Try again in a few minutes, or email{' '}
-          <a href="mailto:naveen@bigpicturesoft.com" className="text-[var(--accent)] hover:underline">
-            naveen@bigpicturesoft.com
+          <a href="mailto:hello@naveenschoudhary.com" className="text-[var(--accent)] hover:underline">
+            hello@naveenschoudhary.com
           </a>{' '}
           and we&apos;ll sort it out by hand.
         </div>

@@ -32,8 +32,8 @@ export default function Thanks() {
         <p>
           Check spam first; it comes from Dodo Payments, not from memoflow.app. If it is
           not there after ten minutes, write to{' '}
-          <a href="mailto:naveen@bigpicturesoft.com" className="text-[var(--accent)] hover:underline">
-            naveen@bigpicturesoft.com
+          <a href="mailto:hello@naveenschoudhary.com" className="text-[var(--accent)] hover:underline">
+            hello@naveenschoudhary.com
           </a>{' '}
           with the address you bought with and we will send the key by hand.
         </p>
