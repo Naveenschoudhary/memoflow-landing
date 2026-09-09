@@ -23,8 +23,6 @@ export type Tier = {
   /** Devices the key activates on. */
   devices: string;
   includes: string[];
-  /** Dodo Payments product ids. Live ids are filled in after account approval. */
-  productId: { test: string; live: string | null };
   featured?: boolean;
 };
 
@@ -48,7 +46,6 @@ export const TIERS: Tier[] = [
       'System-wide dictation in any app',
       'English, हिन्दी and Hinglish, on-device',
     ],
-    productId: { test: 'pdt_0Nn9CLx3ct5yH1uX9fep7', live: null },
     featured: true,
   },
   {
@@ -58,7 +55,6 @@ export const TIERS: Tier[] = [
     seats: 'Three people',
     devices: 'One shared key, 6 devices',
     includes: ['Everything in Personal', 'For a small team or a family', 'One key to hand around'],
-    productId: { test: 'pdt_0Nn9CM1K3jt6HqIzfr5jV', live: null },
   },
   {
     id: 'organisation',
@@ -67,32 +63,17 @@ export const TIERS: Tier[] = [
     seats: 'Up to 20 people',
     devices: 'One shared key, 40 devices',
     includes: ['Everything in Personal', 'One invoice for the whole team', 'Email us for more than 20'],
-    productId: { test: 'pdt_0Nn9CM4uuMW4XUbMzMq1z', live: null },
   },
 ];
 
 /**
- * Which Dodo environment the Buy buttons point at. Live by default; set
- * NEXT_PUBLIC_DODO_MODE=test locally to exercise the test checkout.
+ * Where a Buy button goes: our own API, which creates the checkout session
+ * server-side (product ids, mode and API key live there — see lib/dodo.ts)
+ * and redirects to it. `source` is recorded on the payment for attribution.
  */
-export const DODO_MODE: 'test' | 'live' =
-  process.env.NEXT_PUBLIC_DODO_MODE === 'test' ? 'test' : 'live';
-
-/**
- * Dodo's static checkout link for a tier, or null while the live product does
- * not exist yet — the button then says so instead of linking nowhere.
- */
-export function checkoutURL(tier: Tier, source: 'web' | 'app' = 'web'): string | null {
-  const id = tier.productId[DODO_MODE];
-  if (!id) return null;
-  const host =
-    DODO_MODE === 'test'
-      ? 'https://test.checkout.dodopayments.com'
-      : 'https://checkout.dodopayments.com';
-  const redirect = encodeURIComponent('https://memoflow.app/thanks');
-  // metadata_source lands on the payment in Dodo, so app-driven and
-  // web-driven purchases can be told apart later.
-  return `${host}/buy/${id}?quantity=1&redirect_url=${redirect}&metadata_source=${source}`;
+export function checkoutPath(tier: Tier | TierId, source: 'web' | 'app' = 'web'): string {
+  const id = typeof tier === 'string' ? tier : tier.id;
+  return `/api/checkout?tier=${id}&source=${source}`;
 }
 
 /** Kept for the comparison tables and JSON-LD: the entry price, in prose. */

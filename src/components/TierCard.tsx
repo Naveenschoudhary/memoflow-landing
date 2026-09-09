@@ -1,8 +1,8 @@
-import { checkoutURL, type Tier } from '@/lib/pricing';
+import { checkoutPath, type Tier } from '@/lib/pricing';
 
 /** One pricing tier, used by /pricing and the home page so they never drift. */
 export default function TierCard({ tier, source }: { tier: Tier; source: 'web' | 'app' }) {
-  const href = checkoutURL(tier, source);
+  const href = checkoutPath(tier, source);
   return (
     <div
       className={
@@ -33,22 +33,16 @@ export default function TierCard({ tier, source }: { tier: Tier; source: 'web' |
         ))}
       </ul>
       <div className="mt-auto pt-6">
-        {href ? (
-          <a
-            href={href}
-            className={
-              tier.featured
-                ? 'block whitespace-nowrap rounded-xl bg-[var(--accent)] px-5 py-3 text-center text-sm font-semibold text-white shadow-lg shadow-[var(--accent)]/25 transition hover:brightness-110'
-                : 'block whitespace-nowrap rounded-xl border border-[var(--line)] px-5 py-3 text-center text-sm font-medium text-[var(--text)] transition hover:bg-white/5'
-            }
-          >
-            Buy for ${tier.priceUsd}
-          </a>
-        ) : (
-          <span className="block rounded-xl border border-[var(--line)] px-5 py-3 text-center text-sm text-[var(--muted)]">
-            Available soon
-          </span>
-        )}
+        <a
+          href={href}
+          className={
+            tier.featured
+              ? 'block whitespace-nowrap rounded-xl bg-[var(--accent)] px-5 py-3 text-center text-sm font-semibold text-white shadow-lg shadow-[var(--accent)]/25 transition hover:brightness-110'
+              : 'block whitespace-nowrap rounded-xl border border-[var(--line)] px-5 py-3 text-center text-sm font-medium text-[var(--text)] transition hover:bg-white/5'
+          }
+        >
+          Buy for ${tier.priceUsd}
+        </a>
         <p className="mt-2 text-center text-xs text-[var(--muted)]/80">
           One-time · key by email in a minute · 14-day refund
         </p>

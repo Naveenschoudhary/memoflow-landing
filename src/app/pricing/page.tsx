@@ -8,7 +8,7 @@ import {
   TRIAL_DAYS,
   PAID_COMPETITORS,
   PRICES_CHECKED,
-  checkoutURL,
+  checkoutPath,
   memoflowFiveYear,
 } from '@/lib/pricing';
 
@@ -86,12 +86,14 @@ export default async function Pricing({
 }: {
   searchParams: Promise<Record<string, string | string[] | undefined>>;
 }) {
-  const arrival = arrivalFrom(await searchParams);
+  const params = await searchParams;
+  const arrival = arrivalFrom(params);
   const fromApp = arrival !== 'web';
   const hero = HERO[arrival];
   const source = fromApp ? 'app' : 'web';
   const personal = TIERS[0];
-  const personalHref = checkoutURL(personal, source);
+  const personalHref = checkoutPath(personal, source);
+  const checkoutBounced = typeof params.checkout === 'string';
 
   return (
     <PageShell
@@ -100,6 +102,16 @@ export default async function Pricing({
       updated={fromApp ? undefined : '8 September 2026'}
     >
       <Panel>{hero.lead}</Panel>
+
+      {checkoutBounced && (
+        <div className="rounded-2xl border border-[var(--accent)]/40 bg-[var(--accent)]/10 p-4 text-sm">
+          Checkout isn&apos;t available right now. Try again in a few minutes, or email{' '}
+          <a href="mailto:naveen@bigpicturesoft.com" className="text-[var(--accent)] hover:underline">
+            naveen@bigpicturesoft.com
+          </a>{' '}
+          and we&apos;ll sort it out by hand.
+        </div>
+      )}
 
       <div className="grid gap-4 pt-3 md:grid-cols-3">
         {TIERS.map((tier) => (
@@ -226,16 +238,12 @@ export default async function Pricing({
             One payment, a key by email, thirty seconds in Settings › License.
           </p>
           <div className="mt-5">
-            {personalHref ? (
-              <a
-                href={personalHref}
-                className="inline-block rounded-xl bg-[var(--accent)] px-7 py-3.5 text-sm font-semibold text-white shadow-lg shadow-[var(--accent)]/25 transition hover:brightness-110"
-              >
-                Buy Personal · ${personal.priceUsd}
-              </a>
-            ) : (
-              <span className="text-sm text-[var(--muted)]">Purchasing opens shortly.</span>
-            )}
+            <a
+              href={personalHref}
+              className="inline-block rounded-xl bg-[var(--accent)] px-7 py-3.5 text-sm font-semibold text-white shadow-lg shadow-[var(--accent)]/25 transition hover:brightness-110"
+            >
+              Buy Personal · ${personal.priceUsd}
+            </a>
           </div>
           <p className="mt-4 text-xs text-[var(--muted)]/70">
             Already have a key? Open MemoFlow › Settings › License and paste it in.
