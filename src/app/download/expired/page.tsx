@@ -40,7 +40,7 @@ export default function ExpiredPage() {
 
               <p className="text-sm text-gray-500 mt-6">
                 Download links expire after 10 minutes for security purposes.
-                Need help? Contact <a href="mailto:support@memoflow.app" className="text-amber-500 hover:text-amber-400">support@memoflow.app</a>
+                Need help? Contact <a href="mailto:hello@naveenschoudhary.com" className="text-amber-500 hover:text-amber-400">hello@naveenschoudhary.com</a>
               </p>
             </div>
           </div>

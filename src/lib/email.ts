@@ -14,7 +14,7 @@ const getDownloadLink = async (_os: 'mac' | 'windows' | 'linux') =>
 
 // Resend's shared address works without domain verification (but only
 // delivers to the Resend account owner). Once memoflow.app is verified on
-// https://resend.com/domains, set EMAIL_FROM="MemoFlow <naveen@memoflow.app>"
+// https://resend.com/domains, set EMAIL_FROM="MemoFlow <hello@naveenschoudhary.com>"
 // in Vercel — no code change needed.
 const EMAIL_FROM = process.env.EMAIL_FROM || 'MemoFlow <onboarding@resend.dev>';
 
