@@ -1,20 +1,26 @@
 import Link from 'next/link';
 import ResendButton from '@/components/superadmin/ResendButton';
 import { Empty, PageHeader, Panel, StatusPill, compact, stamp } from '@/components/superadmin/ui';
-import { STATUSES, getSignups } from '@/lib/superadmin/stats';
+import { STATUSES, getSignups, type SignupView } from '@/lib/superadmin/stats';
 
 export const dynamic = 'force-dynamic';
 
 /**
- * The full signup list.
+ * The signup list, one row per person by default.
  *
- * Filters live in the URL rather than component state, so a filtered view is
- * linkable and survives a refresh — and the whole page stays a server
- * component with no client-side data fetching. The form uses GET for the same
- * reason: submitting it just navigates.
+ * The download flow writes a `downloads` row per emailed link, so a per-row
+ * list shows the same person up to ten times — each repeat carrying its own
+ * Resend button, including on people who downloaded on a later attempt. This
+ * page collapses to one row per address and keeps the per-attempt history one
+ * click away.
+ *
+ * Filters and the view live in the URL rather than component state, so a
+ * filtered view is linkable and survives a refresh — and the whole page stays
+ * a server component with no client-side data fetching. The form uses GET for
+ * the same reason: submitting it just navigates.
  */
 
-type Search = { q?: string; status?: string; page?: string };
+type Search = { q?: string; status?: string; page?: string; view?: string };
 
 export default async function SignupsPage({
   searchParams,
@@ -27,15 +33,23 @@ export default async function SignupsPage({
     ? params.status
     : '';
   const page = Number(params.page) > 0 ? Number(params.page) : 1;
+  const view: SignupView = params.view === 'attempts' ? 'attempts' : 'people';
+  const people = view === 'people';
 
-  const result = await getSignups({ q, status, page, perPage: 50 });
+  const result = await getSignups({ q, status, page, perPage: 50, view });
   const filtered = Boolean(q || status);
 
-  const pageHref = (target: number) => {
+  /** Every link on this page keeps the filters that are already applied. */
+  const href = (over: { page?: number; view?: SignupView; q?: string; status?: string } = {}) => {
     const next = new URLSearchParams();
-    if (q) next.set('q', q);
-    if (status) next.set('status', status);
-    if (target > 1) next.set('page', String(target));
+    const email = over.q ?? q;
+    const state = over.status ?? status;
+    const target = over.view ?? view;
+    const number = over.page ?? 1;
+    if (email) next.set('q', email);
+    if (state) next.set('status', state);
+    if (target !== 'people') next.set('view', target);
+    if (number > 1) next.set('page', String(number));
     const query = next.toString();
     return query ? `/superadmin/signups?${query}` : '/superadmin/signups';
   };
@@ -44,42 +58,49 @@ export default async function SignupsPage({
     <div className="space-y-6">
       <PageHeader
         title="Signups"
-        subtitle={`${compact(result.total)} row${result.total === 1 ? '' : 's'}${
-          filtered ? ' matching this filter' : ''
-        } · newest first`}
+        subtitle={
+          people
+            ? `${compact(result.total)} ${result.total === 1 ? 'person' : 'people'}${
+                status ? ` with at least one ${status.replace('_', ' ')} link` : ''
+              }${q ? ' matching that search' : ''} · one row each, newest activity first`
+            : `${compact(result.total)} link${result.total === 1 ? '' : 's'} sent${
+                filtered ? ' matching this filter' : ''
+              } · newest first`
+        }
         action={
           /* One filter row above everything it scopes. */
           <form method="GET" className="flex flex-wrap items-center gap-2">
-          <input
-            type="search"
-            name="q"
-            defaultValue={q}
-            placeholder="Search email…"
-            aria-label="Search by email address"
-            className="h-9 w-56 rounded-lg border border-[var(--line)] bg-[var(--panel)] px-3 text-sm outline-none placeholder:text-[var(--muted)] focus:border-[var(--accent)]"
-          />
-          <select
-            name="status"
-            defaultValue={status}
-            aria-label="Filter by status"
-            className="h-9 rounded-lg border border-[var(--line)] bg-[var(--panel)] px-2 text-sm outline-none focus:border-[var(--accent)]"
-          >
-            <option value="">Any status</option>
-            {STATUSES.map((option) => (
-              <option key={option} value={option}>
-                {option.replace('_', ' ')}
-              </option>
-            ))}
-          </select>
-          <button
-            type="submit"
-            className="h-9 rounded-lg bg-[var(--accent)] px-4 text-sm font-medium text-white transition-opacity hover:opacity-90"
-          >
-            Filter
-          </button>
+            {view !== 'people' && <input type="hidden" name="view" value={view} />}
+            <input
+              type="search"
+              name="q"
+              defaultValue={q}
+              placeholder="Search email…"
+              aria-label="Search by email address"
+              className="h-9 w-56 rounded-lg border border-[var(--line)] bg-[var(--panel)] px-3 text-sm outline-none placeholder:text-[var(--muted)] focus:border-[var(--accent)]"
+            />
+            <select
+              name="status"
+              defaultValue={status}
+              aria-label="Filter by status"
+              className="h-9 rounded-lg border border-[var(--line)] bg-[var(--panel)] px-2 text-sm outline-none focus:border-[var(--accent)]"
+            >
+              <option value="">Any status</option>
+              {STATUSES.map((option) => (
+                <option key={option} value={option}>
+                  {option.replace('_', ' ')}
+                </option>
+              ))}
+            </select>
+            <button
+              type="submit"
+              className="h-9 rounded-lg bg-[var(--accent)] px-4 text-sm font-medium text-white transition-opacity hover:opacity-90"
+            >
+              Filter
+            </button>
             {filtered && (
               <Link
-                href="/superadmin/signups"
+                href={href({ q: '', status: '' })}
                 className="h-9 rounded-lg border border-[var(--line)] px-3 text-sm leading-9 text-[var(--muted)] transition-colors hover:text-[var(--text)]"
               >
                 Clear
@@ -88,6 +109,16 @@ export default async function SignupsPage({
           </form>
         }
       />
+
+      {/* People or every attempt — the same filters, a different grain. */}
+      <div className="flex gap-1 text-sm" role="group" aria-label="Grouping">
+        <ViewTab href={href({ view: 'people' })} active={people}>
+          People
+        </ViewTab>
+        <ViewTab href={href({ view: 'attempts' })} active={!people}>
+          Every link sent
+        </ViewTab>
+      </div>
 
       {result.rows.length === 0 ? (
         <Empty>
@@ -105,7 +136,10 @@ export default async function SignupsPage({
                   <th className="px-5 py-3 font-medium">Platform</th>
                   <th className="px-5 py-3 font-medium">Status</th>
                   <th className="px-5 py-3 font-medium">Delivery</th>
-                  <th className="px-5 py-3 font-medium">Signed up (UTC)</th>
+                  {people && <th className="px-5 py-3 font-medium">Links</th>}
+                  <th className="px-5 py-3 font-medium">
+                    {people ? 'Last request (UTC)' : 'Signed up (UTC)'}
+                  </th>
                   <th className="px-5 py-3 font-medium">Downloaded (UTC)</th>
                   <th className="px-5 py-3 text-right font-medium">
                     <span className="sr-only">Actions</span>
@@ -124,6 +158,18 @@ export default async function SignupsPage({
                       <StatusPill status={row.status} />
                     </td>
                     <td className="px-5 py-3 text-[var(--muted)]">{row.email_status}</td>
+                    {people && (
+                      <td className="px-5 py-3 tabular-nums">
+                        {/* The count doubles as the way into that person's history. */}
+                        <Link
+                          href={href({ q: row.email, status: '', view: 'attempts' })}
+                          className="text-[var(--muted)] underline decoration-[var(--line)] underline-offset-4 transition-colors hover:text-[var(--text)]"
+                          title={`Every link sent to ${row.email}`}
+                        >
+                          {row.attempts ?? 1}
+                        </Link>
+                      </td>
+                    )}
                     <td className="px-5 py-3 tabular-nums text-[var(--muted)]">
                       {stamp(row.created_at)}
                     </td>
@@ -132,9 +178,9 @@ export default async function SignupsPage({
                     </td>
                     <td className="px-5 py-3 text-right">
                       {/*
-                        Offered only where a new link is the fix. A row that was
-                        already downloaded needs nothing, and a Resend button on it
-                        would invite mailing people who have the app.
+                        Offered only where a new link is the fix. Someone who
+                        downloaded needs nothing, and in the people view that
+                        covers every one of their earlier failed attempts too.
                       */}
                       {row.status !== 'downloaded' && (
                         <div className="flex justify-end">
@@ -156,16 +202,40 @@ export default async function SignupsPage({
             Page {result.page} of {result.pages}
           </span>
           <div className="flex gap-2">
-            <PageLink href={pageHref(result.page - 1)} disabled={result.page <= 1}>
+            <PageLink href={href({ page: result.page - 1 })} disabled={result.page <= 1}>
               ← Newer
             </PageLink>
-            <PageLink href={pageHref(result.page + 1)} disabled={result.page >= result.pages}>
+            <PageLink href={href({ page: result.page + 1 })} disabled={result.page >= result.pages}>
               Older →
             </PageLink>
           </div>
         </div>
       )}
     </div>
+  );
+}
+
+function ViewTab({
+  href,
+  active,
+  children,
+}: {
+  href: string;
+  active: boolean;
+  children: React.ReactNode;
+}) {
+  return (
+    <Link
+      href={href}
+      aria-current={active ? 'true' : undefined}
+      className={`rounded-lg border px-3 py-1.5 transition-colors ${
+        active
+          ? 'border-[var(--accent)] text-[var(--text)]'
+          : 'border-[var(--line)] text-[var(--muted)] hover:text-[var(--text)]'
+      }`}
+    >
+      {children}
+    </Link>
   );
 }
 

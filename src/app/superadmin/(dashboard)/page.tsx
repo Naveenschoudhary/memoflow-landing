@@ -211,7 +211,7 @@ export default async function OverviewPage() {
         title="Latest signups"
         hint={
           overview.lastSignupAt
-            ? `Most recent ${stamp(overview.lastSignupAt)} UTC.`
+            ? `Every link sent, newest first — the same person can appear twice. Most recent ${stamp(overview.lastSignupAt)} UTC.`
             : undefined
         }
         action={
@@ -219,7 +219,7 @@ export default async function OverviewPage() {
             href="/superadmin/signups"
             className="whitespace-nowrap text-sm text-[var(--muted)] transition-colors hover:text-[var(--text)]"
           >
-            All {compact(overview.signups)} →
+            All {compact(overview.uniqueEmails)} people →
           </Link>
         }
       >

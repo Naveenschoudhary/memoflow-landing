@@ -42,6 +42,8 @@ export type SignupRow = {
   status: string;
   email_status: string;
   downloaded_at: Date | null;
+  /** How many links this address has been sent. Only set in the people view. */
+  attempts?: number;
 };
 
 /** Statuses the download flow can leave behind (see lib/email + api/download). */
@@ -198,9 +200,26 @@ export type SignupQuery = {
   status?: string;
   page?: number;
   perPage?: number;
+  /**
+   * 'people' — one row per address, which is what the list is for: the
+   * download flow writes a row per emailed link, so 68 rows are 21 people and
+   * a per-row list repeats the same person up to ten times, each with its own
+   * Resend button.
+   *
+   * 'attempts' — every row, for reading one person's history.
+   */
+  view?: SignupView;
 };
 
-export async function getSignups({ q, status, page = 1, perPage = 50 }: SignupQuery): Promise<{
+export type SignupView = 'people' | 'attempts';
+
+export async function getSignups({
+  q,
+  status,
+  page = 1,
+  perPage = 50,
+  view = 'people',
+}: SignupQuery): Promise<{
   rows: SignupRow[];
   total: number;
   page: number;
@@ -213,25 +232,70 @@ export async function getSignups({ q, status, page = 1, perPage = 50 }: SignupQu
 
   if (!db) return empty;
 
-  const where: string[] = [];
-  const params: (string | number)[] = [];
+  const people = view === 'people';
 
+  const search: string[] = [];
+  const searchParams: string[] = [];
   if (q) {
-    where.push('email LIKE ?');
-    params.push(`%${q}%`);
+    search.push('email LIKE ?');
+    searchParams.push(`%${q}%`);
   }
+
   // Compared against the known set rather than interpolated, so an unexpected
   // value returns nothing instead of reaching the query.
-  if (status && (STATUSES as readonly string[]).includes(status)) {
-    where.push('status = ?');
-    params.push(status);
-  }
+  const wantedStatus =
+    status && (STATUSES as readonly string[]).includes(status) ? status : null;
 
-  const clause = where.length ? `WHERE ${where.join(' AND ')}` : '';
+  /**
+   * The status filter lands in different places in the two views.
+   *
+   * Per row it is a WHERE on that row's own status. Per person it is a HAVING
+   * on "has at least one link like this", which is the question an operator is
+   * actually asking — and the same rule the resend panel counts by, so the two
+   * screens agree. Filtering on the *collapsed* status instead would answer 0
+   * for "email failed" here while 27 such rows exist, because nobody's newest
+   * attempt happens to be a failure.
+   */
+  const rowStatus = !people && wantedStatus ? ['status = ?'] : [];
+  const clause = [...search, ...rowStatus].length
+    ? `WHERE ${[...search, ...rowStatus].join(' AND ')}`
+    : '';
+  const having = people && wantedStatus ? 'HAVING SUM(status = ?) > 0' : '';
+  const params = [...searchParams, ...(wantedStatus ? [wantedStatus] : [])];
+
+  /**
+   * One person, collapsed from their rows.
+   *
+   * GROUP_CONCAT ordered by date, then SUBSTRING_INDEX for the first element,
+   * is how MySQL says "the value from the newest row" without a self-join.
+   * group_concat_max_len truncates the tail of a long list, which cannot
+   * affect the element being read.
+   *
+   * The status rule is the one that matters: a person who ever downloaded is
+   * done, whatever their later rows say. Without it the five people here who
+   * downloaded after a failed attempt would each keep a Resend button on their
+   * older rows — offering to email the app to people who already have it.
+   */
+  const personSelect = `SELECT
+              SUBSTRING_INDEX(GROUP_CONCAT(id ORDER BY created_at DESC), ',', 1)            AS id,
+              email,
+              SUBSTRING_INDEX(GROUP_CONCAT(os ORDER BY created_at DESC), ',', 1)            AS os,
+              IF(SUM(status = 'downloaded') > 0, 'downloaded',
+                 SUBSTRING_INDEX(GROUP_CONCAT(status ORDER BY created_at DESC), ',', 1))    AS person_status,
+              SUBSTRING_INDEX(GROUP_CONCAT(email_status ORDER BY created_at DESC), ',', 1)  AS email_status,
+              MAX(created_at)                                                               AS created_at,
+              MAX(downloaded_at)                                                            AS downloaded_at,
+              COUNT(*)                                                                      AS attempts
+       FROM downloads
+       ${clause}
+       GROUP BY email
+       ${having}`;
 
   try {
     const [countRows] = await db.execute<RowDataPacket[]>(
-      `SELECT COUNT(*) AS total FROM downloads ${clause}`,
+      people
+        ? `SELECT COUNT(*) AS total FROM (${personSelect}) AS people`
+        : `SELECT COUNT(*) AS total FROM downloads ${clause}`,
       params
     );
     const total = num(countRows[0]?.total);
@@ -246,7 +310,11 @@ export async function getSignups({ q, status, page = 1, perPage = 50 }: SignupQu
     // prepared-statement limitation as above; both are integers by then.
     const offset = (clamped - 1) * size;
     const [rows] = await db.execute<RowDataPacket[]>(
-      `SELECT id, email, os, created_at, status, email_status, downloaded_at
+      people
+        ? `${personSelect}
+       ORDER BY created_at DESC
+       LIMIT ${size} OFFSET ${offset}`
+        : `SELECT id, email, os, created_at, status, email_status, downloaded_at
        FROM downloads
        ${clause}
        ORDER BY created_at DESC
@@ -254,7 +322,18 @@ export async function getSignups({ q, status, page = 1, perPage = 50 }: SignupQu
       params
     );
 
-    return { rows: rows as SignupRow[], total, page: clamped, perPage: size, pages };
+    const shaped: SignupRow[] = rows.map((row) => ({
+      id: String(row.id),
+      email: String(row.email),
+      os: String(row.os ?? 'mac'),
+      created_at: new Date(row.created_at),
+      status: String(people ? row.person_status : row.status),
+      email_status: String(row.email_status ?? ''),
+      downloaded_at: row.downloaded_at ? new Date(row.downloaded_at) : null,
+      ...(people ? { attempts: num(row.attempts) } : {}),
+    }));
+
+    return { rows: shaped, total, page: clamped, perPage: size, pages };
   } catch (error) {
     console.error('superadmin/getSignups:', error);
     return empty;
