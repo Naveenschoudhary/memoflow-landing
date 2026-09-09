@@ -17,8 +17,8 @@ const APPCAST_URL = `https://raw.githubusercontent.com/${REPO}/main/appcast.xml`
 // Last resort, if both sources are unreachable, so a signup still gets a
 // working link. Worth refreshing occasionally, but never load-bearing.
 const PINNED: Release = {
-  version: '0.7.0',
-  dmgUrl: `https://github.com/${REPO}/releases/download/v0.7.0/MemoFlow-0.7.0.dmg`,
+  version: '0.7.1',
+  dmgUrl: `https://github.com/${REPO}/releases/download/v0.7.1/MemoFlow-0.7.1.dmg`,
 };
 
 export type Release = { version: string; dmgUrl: string };

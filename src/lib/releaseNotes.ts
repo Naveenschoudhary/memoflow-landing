@@ -14,6 +14,20 @@ export type Release = {
 /** Newest first. Mirrors the GitHub releases on memoflow-models. */
 export const releases: Release[] = [
   {
+    version: '0.7.1',
+    date: '9 September 2026',
+    headline: 'Calendar connection now works in the signed Mac release.',
+    groups: [
+      {
+        title: 'Calendar connection fix',
+        items: [
+          'The signed app now includes the macOS Calendar entitlement, so Connect can request full access and load Google, Outlook and iCloud calendars from your Mac.',
+          'If Calendar access is denied, MemoFlow now explains what happened and opens the correct Privacy & Security setting.',
+        ],
+      },
+    ],
+  },
+  {
     version: '0.7.0',
     date: '9 September 2026',
     headline:
