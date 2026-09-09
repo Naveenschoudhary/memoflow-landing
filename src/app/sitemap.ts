@@ -21,6 +21,9 @@ const routes: { path: string; priority: number; changeFrequency: MetadataRoute.S
   { path: '/compare/dictation-without-subscription', priority: 0.8, changeFrequency: 'monthly' },
   { path: '/blog', priority: 0.7, changeFrequency: 'weekly' },
   { path: '/release-notes', priority: 0.6, changeFrequency: 'weekly' },
+  { path: '/support', priority: 0.6, changeFrequency: 'monthly' },
+  { path: '/is-memoflow-legit', priority: 0.7, changeFrequency: 'monthly' },
+  { path: '/refunds', priority: 0.4, changeFrequency: 'yearly' },
   { path: '/privacy', priority: 0.4, changeFrequency: 'yearly' },
   { path: '/terms', priority: 0.3, changeFrequency: 'yearly' },
 ];

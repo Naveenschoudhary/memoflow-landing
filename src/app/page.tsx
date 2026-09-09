@@ -439,6 +439,8 @@ function Footer() {
           <a href="/privacy" className="hover:text-[var(--text)]">Privacy</a>
           <a href="/terms" className="hover:text-[var(--text)]">Terms</a>
           <a href="/refunds" className="hover:text-[var(--text)]">Refunds</a>
+          <a href="/support" className="hover:text-[var(--text)]">Support</a>
+          <a href="/is-memoflow-legit" className="hover:text-[var(--text)]">Is MemoFlow legit?</a>
           <a href="/release-notes" className="hover:text-[var(--text)]">Release notes</a>
         </div>
       </div>

@@ -88,6 +88,8 @@ export default function PageShell({
             <Link href="/privacy" className="hover:text-[var(--text)]">Privacy</Link>
             <Link href="/terms" className="hover:text-[var(--text)]">Terms</Link>
             <Link href="/refunds" className="hover:text-[var(--text)]">Refunds</Link>
+            <Link href="/support" className="hover:text-[var(--text)]">Support</Link>
+            <Link href="/is-memoflow-legit" className="hover:text-[var(--text)]">Is MemoFlow legit?</Link>
             <Link href="/release-notes" className="hover:text-[var(--text)]">Release notes</Link>
           </div>
         </div>
