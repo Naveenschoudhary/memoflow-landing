@@ -14,6 +14,63 @@ export type Release = {
 /** Newest first. Mirrors the GitHub releases on memoflow-models. */
 export const releases: Release[] = [
   {
+    version: '0.8.0',
+    date: '27 September 2026',
+    headline:
+      'Speak an instruction and MemoFlow writes it, block out time by voice, and a calendar you can drag on.',
+    groups: [
+      {
+        title: 'Write mode',
+        items: [
+          'Hold fn 1, or say “write mode” first, and speak what you want rather than the words themselves. MemoFlow writes it and inserts the result.',
+          'The writing is shaped for the app you are in: an email gets a greeting and a sign-off, a chat message stays short, a note comes out as markdown.',
+          'Select a paragraph first and the instruction rewrites it in place.',
+          'Sign-offs use a name you set once, and write mode can use your cloud model or stay on-device.',
+        ],
+      },
+      {
+        title: 'Block time by voice',
+        items: [
+          'Say “block 3 to 5 tomorrow for deep work” and it goes on your calendar instead of being typed.',
+          'The confirmation names what was created and offers an Undo.',
+          'The common phrasings are understood with no model and no network, so this works offline.',
+        ],
+      },
+      {
+        title: 'A calendar you can drag on',
+        items: [
+          'Day and week are now a real time grid, with a line at the current time and overlapping events side by side.',
+          'Drag across empty space to block out exactly the hours you want.',
+          'Events open in a card beside the block rather than a window over it, with colours you can set per block.',
+        ],
+      },
+      {
+        title: 'Extractors are now Dynamic Flows',
+        items: [
+          'A library of your own Flows, with the generated result up front instead of the prompt.',
+          'A Flow can run itself after every meeting, or only after meetings carrying a tag you choose.',
+          'Every earlier result is kept and can be reopened.',
+        ],
+      },
+      {
+        title: 'Settings and permissions',
+        items: [
+          'Settings is now seven tabs instead of one long scroll, so related settings sit together.',
+          'A Permissions tab lists everything MemoFlow asks for, what each is for, and what stops working without it.',
+          'Transcription engines sit beside the model that has to be downloaded for them.',
+        ],
+      },
+      {
+        title: 'Fixes',
+        items: [
+          'Calendar access can finally be granted. The app carried the entitlement but was missing the description macOS needs before it will show the permission prompt.',
+          'Fixed a crash on first launch for new installs, caused by a database migration that referenced a column added by a later one.',
+          'Dictation now says whether it is transcribing or polishing, and no longer leaves the hands-free notice on screen while it works.',
+        ],
+      },
+    ],
+  },
+  {
     version: '0.7.1',
     date: '9 September 2026',
     headline: 'Calendar connection now works in the signed Mac release.',
