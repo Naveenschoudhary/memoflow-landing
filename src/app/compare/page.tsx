@@ -1,13 +1,12 @@
-import type { Metadata } from 'next';
+import { pageMetadata } from '@/lib/pageMetadata';
 import Link from 'next/link';
 import PageShell, { Panel } from '@/components/PageShell';
 
-export const metadata: Metadata = {
-  title: 'MemoFlow compared — dictation and meeting apps for Mac',
-  description:
-    'Honest comparisons between MemoFlow and the alternatives: Wispr Flow, superwhisper, MacWhisper, and the free open-source options.',
-  alternates: { canonical: 'https://memoflow.app/compare' },
-};
+export const metadata = pageMetadata(
+  '/compare',
+  'MemoFlow compared — dictation and meeting apps for Mac',
+  'Honest comparisons between MemoFlow and the alternatives: Wispr Flow, superwhisper, MacWhisper, and the free open-source options.',
+);
 
 const pages = [
   {

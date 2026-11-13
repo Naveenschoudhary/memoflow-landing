@@ -1,4 +1,4 @@
-import type { Metadata } from 'next';
+import { pageMetadata } from '@/lib/pageMetadata';
 import PageShell, { Section, Panel, Bullets } from '@/components/PageShell';
 import { Answer } from '@/components/CompareTable';
 import CTAButton from '@/components/CTAButton';
@@ -12,12 +12,11 @@ import {
   memoflowFiveYear,
 } from '@/lib/pricing';
 
-export const metadata: Metadata = {
-  title: 'Pricing — MemoFlow',
-  description:
-    'Free for 7 days, then one payment for life. $20 for one person, $40 for three, $300 for a team of up to twenty. Never a subscription.',
-  alternates: { canonical: 'https://memoflow.app/pricing' },
-};
+export const metadata = pageMetadata(
+  '/pricing',
+  'Pricing — MemoFlow',
+  'Free for 7 days, then one payment for life. $20 for one person, $40 for three, $300 for a team of up to twenty. Never a subscription.',
+);
 
 /**
  * Where the visitor is coming from. The app sends people here with

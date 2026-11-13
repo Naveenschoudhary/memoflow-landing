@@ -1,11 +1,11 @@
-import type { Metadata } from 'next';
+import { pageMetadata } from '@/lib/pageMetadata';
 import PageShell, { Section, Panel, Bullets } from '@/components/PageShell';
 
-export const metadata: Metadata = {
-  title: 'Refunds — MemoFlow',
-  description: 'How refunds work for MemoFlow: a full refund within 14 days of purchase, no questions asked.',
-  alternates: { canonical: 'https://memoflow.app/refunds' },
-};
+export const metadata = pageMetadata(
+  '/refunds',
+  'Refunds — MemoFlow',
+  'How refunds work for MemoFlow: a full refund within 14 days of purchase, no questions asked.',
+);
 
 export default function Refunds() {
   return (

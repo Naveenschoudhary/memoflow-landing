@@ -1,24 +1,15 @@
-import type { Metadata } from 'next';
+import { pageMetadata } from '@/lib/pageMetadata';
 import Image from 'next/image';
 import Link from 'next/link';
 import PageShell, { Panel } from '@/components/PageShell';
 import { blogJsonLd, breadcrumbJsonLd, JsonLd } from '@/lib/jsonld';
 import { BASE, formatDate, postPath, postsByDate, postUrl } from '@/lib/posts';
 
-export const metadata: Metadata = {
-  title: 'MemoFlow blog — on-device transcription, Hinglish and meeting notes',
-  description:
-    'Writing on private, on-device transcription: Hinglish and Hindi speech recognition, meeting notes that stay on your Mac, and how the tools actually compare.',
-  alternates: { canonical: `${BASE}/blog` },
-  openGraph: {
-    title: 'MemoFlow blog',
-    description:
-      'Writing on private, on-device transcription: Hinglish and Hindi speech recognition, and meeting notes that stay on your Mac.',
-    url: `${BASE}/blog`,
-    siteName: 'MemoFlow',
-    type: 'website',
-  },
-};
+export const metadata = pageMetadata(
+  '/blog',
+  'MemoFlow blog — on-device transcription, Hinglish and meeting notes',
+  'Writing on private, on-device transcription: Hinglish and Hindi speech recognition, meeting notes that stay on your Mac, and how the tools actually compare.',
+);
 
 export default function BlogIndex() {
   const posts = postsByDate();

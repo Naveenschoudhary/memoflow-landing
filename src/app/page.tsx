@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import { pageMetadata } from '@/lib/pageMetadata';
 import CTAButton from "@/components/CTAButton";
 import TierCard from "@/components/TierCard";
 import { TIERS, TRIAL_DAYS } from "@/lib/pricing";
@@ -11,15 +11,11 @@ import {
   HinglishFrame,
 } from "@/components/ui-frames";
 
-/**
- * Declared here rather than in the root layout. A canonical in the layout is
- * inherited by every page that does not set its own, which silently pointed
- * /privacy, /terms and /release-notes at the homepage and kept them out of
- * the index. Each page now owns its canonical.
- */
-export const metadata: Metadata = {
-  alternates: { canonical: "https://memoflow.app" },
-};
+export const metadata = pageMetadata(
+  '/',
+  "MemoFlow — AI Meeting Notes That Never Leave Your Mac",
+  "Record both sides of a call on your Mac. Get live transcripts, summaries, and action items in English, Hindi, or Hinglish with on-device AI.",
+);
 
 const faqs = [
   {

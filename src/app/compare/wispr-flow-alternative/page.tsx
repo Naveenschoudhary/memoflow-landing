@@ -1,4 +1,4 @@
-import type { Metadata } from 'next';
+import { pageMetadata } from '@/lib/pageMetadata';
 import Link from 'next/link';
 import PageShell, { Section, Panel } from '@/components/PageShell';
 import CompareTable, { Answer, WhereTheyWin } from '@/components/CompareTable';
@@ -6,12 +6,11 @@ import CTAButton from '@/components/CTAButton';
 import { COMPETITORS } from '@/lib/pricing';
 import { faqJsonLd, JsonLd, type Faq } from '@/lib/jsonld';
 
-export const metadata: Metadata = {
-  title: 'A free Wispr Flow alternative for Mac — MemoFlow',
-  description:
-    'Wispr Flow costs $15/month, or $900 over five years. MemoFlow gives you unlimited on-device dictation free, with meetings unlocked by one payment. An honest comparison, including where Wispr Flow wins.',
-  alternates: { canonical: 'https://memoflow.app/compare/wispr-flow-alternative' },
-};
+export const metadata = pageMetadata(
+  '/compare/wispr-flow-alternative',
+  'A free Wispr Flow alternative for Mac — MemoFlow',
+  'Wispr Flow costs $15/month, or $900 over five years. MemoFlow gives you unlimited on-device dictation free, with meetings unlocked by one payment. An honest comparison, including where Wispr Flow wins.',
+);
 
 const faqs: Faq[] = [
   {
@@ -88,12 +87,12 @@ export default function WisprFlowAlternative() {
         <p>
           MemoFlow also covers ground Wispr Flow does not: it records meetings with
           both sides captured as separate tracks, writes summaries and action
-          items, and answers questions across everything you have recorded. That
-          part is the paid tier — one payment, described on the{' '}
+          items, and answers questions across everything you have recorded. The
+          one-time licence covers meetings and dictation. See the{' '}
           <Link href="/pricing" className="text-[var(--text)] underline decoration-[var(--line)] underline-offset-4">
             pricing page
           </Link>
-          . Dictation stays free regardless.
+           for details.
         </p>
       </Section>
 

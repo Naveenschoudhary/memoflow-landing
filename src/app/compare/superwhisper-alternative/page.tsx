@@ -1,4 +1,4 @@
-import type { Metadata } from 'next';
+import { pageMetadata } from '@/lib/pageMetadata';
 import Link from 'next/link';
 import PageShell, { Section, Panel } from '@/components/PageShell';
 import CompareTable, { Answer, WhereTheyWin } from '@/components/CompareTable';
@@ -6,12 +6,11 @@ import CTAButton from '@/components/CTAButton';
 import { COMPETITORS } from '@/lib/pricing';
 import { faqJsonLd, JsonLd, type Faq } from '@/lib/jsonld';
 
-export const metadata: Metadata = {
-  title: 'A cheaper superwhisper alternative for Mac — MemoFlow',
-  description:
-    'superwhisper is $249 one-time. MemoFlow gives unlimited on-device dictation free, with meetings unlocked by a single small payment. Honest comparison, including what superwhisper still does better.',
-  alternates: { canonical: 'https://memoflow.app/compare/superwhisper-alternative' },
-};
+export const metadata = pageMetadata(
+  '/compare/superwhisper-alternative',
+  'A cheaper superwhisper alternative for Mac — MemoFlow',
+  'superwhisper is $249 one-time. MemoFlow gives unlimited on-device dictation free, with meetings unlocked by a single small payment. Honest comparison, including what superwhisper still does better.',
+);
 
 const faqs: Faq[] = [
   {
@@ -86,12 +85,12 @@ export default function SuperwhisperAlternative() {
         <p>
           It also transcribes Hindi in Devanagari and handles Hinglish
           code-switching on-device, which nothing else in this comparison does.
-          The meeting features are the paid tier — a single payment, no
-          subscription, laid out on the{' '}
+          The 7-day trial includes dictation and meeting features. The one-time
+          licence covers both, as detailed on the{' '}
           <Link href="/pricing" className="text-[var(--text)] underline decoration-[var(--line)] underline-offset-4">
             pricing page
           </Link>
-          . Dictation is free either way.
+          .
         </p>
       </Section>
 

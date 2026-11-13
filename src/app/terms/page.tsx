@@ -1,11 +1,11 @@
-import type { Metadata } from 'next';
+import { pageMetadata } from '@/lib/pageMetadata';
 import PageShell, { Section, Panel, Bullets } from '@/components/PageShell';
 
-export const metadata: Metadata = {
-  title: 'Terms — MemoFlow',
-  description: 'The terms you agree to by using MemoFlow.',
-  alternates: { canonical: 'https://memoflow.app/terms' },
-};
+export const metadata = pageMetadata(
+  '/terms',
+  'Terms — MemoFlow',
+  'The terms you agree to by using MemoFlow.',
+);
 
 export default function Terms() {
   return (

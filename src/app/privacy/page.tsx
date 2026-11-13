@@ -1,12 +1,11 @@
-import type { Metadata } from 'next';
+import { pageMetadata } from '@/lib/pageMetadata';
 import PageShell, { Section, Panel, Bullets } from '@/components/PageShell';
 
-export const metadata: Metadata = {
-  title: 'Privacy — MemoFlow',
-  description:
-    'What MemoFlow records, where it is stored, and the one case where text leaves your Mac.',
-  alternates: { canonical: 'https://memoflow.app/privacy' },
-};
+export const metadata = pageMetadata(
+  '/privacy',
+  'Privacy — MemoFlow',
+  'What MemoFlow records, where it is stored, and the one case where text leaves your Mac.',
+);
 
 export default function Privacy() {
   return (

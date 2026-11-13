@@ -1,4 +1,4 @@
-import type { Metadata } from 'next';
+import { pageMetadata } from '@/lib/pageMetadata';
 import Link from 'next/link';
 import PageShell, { Section, Panel } from '@/components/PageShell';
 import CompareTable, { Answer, WhereTheyWin } from '@/components/CompareTable';
@@ -6,19 +6,16 @@ import CTAButton from '@/components/CTAButton';
 import { COMPETITORS, PAID_COMPETITORS } from '@/lib/pricing';
 import { faqJsonLd, JsonLd, type Faq } from '@/lib/jsonld';
 
-export const metadata: Metadata = {
-  title: 'Mac dictation without a subscription — the pay-once options',
-  description:
-    'Wispr Flow is $900 over five years. superwhisper, MacWhisper and MemoFlow are one-time purchases. Every Mac dictation app that does not charge monthly, compared.',
-  alternates: {
-    canonical: 'https://memoflow.app/compare/dictation-without-subscription',
-  },
-};
+export const metadata = pageMetadata(
+  '/compare/dictation-without-subscription',
+  'Mac dictation without a subscription — the pay-once options',
+  'Wispr Flow is $900 over five years. superwhisper, MacWhisper and MemoFlow are one-time purchases. Every Mac dictation app that does not charge monthly, compared.',
+);
 
 const faqs: Faq[] = [
   {
     q: 'Is there a Mac dictation app without a subscription?',
-    a: 'Yes, several. superwhisper is $249 one-time, MacWhisper is around €59 one-time, and MemoFlow is free for dictation with a single one-time payment for meeting features. Handy, OpenWhispr and FluidVoice are free and open source with no paid tier at all.',
+    a: 'Yes, several. superwhisper is $249 one-time, MacWhisper is around €59 one-time, and MemoFlow includes dictation and meeting features in its 7-day trial, followed by a one-time licence. Handy, OpenWhispr and FluidVoice are free and open source with no paid tier at all.',
   },
   {
     q: 'Why do some dictation apps charge monthly?',
@@ -52,8 +49,8 @@ export default function DictationWithoutSubscription() {
       <Section title="Is there a Mac dictation app without a subscription?">
         <Answer>
           Yes, several. superwhisper is $249 once. MacWhisper is around €59 once.
-          MemoFlow is free for unlimited dictation, with a single one-time payment
-          for meetings. Handy, OpenWhispr and FluidVoice are free and open source
+          MemoFlow includes dictation and meeting features in its 7-day trial,
+          followed by a one-time licence. Handy, OpenWhispr and FluidVoice are free and open source
           with no paid tier at all.
         </Answer>
         <p>
@@ -98,8 +95,7 @@ export default function DictationWithoutSubscription() {
         </Answer>
         <CompareTable competitors={PAID_COMPETITORS} caption="Pay-once options only." />
         <p>
-          MemoFlow&apos;s dictation is free with no cap, so the comparison costs
-          nothing to run yourself — see the{' '}
+          Try MemoFlow&apos;s dictation and meeting tools free for 7 days. See the{' '}
           <Link href="/pricing" className="text-[var(--text)] underline decoration-[var(--line)] underline-offset-4">
             pricing page
           </Link>{' '}

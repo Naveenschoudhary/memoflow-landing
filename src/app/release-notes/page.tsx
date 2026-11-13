@@ -1,12 +1,12 @@
-import type { Metadata } from 'next';
+import { pageMetadata } from '@/lib/pageMetadata';
 import PageShell, { Bullets } from '@/components/PageShell';
 import { releases } from '@/lib/releaseNotes';
 
-export const metadata: Metadata = {
-  title: 'Release notes — MemoFlow',
-  description: 'What changed in each version of MemoFlow.',
-  alternates: { canonical: 'https://memoflow.app/release-notes' },
-};
+export const metadata = pageMetadata(
+  '/release-notes',
+  'Release notes — MemoFlow',
+  'See what changed in MemoFlow for Mac, from on-device meeting transcription and dictation to calendar reminders, privacy controls, and bug fixes.',
+);
 
 export default function ReleaseNotes() {
   return (

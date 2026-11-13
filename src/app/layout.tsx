@@ -5,9 +5,7 @@ import ModalContainer from "@/components/ModalContainer";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://memoflow.app"),
-  title: "MemoFlow — AI Meeting Notes That Never Leave Your Mac",
-  description:
-    "Private, on-device AI meeting notes for macOS. Records both sides of your calls, live transcripts, summaries, action items, and ask-your-meetings chat — in English, Hindi & Hinglish. Nothing is ever uploaded.",
+  title: "MemoFlow",
   keywords: [
     "AI meeting notes Mac",
     "private meeting transcription",
@@ -31,22 +29,6 @@ export const metadata: Metadata = {
     ],
   },
   manifest: "/manifest.json",
-  openGraph: {
-    title: "MemoFlow — AI Meeting Notes That Never Leave Your Mac",
-    description:
-      "Records both sides of your meetings, transcribes live, writes summaries & action items, and answers questions about what was said — 100% on-device, in English, Hindi & Hinglish.",
-    url: "https://memoflow.app",
-    siteName: "MemoFlow",
-    images: [{ url: "/og.png", width: 1200, height: 630, alt: "MemoFlow — private AI meeting notes for Mac" }],
-    type: "website",
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "MemoFlow — AI Meeting Notes That Never Leave Your Mac",
-    description:
-      "Private, on-device meeting transcription, summaries, and dictation for macOS. English, Hindi & Hinglish. Nothing is ever uploaded.",
-    images: ["/og.png"],
-  },
   robots: {
     index: true,
     follow: true,

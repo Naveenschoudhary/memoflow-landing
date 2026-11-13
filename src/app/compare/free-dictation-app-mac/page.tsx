@@ -1,4 +1,4 @@
-import type { Metadata } from 'next';
+import { pageMetadata } from '@/lib/pageMetadata';
 import Link from 'next/link';
 import PageShell, { Section, Panel } from '@/components/PageShell';
 import CompareTable, { Answer, WhereTheyWin } from '@/components/CompareTable';
@@ -6,17 +6,16 @@ import CTAButton from '@/components/CTAButton';
 import { COMPETITORS, FREE_COMPETITORS } from '@/lib/pricing';
 import { faqJsonLd, JsonLd, type Faq } from '@/lib/jsonld';
 
-export const metadata: Metadata = {
-  title: 'The best free dictation apps for Mac in 2026 — compared',
-  description:
-    'MemoFlow, Handy, OpenWhispr and FluidVoice all offer free on-device dictation on macOS. What each one is actually best at, and when a paid app is worth it instead.',
-  alternates: { canonical: 'https://memoflow.app/compare/free-dictation-app-mac' },
-};
+export const metadata = pageMetadata(
+  '/compare/free-dictation-app-mac',
+  'The best free dictation apps for Mac in 2026 — compared',
+  'Compare free Mac dictation apps Handy, OpenWhispr and FluidVoice, plus MemoFlow’s 7-day trial with on-device Hindi, Hinglish and meeting notes.',
+);
 
 const faqs: Faq[] = [
   {
     q: 'What is the best free dictation app for Mac?',
-    a: 'It depends on what you need. Handy is the most popular free open-source option and runs on Mac, Windows and Linux. OpenWhispr is MIT licensed with multiple model choices. FluidVoice is fully on-device on macOS. MemoFlow is free for unlimited dictation and additionally records and summarises meetings.',
+    a: 'It depends on what you need. Handy is the most popular free open-source option and runs on Mac, Windows and Linux. OpenWhispr is MIT licensed with multiple model choices. FluidVoice is fully on-device on macOS. MemoFlow offers a 7-day trial of dictation, meeting recording and summaries, followed by a one-time licence.',
   },
   {
     q: 'Are free dictation apps as accurate as paid ones?',
@@ -42,9 +41,9 @@ export default function FreeDictationAppMac() {
       <JsonLd data={faqJsonLd(faqs)} />
 
       <Panel>
-        There are several genuinely free Mac dictation apps, and most of them are
-        good. MemoFlow is one of them — but it is not the right answer for
-        everyone on this page, and this comparison says where it is not.
+        Handy, OpenWhispr and FluidVoice offer free Mac dictation. MemoFlow offers
+        a 7-day trial for people who also want meeting notes or on-device Hindi
+        and Hinglish dictation.
       </Panel>
 
       <Section title="What is the best free dictation app for Mac?">
@@ -52,7 +51,8 @@ export default function FreeDictationAppMac() {
           It depends what you want. Handy is the most popular free open-source
           choice and runs on three platforms. OpenWhispr is MIT licensed with
           multiple model options. FluidVoice is fully on-device on macOS. MemoFlow
-          is free for unlimited dictation and also records meetings.
+          offers a 7-day trial of dictation, meeting recording and summaries,
+          followed by a one-time licence.
         </Answer>
         <p>
           All four transcribe on your own hardware, so none of them charge you
@@ -63,10 +63,8 @@ export default function FreeDictationAppMac() {
 
       <Section title="How the free options compare">
         <Answer>
-          Handy, OpenWhispr and FluidVoice are free and open source, dictation
-          only, and cost nothing indefinitely. MemoFlow is free for unlimited
-          dictation, closed source, Mac only, and adds paid meeting recording on
-          top.
+          Handy, OpenWhispr and FluidVoice offer free, open-source dictation.
+          The table compares how each one runs on your Mac.
         </Answer>
         <CompareTable
           competitors={FREE_COMPETITORS}

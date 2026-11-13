@@ -1,15 +1,14 @@
-import type { Metadata } from 'next';
+import { pageMetadata } from '@/lib/pageMetadata';
 import PageShell, { Section, Panel } from '@/components/PageShell';
 import { faqJsonLd, JsonLd, type Faq } from '@/lib/jsonld';
 import { TIERS } from '@/lib/pricing';
 import { latestRelease } from '@/lib/releaseNotes';
 
-export const metadata: Metadata = {
-  title: 'Is MemoFlow legit? How to check for yourself — MemoFlow',
-  description:
-    'MemoFlow is a Mac app by an independent developer, signed and notarized by Apple, with nothing uploaded from your Mac. Here is who makes it, what it connects to, how paying works, and the commands that let you verify every claim yourself.',
-  alternates: { canonical: 'https://memoflow.app/is-memoflow-legit' },
-};
+export const metadata = pageMetadata(
+  '/is-memoflow-legit',
+  'Is MemoFlow legit? How to check for yourself — MemoFlow',
+  'Verify who makes MemoFlow, how Apple signs and notarizes the Mac app, where recordings are stored, and how one-time payments and refunds work.',
+);
 
 const SUPPORT = 'hello@naveenschoudhary.com';
 

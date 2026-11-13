@@ -1,12 +1,11 @@
-import type { Metadata } from 'next';
+import { pageMetadata } from '@/lib/pageMetadata';
 import PageShell, { Section, Panel } from '@/components/PageShell';
 
-export const metadata: Metadata = {
-  title: 'Support — MemoFlow',
-  description:
-    'Get help with MemoFlow: licence keys, permissions, transcription, dictation, updates and refunds. A person answers within one business day.',
-  alternates: { canonical: 'https://memoflow.app/support' },
-};
+export const metadata = pageMetadata(
+  '/support',
+  'Support — MemoFlow',
+  'Get help with MemoFlow: licence keys, permissions, transcription, dictation, updates and refunds. A person answers within one business day.',
+);
 
 const SUPPORT = 'hello@naveenschoudhary.com';
 
