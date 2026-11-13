@@ -78,7 +78,7 @@ const jsonLd = {
       applicationSubCategory: "Transcription and dictation",
       publisher: { "@id": "https://memoflow.app/#organization" },
       description:
-        "Private, on-device AI meeting recorder for Mac: transcription, summaries, action items, ask-your-meetings chat, and system-wide dictation in English, Hindi and Hinglish. No cloud, no account.",
+        "Private, on-device AI meeting recorder for Mac: transcription, summaries, action items, ask-your-meetings chat, and system-wide dictation in English, Hindi and Hinglish. Local by default, with no account required.",
       featureList: [
         "Records microphone and system audio as separate tracks, capturing both sides of a call",
         "Live on-device transcription with speaker labels",

@@ -7,7 +7,7 @@ import { BASE, formatDate, postPath, postsByDate, postUrl } from '@/lib/posts';
 
 export const metadata = pageMetadata(
   '/blog',
-  'MemoFlow blog — on-device transcription, Hinglish and meeting notes',
+  'Mac Meeting Notes and Transcription Guides | MemoFlow',
   'Writing on private, on-device transcription: Hinglish and Hindi speech recognition, meeting notes that stay on your Mac, and how the tools actually compare.',
 );
 
@@ -15,7 +15,7 @@ export default function BlogIndex() {
   const posts = postsByDate();
 
   return (
-    <PageShell eyebrow="Blog" title="Writing">
+    <PageShell eyebrow="Blog" title="Mac meeting notes and transcription guides">
       <JsonLd
         data={blogJsonLd(
           posts.map((p) => ({

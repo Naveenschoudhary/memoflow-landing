@@ -3,17 +3,17 @@ import PageShell, { Section, Panel, Bullets } from '@/components/PageShell';
 
 export const metadata = pageMetadata(
   '/refunds',
-  'Refunds — MemoFlow',
-  'How refunds work for MemoFlow: a full refund within 14 days of purchase, no questions asked.',
+  'Mac App Refund Policy | MemoFlow',
+  'Request a refund for the MemoFlow Mac meeting notes app within 14 days of buying your software licence.',
 );
 
 export default function Refunds() {
   return (
-    <PageShell eyebrow="Refunds" title="Refund and cancellation policy" updated="8 September 2026">
+    <PageShell eyebrow="Refunds" title="MemoFlow Mac app refund policy" updated="8 September 2026">
       <Panel>
-        MemoFlow is a one-time purchase, so there is nothing to cancel. If it is not for
-        you, ask for a refund within 14 days of buying and you get the full amount back.
-        No questions, no forms.
+        This policy covers software licences for the MemoFlow meeting notes and
+        dictation app sold through memoflow.app. You can request a full refund
+        within 14 days of purchase. No questions, no forms.
       </Panel>
 
       <Section title="How to ask">

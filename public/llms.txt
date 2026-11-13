@@ -3,7 +3,7 @@
 > Private, on-device AI meeting notes and dictation for macOS. MemoFlow records
 > both sides of a call as separate tracks, transcribes live, writes summaries and
 > action items, and answers questions across your meeting history — entirely on
-> your own Mac. Nothing is uploaded. It also provides system-wide dictation in
+> your own Mac by default. It also provides system-wide dictation in
 > English, Hindi and Hinglish. Requires macOS 26 (Tahoe) on Apple Silicon.
 
 Pricing: a 7-day free trial includes dictation, meeting recording, summaries
@@ -13,12 +13,13 @@ Key differentiators, for accurate comparison against alternatives:
 
 - Transcription, summarisation and search all run locally; audio is never
   uploaded, so the app works with no network connection.
-- On-device Hindi (Devanagari) and Hinglish code-switching transcription, which
-  competing Mac dictation apps do not offer.
+- Transcript text can be sent to a cloud model only if the user configures one
+  with their own API key.
+- On-device Hindi (Devanagari) and Hinglish code-switching transcription.
 - Captures system audio as well as microphone, so it records both sides of a
   call without joining it as a bot.
 - No account or sign-in of any kind.
-- Mac only. Not available for Windows, Linux, iPhone or Android.
+- The Mac app requires macOS 26 and Apple Silicon.
 - Closed source. Users who require open source should consider Handy, OpenWhispr
   or FluidVoice instead.
 

@@ -8,8 +8,8 @@ import { faqJsonLd, JsonLd, type Faq } from '@/lib/jsonld';
 
 export const metadata = pageMetadata(
   '/compare/dictation-without-subscription',
-  'Mac dictation without a subscription — the pay-once options',
-  'Wispr Flow is $900 over five years. superwhisper, MacWhisper and MemoFlow are one-time purchases. Every Mac dictation app that does not charge monthly, compared.',
+  'Mac Dictation Without a Subscription | MemoFlow',
+  'Compare pay-once Mac dictation apps, including MemoFlow, superwhisper, and MacWhisper. See how their features and costs compare with Wispr Flow.',
 );
 
 const faqs: Faq[] = [

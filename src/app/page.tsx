@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { pageMetadata } from '@/lib/pageMetadata';
 import CTAButton from "@/components/CTAButton";
 import TierCard from "@/components/TierCard";
@@ -13,30 +14,34 @@ import {
 
 export const metadata = pageMetadata(
   '/',
-  "MemoFlow — AI Meeting Notes That Never Leave Your Mac",
-  "Record both sides of a call on your Mac. Get live transcripts, summaries, and action items in English, Hindi, or Hinglish with on-device AI.",
+  "AI Meeting Notes for Mac with Hinglish | MemoFlow",
+  "Transcribe Hindi, English, and Hinglish meetings on your Mac. Record Zoom, Google Meet, and Teams without a bot and get local AI summaries.",
 );
 
 const faqs = [
   {
     q: "Is anything uploaded to the cloud?",
-    a: "No. Recording, transcription, summaries, and chat all run on your Mac using Apple Intelligence and Whisper on the Neural Engine. Your recordings and transcripts live in a local database on your disk. MemoFlow needs no account and works fully offline.",
+    a: "Recording, transcription, summaries, and chat run on your Mac by default. Audio stays on your device. If you configure a cloud model with your own API key, transcript text can be sent to that provider.",
   },
   {
-    q: "Does it work with Zoom, Google Meet, and Teams?",
-    a: "Yes — with any meeting app. MemoFlow captures your microphone and your Mac's system audio, so it hears both sides of any call and labels who said what (You vs. Others). No bot joins the call. Calendar connection is optional and can link Google, Outlook or iCloud events to their recordings.",
+    q: "Can I transcribe Zoom, Google Meet, or Teams without a bot?",
+    a: "Yes. MemoFlow records your microphone and Mac system audio during the call and labels the two sides You and Others. The app runs on your Mac, so no meeting bot joins the call. You can optionally link the recording to a calendar event.",
   },
   {
-    q: "Does it really support Hindi and Hinglish?",
-    a: "Yes. MemoFlow runs Whisper large-v3 turbo on-device, transcribing Hindi in Devanagari and handling Hinglish code-switching — English words mixed into Hindi sentences come out naturally. Auto-detection picks the right language per meeting.",
+    q: "Can MemoFlow transcribe Hindi and English in the same meeting?",
+    a: "Yes. MemoFlow supports Hinglish, including switches between Hindi and English within a sentence. The on-device Whisper model can write Hindi in Devanagari and keep English words in Latin script.",
   },
   {
     q: "How is this different from Otter, Fireflies, or Granola?",
-    a: "Those services process your meetings on their servers. MemoFlow processes everything on your Mac — nothing is uploaded, so nothing can leak, be subpoenaed from a third party, or become training data. It's also the only one with local Hindi and Hinglish support.",
+    a: "MemoFlow captures your microphone and system audio without joining the call as a bot. It transcribes English, Hindi, and Hinglish locally and can generate summaries offline after setup.",
   },
   {
-    q: "What does dictation do?",
+    q: "Can I dictate in Hindi or Hinglish on my Mac?",
     a: "Hold a hotkey in any app, speak, and release — clean text is typed into whatever field has focus. MemoFlow removes filler words, fixes punctuation, and applies your self-corrections: say “at 6 o'clock — no, at 7” and it types “at 7 o'clock.” Works in English, Hindi, and Hinglish.",
+  },
+  {
+    q: "Does meeting transcription work offline on a Mac?",
+    a: "Yes. After the one-time model download, MemoFlow can transcribe audio without sending it to a server. Online calls still need an internet connection for Zoom, Google Meet, or Teams.",
   },
   {
     q: "What are the system requirements?",
@@ -102,16 +107,16 @@ function Hero() {
   return (
     <section className="mx-auto max-w-6xl px-6 pb-20 pt-16 text-center sm:pt-24">
       <p className="mb-4 text-sm font-medium text-[var(--accent)]">
-        For macOS · 100% on-device
+        For macOS · On-device by default
       </p>
       <h1 className="mx-auto max-w-3xl text-4xl font-semibold tracking-tight sm:text-6xl">
-        AI meeting notes that never leave your Mac.
+        Private AI meeting notes for Mac
       </h1>
       <p className="mx-auto mt-5 max-w-2xl text-lg text-[var(--muted)]">
-        MemoFlow records both sides of your meetings, transcribes live, writes
-        summaries and action items, and answers questions about what was said —
-        in English, हिन्दी, and Hinglish. No cloud. No account. No bots in your
-        calls.
+        Record Zoom, Google Meet, and Teams without a meeting bot. MemoFlow
+        transcribes both sides on your Mac, even when speakers switch between
+        Hindi and English, then turns the conversation into summaries and
+        action items.
       </p>
       <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
         <CTAButton>Download for macOS — free 7-day trial</CTAButton>
@@ -123,7 +128,7 @@ function Hero() {
         </a>
       </div>
       <p className="mt-4 text-xs text-[var(--muted)]/70">
-        macOS 26 · Apple Silicon · nothing is ever uploaded
+        macOS 26 · Apple Silicon · recordings stay on your Mac
       </p>
       <a
         href="/release-notes"
@@ -156,11 +161,10 @@ function Privacy() {
           Your meetings are not training data.
         </h2>
         <p className="mx-auto mt-4 max-w-2xl text-[var(--muted)]">
-          Cloud notetakers send every word your team says to someone else&apos;s
-          servers. MemoFlow runs Apple&apos;s speech models and Whisper directly
-          on your Mac&apos;s Neural Engine. The audio, transcripts, summaries,
-          and chat history live in a local database you can open in Finder —
-          and delete whenever you want.
+          MemoFlow runs speech recognition on your Mac. Your audio, transcripts,
+          summaries, and chat history are stored locally. If you configure a cloud
+          model with your own API key, transcript text can be sent to that provider.
+          {" "}<Link href="/privacy" className="underline underline-offset-4">Read the privacy policy</Link>.
         </p>
         <div className="mx-auto mt-10 grid max-w-3xl gap-4 text-left sm:grid-cols-3">
           {[
@@ -184,6 +188,7 @@ function FeatureRow({
   title,
   body,
   bullets,
+  guide,
   visual,
   flip = false,
 }: {
@@ -191,6 +196,7 @@ function FeatureRow({
   title: string;
   body: string;
   bullets: string[];
+  guide?: { href: string; label: string };
   visual: React.ReactNode;
   flip?: boolean;
 }) {
@@ -214,6 +220,11 @@ function FeatureRow({
             </li>
           ))}
         </ul>
+        {guide && (
+          <Link href={guide.href} className="mt-5 inline-block text-sm underline underline-offset-4">
+            {guide.label}
+          </Link>
+        )}
       </div>
       <div className="w-full min-w-0">{visual}</div>
     </div>
@@ -225,13 +236,17 @@ function Features() {
     <section id="features" className="py-8">
       <FeatureRow
         eyebrow="Meetings"
-        title="Both sides of the call, transcribed live."
-        body="MemoFlow hears your mic and your Mac's system audio, so every Zoom, Meet, or Teams call is captured with who-said-what — no bot joining your meeting."
+        title="Bot-free transcription for Zoom, Meet, and Teams"
+        body="MemoFlow captures your microphone and Mac system audio in Zoom, Google Meet, and Microsoft Teams without sending a bot into the call."
         bullets={[
           "Live transcript while you talk, labeled You / Others",
           "Filler words removed, punctuation fixed — original always kept",
           "Summaries, action items, and smart titles on every meeting",
         ]}
+        guide={{
+          href: "/blog/best-meeting-notes-app-mac-india",
+          label: "Compare meeting notes apps for Mac",
+        }}
         visual={<SummaryFrame />}
       />
       <FeatureRow
@@ -248,13 +263,17 @@ function Features() {
       />
       <FeatureRow
         eyebrow="Dictation"
-        title="Speak into any app. Corrections included."
-        body="Hold ⌥Space, talk, release — polished text is typed into whatever field has focus. Change your mind mid-sentence and MemoFlow keeps only what you meant."
+        title="Offline dictation for Mac"
+        body="Hold your dictation shortcut and speak in English, Hindi, or Hinglish. MemoFlow inserts the text into the Mac app you are using, with punctuation and spoken corrections applied."
         bullets={[
           "“at 6 o'clock — no, at 7” types “at 7 o'clock.”",
           "Fillers stripped, punctuation and casing fixed",
           "Any shortcut you like — hold-to-talk or toggle",
         ]}
+        guide={{
+          href: "/compare/dictation-without-subscription",
+          label: "Compare Mac dictation apps without a subscription",
+        }}
         visual={<DictationFrame />}
       />
     </section>
@@ -270,20 +289,21 @@ function Hinglish() {
             Made for how India actually talks
           </p>
           <h2 className="mt-2 text-3xl font-semibold tracking-tight sm:text-4xl">
-            <span lang="hi">मीटिंग</span> हो या meeting —<br />
-            MemoFlow <span lang="hi">दोनों समझता है।</span>
+            Hinglish meeting transcription on Mac
           </h2>
           <p className="mt-4 text-[var(--muted)]">
-            The only private notetaker that transcribes Hindi, English, and the
-            Hinglish in between — code-switching mid-sentence, the way real
-            meetings sound. Powered by Whisper large-v3 turbo running entirely
-            on your Mac.
+            When a teammate says <span lang="hi">“कल client के साथ meeting है”</span>,
+            MemoFlow can keep the Hindi in Devanagari and the English words in
+            Latin script. Whisper large-v3 turbo runs on your Mac.
           </p>
           <ul className="mt-5 space-y-2 text-sm text-[var(--muted)]">
             <li>— Hindi in <span lang="hi">देवनागरी</span>, English words kept in English</li>
             <li>— Auto language detection per meeting and per dictation</li>
             <li>— Hindi dictation into any app</li>
           </ul>
+          <Link href="/blog/best-hinglish-transcription-apps-indian-teams-2026" className="mt-5 inline-block text-sm underline underline-offset-4">
+            See the Hinglish transcription demo and comparison
+          </Link>
         </div>
         <div className="w-full min-w-0">
           <HinglishFrame />
@@ -410,7 +430,7 @@ function FinalCTA() {
         </h2>
         <p className="mx-auto mt-3 max-w-xl text-[var(--muted)]">
           Free for 7 days, then one payment for life. macOS 26, Apple Silicon.
-          Nothing you say ever leaves your Mac.
+          Recording and transcription run on your Mac.
         </p>
         <div className="mt-8">
           <CTAButton>Download MemoFlow for macOS</CTAButton>
