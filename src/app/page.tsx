@@ -244,8 +244,8 @@ function Features() {
           "Summaries, action items, and smart titles on every meeting",
         ]}
         guide={{
-          href: "/blog/best-meeting-notes-app-mac-india",
-          label: "Compare meeting notes apps for Mac",
+          href: "/blog/transcribe-google-meet-mac-without-bot",
+          label: "How to transcribe Google Meet on Mac",
         }}
         visual={<SummaryFrame />}
       />
@@ -301,8 +301,8 @@ function Hinglish() {
             <li>— Auto language detection per meeting and per dictation</li>
             <li>— Hindi dictation into any app</li>
           </ul>
-          <Link href="/blog/best-hinglish-transcription-apps-indian-teams-2026" className="mt-5 inline-block text-sm underline underline-offset-4">
-            See the Hinglish transcription demo and comparison
+          <Link href="/blog/transcribe-hinglish-meeting-mac" className="mt-5 inline-block text-sm underline underline-offset-4">
+            Set up a Hinglish meeting transcript
           </Link>
         </div>
         <div className="w-full min-w-0">

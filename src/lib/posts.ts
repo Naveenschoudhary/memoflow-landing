@@ -60,15 +60,55 @@ export type Post = {
 
 export const POSTS: Post[] = [
   {
+    slug: 'transcribe-hinglish-meeting-mac',
+    title: 'How to Transcribe a Hinglish Meeting on Mac',
+    metaTitle: 'How to Transcribe a Hinglish Meeting on Mac | MemoFlow',
+    description:
+      'Set up Hindi-English meeting transcription on your Mac. Use a short Hinglish test call to check both speakers, names and action items in MemoFlow.',
+    excerpt:
+      'Choose the Apex model, capture both sides of a practice call, and check that the transcript preserves your team’s Hindi, English, names and deadlines.',
+    datePublished: '2026-11-14',
+    dateModified: '2026-11-14',
+    readingMinutes: 5,
+    keywords: ['Hinglish meeting transcription Mac', 'Hindi English meeting transcription'],
+    hero: {
+      src: '/blog/hinglish-transcription-2026/hero.webp',
+      alt: 'Illustration of Hindi and English mixed in the same conversation.',
+      width: 1536,
+      height: 1024,
+    },
+    ogImage: '/blog/hinglish-transcription-2026/og.jpg',
+  },
+  {
+    slug: 'transcribe-google-meet-mac-without-bot',
+    title: 'How to Transcribe Google Meet on Mac Without a Bot',
+    metaTitle: 'Transcribe Google Meet on Mac Without a Bot | MemoFlow',
+    description:
+      'Capture your microphone and Google Meet audio on Mac without a meeting bot. Compare built-in Meet transcripts and fix missing audio in MemoFlow.',
+    excerpt:
+      'Decide whether Google Meet’s built-in transcript fits your workflow, then set up local audio capture and check both sides of a short test call.',
+    datePublished: '2026-11-14',
+    dateModified: '2026-11-14',
+    readingMinutes: 5,
+    keywords: ['transcribe Google Meet on Mac without a bot', 'local Google Meet transcript'],
+    hero: {
+      src: '/blog/hinglish-transcription-2026/memoflow-dashboard.webp',
+      alt: 'MemoFlow for Mac showing a list of saved meetings and action-item statistics.',
+      width: 2000,
+      height: 1306,
+    },
+    ogImage: '/og.png',
+  },
+  {
     slug: 'best-hinglish-transcription-apps-indian-teams-2026',
     title: 'Best Hinglish Transcription Apps for Indian Teams in 2026',
     metaTitle: 'Best Hinglish Transcription Apps for Indian Teams (2026)',
     description:
-      'Hinglish breaks most transcription tools. A comparison of the apps that handle mid-sentence Hindi-English code-switching, by use case — creators, corporate teams, students.',
+      'Compare Hinglish transcription apps for meetings, interviews and subtitles. See how to evaluate mixed Hindi-English output, privacy and export options.',
     excerpt:
-      'Word error rates on the same Hinglish recording vary by more than 40 percentage points across platforms. Which apps actually handle mid-sentence code-switching, what to look for, and what India’s DPDP Act means for routing client calls through a cloud service.',
+      'Choose a tool for Hindi-English meetings, recorded interviews or subtitles, then use the same sample to check script, names, deadlines and speaker attribution.',
     datePublished: '2026-09-04',
-    dateModified: '2026-09-04',
+    dateModified: '2026-11-14',
     readingMinutes: 10,
     keywords: [
       'Hinglish transcription app',

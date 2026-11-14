@@ -54,6 +54,7 @@ export function articleJsonLd({
   dateModified,
   keywords,
   wordCount,
+  topics = ['Hinglish transcription', 'Automatic speech recognition', 'Code-switching'],
 }: {
   url: string;
   headline: string;
@@ -63,6 +64,7 @@ export function articleJsonLd({
   dateModified: string;
   keywords: string[];
   wordCount?: number;
+  topics?: string[];
 }) {
   return {
     '@context': 'https://schema.org',
@@ -81,11 +83,7 @@ export function articleJsonLd({
     isAccessibleForFree: true,
     author: { '@id': 'https://memoflow.app/#organization' },
     publisher: { '@id': 'https://memoflow.app/#organization' },
-    about: [
-      { '@type': 'Thing', name: 'Hinglish transcription' },
-      { '@type': 'Thing', name: 'Automatic speech recognition' },
-      { '@type': 'Thing', name: 'Code-switching' },
-    ],
+    about: topics.map((name) => ({ '@type': 'Thing', name })),
   };
 }
 
