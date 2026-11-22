@@ -94,10 +94,20 @@ function isNewer(a: string, b: string) {
 
 /** Latest shipped release. Never throws — degrades to the last good value. */
 export async function getLatestRelease(): Promise<Release> {
+  // Next's shared fetch cache can survive deployments. Never let an older
+  // cached response downgrade a known published release.
+  const minimum = lastKnownGood && isNewer(lastKnownGood.version, PINNED.version)
+    ? lastKnownGood
+    : PINNED;
+
   for (const source of [fromReleaseApi, fromAppcast]) {
     try {
       const release = await source();
       if (release) {
+        if (isNewer(minimum.version, release.version)) {
+          console.warn(`${source.name}: ignoring stale release ${release.version}`);
+          continue;
+        }
         lastKnownGood = release;
         return release;
       }
@@ -107,5 +117,5 @@ export async function getLatestRelease(): Promise<Release> {
     }
   }
 
-  return lastKnownGood ?? PINNED;
+  return minimum;
 }

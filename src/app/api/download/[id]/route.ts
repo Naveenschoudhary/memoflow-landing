@@ -1,5 +1,6 @@
 import { db, DownloadRow } from '@/lib/db';
 import { redirect } from 'next/navigation';
+import { getLatestRelease } from '@/lib/release';
 import type { RowDataPacket } from 'mysql2';
 
 export async function GET(
@@ -31,12 +32,21 @@ export async function GET(
       return redirect('/download/expired');
     }
 
+    // Email tokens can predate a release. Choose the current build at click
+    // time rather than redirecting to the URL saved when the email was sent.
+    const { dmgUrl } = await getLatestRelease();
     await db.execute(
-      `UPDATE downloads SET status = 'downloaded', downloaded_at = NOW() WHERE id = ?`,
-      [id]
+      `UPDATE downloads SET status = 'downloaded', downloaded_at = NOW(), download_link = ? WHERE id = ?`,
+      [dmgUrl, id]
     );
 
-    return Response.redirect(data.download_link);
+    return new Response(null, {
+      status: 302,
+      headers: {
+        Location: dmgUrl,
+        'Cache-Control': 'private, no-store, max-age=0',
+      },
+    });
   } catch (error) {
     console.error('Download error:', error);
     return redirect('/download/expired');
