@@ -14,6 +14,50 @@ export type Release = {
 /** Newest first. Mirrors the GitHub releases on memoflow-models. */
 export const releases: Release[] = [
   {
+    version: '0.8.1',
+    date: '22 November 2026',
+    headline:
+      'Organize meetings, format dictation, and keep your workspace comfortable.',
+    groups: [
+      {
+        title: 'Meeting folders',
+        items: [
+          'Organize recordings into folders in the sidebar and drag meetings between them to keep your library tidy.',
+        ],
+      },
+      {
+        title: 'Better dictation formatting',
+        items: [
+          'Turn spoken paragraphs, bullet points and checklists into structured text, with improved formatting preservation and tighter processing deadlines.',
+        ],
+      },
+      {
+        title: 'Models matched to your Mac',
+        items: [
+          'Speech model recommendations take your Mac’s hardware and selected language into account.',
+        ],
+      },
+      {
+        title: 'A clearer sidebar',
+        items: [
+          'Your name appears at the top, Settings stays within reach at the bottom, and consistent icons and selection colours make navigation easier to follow.',
+        ],
+      },
+      {
+        title: 'Quick window-size controls',
+        items: [
+          'Switch between a compact window and the full usable screen directly from the sidebar, with controls that track resizing across displays.',
+        ],
+      },
+      {
+        title: 'Appearance within reach',
+        items: [
+          'Switch between light and dark appearance directly from the sidebar.',
+        ],
+      },
+    ],
+  },
+  {
     version: '0.8.0',
     date: '27 September 2026',
     headline:

@@ -44,7 +44,9 @@ export default function ReleaseNotes() {
 
           <p className="mt-5 text-sm">
             <a
-              href={`https://github.com/Naveenschoudhary/memoflow-models/releases/tag/v${release.version}`}
+              href={index === 0
+                ? `https://github.com/Naveenschoudhary/memoflow-models/releases/download/v${release.version}/MemoFlow-${release.version}.dmg`
+                : `https://github.com/Naveenschoudhary/memoflow-models/releases/tag/v${release.version}`}
               className="text-[var(--accent)] hover:underline"
               target="_blank"
               rel="noreferrer"
